@@ -20,7 +20,9 @@ exports.infraSetup = async (req, res) => {
     const {firstName,lastName, username, password, email, mobile, ccode , country } = req.body;
     //get token
     const tokenResponse = await getToken(ADMIN_USERNAME, ADMIN_PASSWORD);
-    if(tokenResponse.error){
+    console.log(tokenResponse)
+
+    if(JSON.parse(tokenResponse).error){
         res.status(200).json({
             status: 0,
             message: "Error getting token",

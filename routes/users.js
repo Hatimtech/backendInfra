@@ -95,6 +95,50 @@ router.get("/api/checkInfraIsConfigured", userCtrl.checkInfraIsConfigured);
 
 
 
+/**
+ * @swagger
+ * /api/login:
+ *   post:
+ *     summary: Login API for infra users.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 description : Username of the Infra users
+ *                 example: hatim.daudi
+ *               password:
+ *                 type: string
+ *                 description: The user's password.
+ *                 example: life2work4SV!
+ *     responses:
+ *       201:
+ *         description: Logged In
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     status:
+ *                       type: integer
+ *                       description: Status of the request.
+ *                       example: 1
+ *                     message:
+ *                       type: string
+ *                       description: Message for the logged in user.
+ *                       example: Logged In successfully
+ *                     token:
+ *                       type: string
+ *                       description: token for the user authentication.
+ *                       example: efwerfewwer
+ */
 router.post("/api/login", userCtrl.login);
 router.post("/api/registerInfraUser", userCtrl.registerInfraUser);
 router.post("/api/getInfraUsers", userCtrl.getInfraUsers);

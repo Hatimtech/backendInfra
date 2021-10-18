@@ -13,7 +13,7 @@ module.exports.groups = {
 
 module.exports.REALM_NAME = "ewallet"
 
-module.exports.KEYCLOCK_IP = "http://172.16.100.210:8080/auth"
+module.exports.KEYCLOCK_IP = "http://localhost:8080/auth"
 
 module.exports.CLIENT_ID = "infra-client"
 
