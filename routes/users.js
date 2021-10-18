@@ -92,6 +92,9 @@ router.post("/api/infraSetup", userCtrl.infraSetup);
  *                       example: user exists
  */
 router.get("/api/checkInfraIsConfigured", userCtrl.checkInfraIsConfigured);
+
+
+
 router.post("/api/login", userCtrl.login);
 router.post("/api/registerInfraUser", userCtrl.registerInfraUser);
 router.post("/api/getInfraUsers", userCtrl.getInfraUsers);

@@ -58,7 +58,7 @@ exports.infraSetup = async (req, res) => {
                     let infra = new InfraConfigured()
                     infra.isConfigured = true
                     infra.save()
-                    res.send({status: 0,message: "User Created successfully" , username: username , password: password});
+                    res.send({status: 1,message: "User Created successfully" , username: username , password: password});
                 }
             });
         }
@@ -74,7 +74,7 @@ exports.checkInfraIsConfigured = async (req, res) => {
 
     try {
          await InfraConfigured.findOne().then(response=>{
-             res.send({ status: (response.isConfigured) ? 1 : 0 , message: (response.isConfigured) ? "user exists" : "user does not exits" });
+             res.send({ status: (response.isConfigured) ? 1 : 0 , message: (response.isConfigured) ? "Infra admin is configured" : "infra admin is not configured" });
         });
 
     } catch (err) {
