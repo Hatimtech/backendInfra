@@ -1,10 +1,10 @@
-const User = require('../models/User');
+const Users = require('../models/User');
 const InfraConfigured = require('../models/InfraConfigured');
-const jwt = require('jsonwebtoken');
 const {
     getToken,
     createUser,
     checkRoles,
+    editusers,
 } = require("../middlewares/keyClock") ;
 
 const { ADMIN_USERNAME , ADMIN_PASSWORD , groups , roles} = require("../config/keyclockConstant") ;
@@ -37,7 +37,7 @@ exports.infraSetup = async (req, res) => {
                 message: "Error creating infra",
             });
         } else {
-            let data = new User();
+            let data = new Users();
             data.firstname = firstName;
             data.lastname = lastName;
             data.username = username;
@@ -60,7 +60,7 @@ exports.infraSetup = async (req, res) => {
                     let infra = new InfraConfigured()
                     infra.isConfigured = true
                     infra.save()
-                    res.send({status: 1,message: "User Created successfully" , username: username , password: password});
+                    res.send({status: 1,message: "User Created successfully" , username: username});
                 }
             });
         }
@@ -96,7 +96,8 @@ exports.registerInfraUser = async (req, res) => {
     let data = new Users();
     const {
         token,
-        name,
+        firstName,
+        lastName,
         email,
         country,
         ccode,
@@ -116,7 +117,8 @@ exports.registerInfraUser = async (req, res) => {
         else {
             data.country = country;
             data.ccode = ccode;
-            data.name = name;
+            data.firstName = firstName;
+            data.lastName = lastName;
             data.email = email;
             data.mobile = mobile;
             data.username = username;
@@ -128,19 +130,7 @@ exports.registerInfraUser = async (req, res) => {
                     if (err1.message) { message1 = err1.message; }
                     res.send({status: 0,message: message1,});
                 } else {
-                    // let content =
-                    // 	"<p>Your have been added as Infra in E-Wallet application</p><p<p>&nbsp;</p<p>Login URL: <a href='http://" +
-                    // 	config.mainIP +
-                    // 	"/'>http://" +
-                    // 	config.mainIP +
-                    // 	"/</a></p><p><p>Your username: " +
-                    // 	username +
-                    // 	"</p><p>Your password: " +
-                    // 	password +
-                    // 	"</p>";
-                    // sendMail(content, "Infra Account Created", email);
-
-                    res.send({status: 0,message: "User Created successfully" , username: username , password: password});
+                                     res.send({status: 1,message: "User Created successfully"});
                 }
             });
 
@@ -181,20 +171,56 @@ exports.login = async (req, res) => {
  * @param { status, message, users} res
  */
 exports.getInfraUsers = async (req, res) => {
-    const { token } = req.body;
-    var username = getUsername(token);
-    if(!checkRoles(token, roles.INFRA_ADMIN_ROLE)) {
-        res.send({ status: 0, message: "Unauthorized to login",});
-    }else{
         try {
             const InfrUsers = await Users.find();
             res.send({ status: 1, message: "User found", users : InfrUsers });
-
         }catch(err)
         {
-            res.send({ status: 0, message: err, users : InfrUsers });
+            res.send({ status: 0, message: err });
+        }
+};
+
+
+
+exports.enableOrDisableUser = async (req, res) => {
+    const {
+        userId,
+        isEnabled,
+        token
+    } = req.body;
+    
+    let editParams = {
+         isEnabled : isEnabled
+    }
+        
+        const editUserResponse = await editusers(token,userId,editParams);
+        if(!editUserResponse){
+            res.send({ status: 0, message: "Users Cannot be edited."});
+        }
+        else {
+                res.send({status: 1,message: "User " + isEnabled ? "enabled" : "disabled" +  " successfully"});
+                
 
         }
+    
+};
 
-    }
+
+exports.editUser = async (req, res) => {
+    const {
+        userId,
+        editParams,
+        token
+    } = req.body;
+     
+        const editUserResponse = await editusers(token,userId,editParams);
+        if(!editUserResponse){
+            res.send({ status: 0, message: "Users Cannot be edited."});
+        }
+        else {
+                res.send({status: 1,message: "User " + isEnabled ? "enabled" : "disabled" +  " successfully"});
+                
+
+        }
+    
 };

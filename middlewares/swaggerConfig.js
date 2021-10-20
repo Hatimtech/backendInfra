@@ -14,6 +14,9 @@ const swaggerDefinition = {
             description: 'Development server',
         },
     ],
+    security : {
+        bearerAuth: []
+    }
 };
 
 const options = {

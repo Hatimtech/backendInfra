@@ -1,6 +1,7 @@
-const { KEYCLOCK_IP , REALM_NAME,CLIENT_ID} = require( "../config/keyclockConstant");
+const { KEYCLOCK_IP , REALM_NAME,CLIENT_ID , roles} = require( "../config/keyclockConstant");
 const request = require("request") ;
 const jwt_decode = require("jwt-decode");
+
 
 //Get Token
 module.exports.getToken = (username, password) => {
@@ -62,7 +63,6 @@ module.exports.passwordReset = (token, userId, password) => {
 
 // Create users
 module.exports.createUser = (token, firstName,lastName,username, password, email, group) => {
-    console.log(token, username, password, email, group)
     var options = {
         'method': 'POST',
         'url': KEYCLOCK_IP + "/admin/realms/" + REALM_NAME + "/users",
@@ -112,6 +112,30 @@ module.exports.createUser = (token, firstName,lastName,username, password, email
     });
 }
 
+module.exports.editusers = (token , userId, editParams) => {
+    var options = {
+        'method': 'PUT',
+        'url': KEYCLOCK_IP + "/admin/realms/" + REALM_NAME + "/users" + userId,
+        'headers': {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+            ...editParams
+         }),
+    }
+    return new Promise(function (resolve, reject) {
+        request(options, async function (err, response) {
+            if(err){
+                reject(err);
+            } else {
+                resolve(response.body);
+            }
+        });
+    });
+}
+
+
 //Check validity of token
 module.exports.checkRoles = (token, roleToCheck) => {
     var decodedToken = jwt_decode(token);
@@ -121,6 +145,30 @@ module.exports.checkRoles = (token, roleToCheck) => {
 	} else{ 
         return true;
     }
+};
+
+
+module.exports.checkInfraAdmin = (req, res, next) => {
+ let token = req.headers["x-access-token"] || req.headers["authorization"];
+  if (!token) res.send({ code: 0, message: "Token Required" });
+ if(token)
+{
+    if (token.startsWith("Bearer ")) {
+        // Remove Bearer from string
+        console.log('In check infra1')
+    
+        token = token.slice(7, token.length);
+      }
+    var decodedToken = jwt_decode(token);
+	var roles = decodedToken.realm_access.roles;
+	if(roles.indexOf(roles.INFRA_ADMIN_ROLE) == -1){
+		return false;
+	} else{ 
+        console.log('In check infra2')
+
+        next();
+    }
+}
 };
 
 //Get username from token
