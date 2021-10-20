@@ -14,15 +14,29 @@ const swaggerDefinition = {
             description: 'Development server',
         },
     ],
-    security : {
-        bearerAuth: []
+    components: {
+        securitySchemes: {
+            jwt: {
+                type: "http",
+                scheme: "bearer",
+                in: "header",
+                bearerFormat: "JWT"
+            },
+        }
     }
+    ,
+    security: [{
+        jwt: []
+    }]
+
+
 };
 
 const options = {
     swaggerDefinition,
     // Paths to files containing OpenAPI definitions
     apis: ['./routes/*.js'],
+
 };
 module.exports.swaggerSpec  = ()=> {
     return swaggerJSDoc(options)

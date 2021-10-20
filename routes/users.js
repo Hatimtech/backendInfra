@@ -225,8 +225,7 @@ router.post("/api/registerInfraUser", userCtrl.registerInfraUser);
  * /api/getInfraUsers:
  *   get:
  *     summary: Getting Infra users created By Infra Admin.
- *     security:
- *     - bearerAuth : ["iuhuyhuyhguy"]
+ *     Authorization: Bearer
  *     responses:
  *       200:
  *         description: get
