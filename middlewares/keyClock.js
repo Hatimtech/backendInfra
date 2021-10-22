@@ -1,4 +1,4 @@
-const { KEYCLOCK_IP , REALM_NAME,CLIENT_ID , roles} = require( "../config/keyclockConstant");
+const { KEYCLOCK_IP , REALM_NAME,CLIENT_ID , ROLES} = require( "../config/keyclockConstant");
 const request = require("request") ;
 const jwt_decode = require("jwt-decode");
 
@@ -115,7 +115,7 @@ module.exports.createUser = (token, firstName,lastName,username, password, email
 module.exports.editusers = (token , userId, editParams) => {
     var options = {
         'method': 'PUT',
-        'url': KEYCLOCK_IP + "/admin/realms/" + REALM_NAME + "/users" + userId,
+        'url': KEYCLOCK_IP + "/admin/realms/" + REALM_NAME + "/users/" + userId,
         'headers': {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
@@ -161,7 +161,7 @@ module.exports.checkInfraAdmin = (req, res, next) => {
       }
     var decodedToken = jwt_decode(token);
 	var roles = decodedToken.realm_access.roles;
-	if(roles.indexOf(roles.INFRA_ADMIN_ROLE) == -1){
+	if(roles.indexOf(ROLES.INFRA_ADMIN_ROLE) == -1){
 		return false;
 	} else{ 
         console.log('In check infra2')
