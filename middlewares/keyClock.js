@@ -1,4 +1,4 @@
-const { KEYCLOCK_IP , REALM_NAME,CLIENT_ID , roles} = require( "../config/keyclockConstant");
+const { KEYCLOCK_IP , REALM_NAME,CLIENT_ID , ROLES} = require( "../config/keyclockConstant");
 const request = require("request") ;
 const jwt_decode = require("jwt-decode");
 
@@ -46,6 +46,54 @@ module.exports.passwordReset = (token, userId, password) => {
           "value": password,
           "temporary": false
         })
+      
+      };
+    return new Promise(function (resolve, reject) {
+        request(options, async function (err, response) {
+            if(err){
+                reject(err);
+            }else if(response.body.error){
+                reject(response.body.error);
+            } else {
+                resolve(response.body);
+            }
+        });
+    });
+}
+
+//Get user
+module.exports.getUser = (token, username) => {
+    var options = {
+        'method': 'GET',
+        'url': KEYCLOCK_IP + "/admin/realms/" + REALM_NAME +"/users/?username=" + username,
+        'headers': {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      
+      };
+    return new Promise(function (resolve, reject) {
+        request(options, async function (err, response) {
+            if(err){
+                reject(err);
+            }else if(response.body.error){
+                reject(response.body.error);
+            } else {
+                resolve(response.body);
+            }
+        });
+    });
+}
+
+//delete user
+module.exports.deleteUser = (token, userid) => {
+    var options = {
+        'method': 'DELETE',
+        'url': KEYCLOCK_IP + "/admin/realms/" + REALM_NAME +"/users/" + userid,
+        'headers': {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
       
       };
     return new Promise(function (resolve, reject) {
@@ -115,7 +163,7 @@ module.exports.createUser = (token, firstName,lastName,username, password, email
 module.exports.editusers = (token , userId, editParams) => {
     var options = {
         'method': 'PUT',
-        'url': KEYCLOCK_IP + "/admin/realms/" + REALM_NAME + "/users" + userId,
+        'url': KEYCLOCK_IP + "/admin/realms/" + REALM_NAME + "/users/" + userId,
         'headers': {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
@@ -135,7 +183,6 @@ module.exports.editusers = (token , userId, editParams) => {
     });
 }
 
-
 //Check validity of token
 module.exports.checkRoles = (token, roleToCheck) => {
     var decodedToken = jwt_decode(token);
@@ -147,7 +194,6 @@ module.exports.checkRoles = (token, roleToCheck) => {
     }
 };
 
-
 module.exports.checkInfraAdmin = (req, res, next) => {
  let token = req.headers["x-access-token"] || req.headers["authorization"];
   if (!token) res.send({ code: 0, message: "Token Required" });
@@ -155,17 +201,13 @@ module.exports.checkInfraAdmin = (req, res, next) => {
 {
     if (token.startsWith("Bearer ")) {
         // Remove Bearer from string
-        console.log('In check infra1')
-    
         token = token.slice(7, token.length);
       }
     var decodedToken = jwt_decode(token);
 	var roles = decodedToken.realm_access.roles;
-	if(roles.indexOf(roles.INFRA_ADMIN_ROLE) == -1){
+	if(roles.indexOf(ROLES.INFRA_ADMIN_ROLE) == -1){
 		return false;
 	} else{ 
-        console.log('In check infra2')
-
         next();
     }
 }

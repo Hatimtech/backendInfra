@@ -2,9 +2,10 @@ const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
 const bankSchema = mongoose.Schema({
+    keyclock_id: { type: String, required: true },
     name: { type: String, required: true, unique: true },
     bcode: { type: String, required: true, unique: true },
-    address1: { type: String, required: true },
+    address: { type: String, required: true },
     state: { type: String, required: true },
     zip: { type: String, required: true },
     country: { type: String, required: true },

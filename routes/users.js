@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const userCtrl = require('../controllers/UserController');
+const bankCtrl = require('../controllers/BankController');
 const {
     checkInfraAdmin,
 } = require("../middlewares/keyClock") ;
@@ -139,10 +140,6 @@ router.get("/api/checkInfraIsConfigured", userCtrl.checkInfraIsConfigured);
  *                       type: string
  *                       description: Message for the logged in user.
  *                       example: Logged In successfully
- *                     token:
- *                       type: string
- *                       description: token for the user authentication.
- *                       example: efwerfewwer
  */
 
 router.post("/api/login", userCtrl.login);
@@ -154,6 +151,7 @@ router.post("/api/login", userCtrl.login);
  * /api/registerInfraUser:
  *   post:
  *     summary: Create user for infra.
+ *     Authorization: Bearer
  *     requestBody:
  *       required: true
  *       content:
@@ -161,34 +159,30 @@ router.post("/api/login", userCtrl.login);
  *           schema:
  *             type: object
  *             properties:
- *               token:
- *                 type: string
- *                 description : Token of Infra
- *                 example: sdajfosiwefknoanfs
  *               firstName:
  *                 type: string
  *                 description : The user's firstname
- *                 example: Hatim
+ *                 example: Adarsh
  *               lastName:
  *                 type: string
  *                 description : The user's lastname
- *                 example: Daudi
+ *                 example: Sharma
  *               username:
  *                 type: string
  *                 description: The user's username.
- *                 example: hatim.daudi
+ *                 example: adarsh.sharma
  *               password:
  *                 type: string
  *                 description: The user's password.
- *                 example: life2work4SV!
+ *                 example: Hello@1234
  *               email:
  *                 type: string
  *                 description: The user's email.
- *                 example: hatim.daudi@gmail.com
+ *                 example: s.adarsh@gmail.com
  *               mobile:
  *                 type: string
  *                 description: The user's mobile.
- *                 example: 7869820030
+ *                 example: 9955347812
  *               ccode:
  *                 type: string
  *                 description: The user's ccode.
@@ -217,7 +211,7 @@ router.post("/api/login", userCtrl.login);
  *                       description: Message for the logged in user.
  *                       example: User registed successfully
  */
-router.post("/api/registerInfraUser", userCtrl.registerInfraUser);
+router.post("/api/registerInfraUser", checkInfraAdmin , userCtrl.registerInfraUser);
 
 
 /**
@@ -262,6 +256,7 @@ router.get("/api/getInfraUsers", checkInfraAdmin , userCtrl.getInfraUsers);
  * /api/enableOrDisableUser:
  *   post:
  *     summary: Enable and disable user for infra.
+ *     Authorization: Bearer
  *     requestBody:
  *       required: true
  *       content:
@@ -269,18 +264,14 @@ router.get("/api/getInfraUsers", checkInfraAdmin , userCtrl.getInfraUsers);
  *           schema:
  *             type: object
  *             properties:
- *               token:
- *                 type: string
- *                 description : Token of Infra
- *                 example: sdajfosiwefknoanfs
  *               userId:
  *                 type: string
  *                 description : The user's Id
- *                 example: asfsdim
+ *                 example: a244bdab-a2b9-47c4-8cec-af95dd8d63f5
  *               isEnabled:
  *                 type: boolean
  *                 description : true for enable and false for disable
- *                 example: true
+ *                 example: false
  *     responses:
  *       201:
  *         description: Created
@@ -301,7 +292,7 @@ router.get("/api/getInfraUsers", checkInfraAdmin , userCtrl.getInfraUsers);
  *                       description: Message for the logged in user.
  *                       example: User enabled successfully.
  */
-router.post("/api/enableOrDisableUser", userCtrl.enableOrDisableUser);
+router.post("/api/enableOrDisableUser", checkInfraAdmin , userCtrl.enableOrDisableUser);
 
 
 
@@ -310,6 +301,7 @@ router.post("/api/enableOrDisableUser", userCtrl.enableOrDisableUser);
  * /api/editUser:
  *   post:
  *     summary: edit user for infra.
+ *     Authorization: Bearer
  *     requestBody:
  *       required: true
  *       content:
@@ -317,18 +309,50 @@ router.post("/api/enableOrDisableUser", userCtrl.enableOrDisableUser);
  *           schema:
  *             type: object
  *             properties:
- *               token:
- *                 type: string
- *                 description : Token of Infra
- *                 example: sdajfosiwefknoanfs
  *               userId:
  *                 type: string
  *                 description : The user's Id
- *                 example: asfsdim
- *               editParams:
+ *                 example: a244bdab-a2b9-47c4-8cec-af95dd8d63f5
+ *               userMongoId:
  *                 type: string
- *                 description : true for enable and false for disable
- *                 example: true
+ *                 description : The user's Id
+ *                 example: 617188e56ed2151bc61ff1af
+ *               firstName:
+ *                 type: string
+ *                 description : The user's firstname
+ *                 example: Kartik
+ *               lastName:
+ *                 type: string
+ *                 description : The user's lastname
+ *                 example: Kashyap
+ *               username:
+ *                 type: string
+ *                 description: The user's username.
+ *                 example: kartik.kashyap
+ *               password:
+ *                 type: string
+ *                 description: The user's password.
+ *                 example: Hello@1234
+ *               email:
+ *                 type: string
+ *                 description: The user's email.
+ *                 example: k.kartik@gmail.com
+ *               mobile:
+ *                 type: string
+ *                 description: The user's mobile.
+ *                 example: 9955347811
+ *               ccode:
+ *                 type: string
+ *                 description: The user's ccode.
+ *                 example: +91
+ *               country:
+ *                 type: string
+ *                 description: The user's country.
+ *                 example: Indian
+ *               logo:
+ *                 type: string
+ *                 description: The user's logo.
+ *                 example: fwfdiawfawfn
  *     responses:
  *       201:
  *         description: Created
@@ -349,11 +373,6 @@ router.post("/api/enableOrDisableUser", userCtrl.enableOrDisableUser);
  *                       description: Message for the logged in user.
  *                       example: User edited successfully.
  */
-router.post("/api/editUser", userCtrl.editUser);
-
-
-
-
-
+router.post("/api/editUser",  checkInfraAdmin ,userCtrl.editUser);
 
 module.exports = router;

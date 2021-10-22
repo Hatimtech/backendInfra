@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
 const userSchema = mongoose.Schema({
+    keyclock_id: { type: String, required: true },
     firstname: { type: String, required: true },
     lastname: { type: String, required: true },
     username: { type: String, required: true, unique: true },

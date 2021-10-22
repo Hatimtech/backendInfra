@@ -1,11 +1,11 @@
 
-module.exports.roles = {
+module.exports.ROLES = {
 	BANK_ADMIN_ROLE: "bank-admin",
     BANK_BRANCH_ADMIN_ROLE: "bank-branch-admin",
 	INFRA_ADMIN_ROLE: "infra-admin",
 }
 
-module.exports.groups = {
+module.exports.GROUPS = {
 	INFRA_GROUP: "Infra",
     BANK_GROUP: "Bank",
     BANK_BRANCH_GROUP: "Bank Branch"

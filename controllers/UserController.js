@@ -1,13 +1,17 @@
 const Users = require('../models/User');
+const Bank = require('../models/Bank');
 const InfraConfigured = require('../models/InfraConfigured');
 const {
     getToken,
+    getUser,
     createUser,
     checkRoles,
     editusers,
+    deleteUser,
 } = require("../middlewares/keyClock") ;
+const { getTokenFromRequestHeader } = require("../middlewares/commonFunctions")
 
-const { ADMIN_USERNAME , ADMIN_PASSWORD , groups , roles} = require("../config/keyclockConstant") ;
+const { ADMIN_USERNAME , ADMIN_PASSWORD , GROUPS , ROLES} = require("../config/keyclockConstant") ;
 
 
 /**
@@ -17,10 +21,9 @@ const { ADMIN_USERNAME , ADMIN_PASSWORD , groups , roles} = require("../config/k
  */
 exports.infraSetup = async (req, res) => {
     //this is req params
-    const {firstName,lastName, username, password, email, mobile, ccode , country } = req.body;
+    const {firstName,lastName, username, password, email, mobile, ccode , country, roles } = req.body;
     //get token
     const tokenResponse = await getToken(ADMIN_USERNAME, ADMIN_PASSWORD);
-    console.log(tokenResponse)
 
     if(JSON.parse(tokenResponse).error){
         res.status(200).json({
@@ -29,15 +32,18 @@ exports.infraSetup = async (req, res) => {
         });
 
     }else{
-        const token =JSON.parse(tokenResponse).access_token;
-        const createUserResponse = await createUser(token,firstName,lastName,username,password,email,groups.INFRA_GROUP);
-        if(createUserResponse){
+        const token = JSON.parse(tokenResponse).access_token;
+        const createUserResponse = await createUser(token,firstName,lastName,username,password,email,GROUPS.INFRA_GROUP);
+        if(createUserResponse.length !== 0 ){
             res.status(200).json({
                 status: 0,
                 message: "Error creating infra",
             });
         } else {
+            const getUserResponse = await getUser(token, username);
+            const userKeyclockId = JSON.parse(getUserResponse)[0].id;
             let data = new Users();
+            data.keyclock_id = userKeyclockId;
             data.firstname = firstName;
             data.lastname = lastName;
             data.username = username;
@@ -46,16 +52,24 @@ exports.infraSetup = async (req, res) => {
             data.email = email;
             data.ccode = ccode;
             data.country = country;
-            data.save((err) => {
+            data.save(async (err) => {
                 if (err) {
                     var message = err;
                     if (err.message) {
                         message = err.message;
                     }
-                    res.status(200).json({
-                        status: 0,
-                        message: message,
-                    });
+                    const deleteUserResponse = await deleteUser(token, userKeyclockId);
+                    if(deleteUserResponse.length !== 0 ){
+                        res.status(200).json({
+                            status: 0,
+                            message: "Error deleting infra in keyclock",
+                        });
+                    } else {
+                        res.status(200).json({
+                            status: 0,
+                            message: message,
+                        });
+                    }
                 } else {
                     let infra = new InfraConfigured()
                     infra.isConfigured = true
@@ -93,9 +107,8 @@ exports.checkInfraIsConfigured = async (req, res) => {
  */
 
 exports.registerInfraUser = async (req, res) => {
-    let data = new Users();
+    let token = getTokenFromRequestHeader(req,res);
     const {
-        token,
         firstName,
         lastName,
         email,
@@ -107,35 +120,46 @@ exports.registerInfraUser = async (req, res) => {
         roles,
         logo,
     } = req.body;
-    if(!checkRoles(token, roles.INFRA_ADMIN_ROLE)) {
-        res.send({ status: 0, message: "Unauthorized to login", });
-    }else{
-        const createUserResponse = await createUser(token,mobile,password,email,groups.BANK_GROUP);
-        if(!createUserResponse){
+        const createUserResponse = await createUser(token,firstName,lastName,username,password,email,GROUPS.INFRA_GROUP);
+        if(createUserResponse.length !== 0 ){
             res.send({ status: 0, message: "Error creating Users"});
         }
         else {
-            data.country = country;
-            data.ccode = ccode;
-            data.firstName = firstName;
-            data.lastName = lastName;
-            data.email = email;
-            data.mobile = mobile;
+            const getUserResponse = await getUser(token, username);
+            const userKeyclockId = JSON.parse(getUserResponse)[0].id;
+            let data = new Users();
+            data.keyclock_id = userKeyclockId;
+            data.firstname = firstName;
+            data.lastname = lastName;
             data.username = username;
-            data.password = password;
             data.roles = roles;
-            data.save((err1) => {
+            data.mobile = mobile;
+            data.email = email;
+            data.ccode = ccode;
+            data.country = country;
+            data.save(async(err1) => {
                 if (err1) {
                     var message1 = err1;
                     if (err1.message) { message1 = err1.message; }
-                    res.send({status: 0,message: message1,});
+                    const deleteUserResponse = await deleteUser(token, userKeyclockId);
+                    if(deleteUserResponse.length !== 0 ){
+                        res.status(200).json({
+                            status: 0,
+                            message: "Error deleting infra in keyclock",
+                        });
+                    } else {
+                        res.send({status: 0,message: message1,});
+                    }
                 } else {
-                                     res.send({status: 1,message: "User Created successfully"});
+                    res.send({
+                        status: 1,
+                        message: "User Created successfully"
+                    });
                 }
             });
 
         }
-    }
+    
 };
 
 
@@ -153,7 +177,7 @@ exports.login = async (req, res) => {
         res.send({ status: 0, message: "Error getting token" });
     }else{
         const token =JSON.parse(tokenResponse).access_token;
-        if(!checkRoles(token, roles.INFRA_ADMIN_ROLE)) {
+        if(!checkRoles(token, ROLES.INFRA_ADMIN_ROLE)) {
             res.send({ status: 0, message: "Unauthorized to login" });
         }else{
             res.send({ status: 1, message: "Authorized to login", token : token });
@@ -183,22 +207,22 @@ exports.getInfraUsers = async (req, res) => {
 
 
 exports.enableOrDisableUser = async (req, res) => {
+    let token = getTokenFromRequestHeader(req,res);
     const {
         userId,
         isEnabled,
-        token
     } = req.body;
     
     let editParams = {
-         isEnabled : isEnabled
+         enabled : isEnabled
     }
         
         const editUserResponse = await editusers(token,userId,editParams);
-        if(!editUserResponse){
+        if(editUserResponse.length !== 0 ){
             res.send({ status: 0, message: "Users Cannot be edited."});
         }
         else {
-                res.send({status: 1,message: "User " + isEnabled ? "enabled" : "disabled" +  " successfully"});
+                res.send({status: 1,message: `User ${isEnabled ? "enabled" : "disabled"} successfully`});
                 
 
         }
@@ -207,18 +231,221 @@ exports.enableOrDisableUser = async (req, res) => {
 
 
 exports.editUser = async (req, res) => {
+    let token = getTokenFromRequestHeader(req,res);
     const {
         userId,
-        editParams,
-        token
+        userMongoId,
+        firstName,
+        lastName,
+        username,
+        email,
+        country,
+        ccode,
+        mobile,
+        password,
+        logo,
     } = req.body;
+    let editParams = {
+        firstName : firstName,
+        lastName: lastName,
+        email: email,
+        username: username,
+        credentials:[
+            {
+              "type":"password",
+                "value":password,
+                "temporary":false
+            }
+      ],
+    }
      
         const editUserResponse = await editusers(token,userId,editParams);
-        if(!editUserResponse){
+        if(editUserResponse.length !== 0 ){
             res.send({ status: 0, message: "Users Cannot be edited."});
         }
         else {
-                res.send({status: 1,message: "User " + isEnabled ? "enabled" : "disabled" +  " successfully"});
+            Users.findOneAndUpdate(
+                { _id: userMongoId },
+                {
+                    firstname: firstName,
+                    lastname: lastName,
+                    email: email,
+                    country: country,
+                    ccode: ccode,
+                    mobile: mobile,
+                    username: username
+                },
+                (err1, user) => {
+                    if (err1) {
+                        var message1 = err1;
+                        if (err1.message) { message1 = err1.message; }
+                        res.send({status: 0,message: message1,});
+                    } else {
+                        res.send({
+                            status: 1,
+                            message: "User Edited successfully"
+                        });
+                    }
+                }
+            );
+                
+
+        }
+    
+};
+
+exports.createBank = async (req, res) => {
+    let token = getTokenFromRequestHeader(req,res);
+    const {
+        name,
+        bcode,
+        address,
+        state,
+        zip,
+        user_id,
+        contract,
+        email,
+        country,
+        ccode,
+        mobile,
+        password,
+        logo,
+    } = req.body;
+        const createUserResponse = await createUser(token,name,"",mobile,password,email,GROUPS.BANK_GROUP);
+        if(createUserResponse.length !== 0 ){
+            res.send({ status: 0, message: "Error creating Bank"});
+        }
+        else {
+            const getUserResponse = await getUser(token, mobile);
+            const userKeyclockId = JSON.parse(getUserResponse)[0].id;
+            let data = new Bank();
+            data.keyclock_id = userKeyclockId;
+            data.name = name,
+            data.bcode = bcode,
+            data.address = address,
+            data.state = state,
+            data.zip = zip,
+            data.user_id = user_id,
+            data.contract = contract,
+            data.email = email,
+            data.country = country,
+            data.ccode = ccode,
+            data.mobile = mobile,
+            data.username = mobile,
+            data.password = password,
+            data.logo = logo,
+            data.save(async (err1) => {
+                if (err1) {
+                    var message1 = err1;
+                    if (err1.message) { message1 = err1.message; }
+                    const deleteUserResponse = await deleteUser(token, userKeyclockId);
+                    if(deleteUserResponse.length !== 0 ){
+                        res.status(200).json({
+                            status: 0,
+                            message: "Error deleting infra in keyclock",
+                        });
+                    } else {
+                        res.send({status: 0,message: message1,});
+                    }
+                } else {
+                    res.send({
+                        status: 1,
+                        message: "Bank Created successfully"
+                    });
+                }
+            });
+
+        }
+    
+};
+
+
+exports.enableOrDisableBank = async (req, res) => {
+    let token = getTokenFromRequestHeader(req,res);
+    const {
+        userId,
+        isEnabled,
+    } = req.body;
+    
+    let editParams = {
+         enabled : isEnabled
+    }
+        const editUserResponse = await editusers(token,userId,editParams);
+        if(editUserResponse.length !== 0 ){
+            res.send({ status: 0, message: "Bank Cannot be edited."});
+        }
+        else {
+                res.send({status: 1,message: `Bank ${isEnabled ? "enabled" : "disabled"} successfully`});
+                
+
+        }
+};
+
+
+exports.editBank = async (req, res) => {
+    let token = getTokenFromRequestHeader(req,res);
+    const {
+        userId,
+        userMongoId,
+        name,
+        address,
+        state,
+        zip,
+        contract,
+        email,
+        country,
+        ccode,
+        mobile,
+        password,
+        logo,
+    } = req.body;
+    let editParams = {
+        firstName : name,
+        lastName: '',
+        email: email,
+        username: mobile,
+        credentials:[
+            {
+              "type":"password",
+                "value":password,
+                "temporary":false
+            }
+      ],
+    }
+     
+        const editUserResponse = await editusers(token,userId,editParams);
+        if(editUserResponse.length !== 0 ){
+            res.send({ status: 0, message: "Bank Cannot be edited."});
+        }
+        else {
+            Bank.findOneAndUpdate(
+                { _id: userMongoId },
+                {
+                    name : name,
+                    address : address,
+                    state : state,
+                    zip : zip,
+                    contract : contract,
+                    email : email,
+                    country : country,
+                    ccode : ccode,
+                    mobile : mobile,
+                    username : mobile,
+                    logo : logo,
+                },
+                (err1, bank) => {
+                    if (err1) {
+                        var message1 = err1;
+                        if (err1.message) { message1 = err1.message; }
+                        res.send({status: 0,message: message1,});
+                    } else {
+                        res.send({
+                            status: 1,
+                            message: "Bank Edited successfully"
+                        });
+                    }
+                }
+            );
                 
 
         }
