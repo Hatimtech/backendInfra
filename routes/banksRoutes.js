@@ -229,6 +229,42 @@ router.post("/api/enableOrDisableBank", checkInfraAdmin , bankCtrl.enableOrDisab
 
 
 
+ /**
+ * @swagger
+ * /api/getAllBanks:
+ *   get:
+ *     summary: Getting Infra users created By Infra Admin.
+ *     Authorization: Bearer
+ *     responses:
+ *       200:
+ *         description: get
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                     status:
+ *                       type: integer
+ *                       description: The status code.
+ *                       example: 1
+ *                     message:
+ *                       type: string
+ *                       description: The status message.
+ *                       example: users found.                       
+ *                     banks:
+ *                       type: array
+ *                       items:
+ *                          type: object
+ *                          properties:
+ *                               name:
+ *                                  type: string
+ *                                  description: first name of User.
+ *                                  example: Hatim. 
+ */
+router.get("/api/getAllBanks", checkInfraAdmin , bankCtrl.getAllBanks);
+
+ 
+
 
 
 module.exports = router;

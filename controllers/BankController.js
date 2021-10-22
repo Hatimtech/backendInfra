@@ -168,3 +168,14 @@ exports.editBank = async (req, res) => {
         }
     
 };
+
+
+exports.getAllBanks = async (req, res) => {
+    try {
+        const allBanks = await Bank.find();
+        res.send({ status: 1, message: "User found", banks : allBanks });
+    }catch(err)
+    {
+        res.send({ status: 0, message: err });
+    }
+};
