@@ -52,19 +52,11 @@ exports.createBank = async (req, res) => {
         data.country = country,
         data.ccode = ccode,
         data.logo = logo,
-        data.save(async (err1) => {
+        data.save(async (err1,bank) => {
             if (err1) {
                 var message1 = err1;
                 if (err1.message) { message1 = err1.message; }
-                const deleteUserResponse = await deleteUser(token, userKeyclockId);
-                if(deleteUserResponse.length !== 0 ){
-                    res.status(200).json({
-                        status: 0,
-                        message: "Error deleting infra in keyclock",
-                    });
-                } else {
                     res.send({status: 0,message: message1,});
-                }
             } else {
                 if (checkValidityToCreateUser(req,res)){
                     const createUserResponse = await createUser(token,firstName,lastName,username,password,email,GROUPS.BANK_GROUP);
@@ -78,30 +70,47 @@ exports.createBank = async (req, res) => {
                         data.firstname = firstName;
                         data.lastname = lastName;
                         data.username = username;
-                        data.roles = roles;
                         data.mobile = mobile;
                         data.email = email;
                         data.ccode = ccode;
                         data.country = country;
-                        data.save(async (err) => {
-                        if (err) {
-                            var message = err;
-                            if (err.message) {
-                                message = err.message;
-                            }
-                            const deleteUserResponse = await deleteUser(token, userKeyclockId);
-                            if(deleteUserResponse.length !== 0 ){
-                                res.status(200).json(error.USER_DELETE);
-                            } else {
-                                res.status(200).json({
-                                    code: 0,
-                                    message: message,
-                                });
-                            }
-                        } else {
-                            res.send({code: 1,message: "Bank Created successfully"});
+                        data.user_type = {
+                            bank_id : bank._id,
                         }
-                });
+                        data.save(async (usererr) => {
+                            if (usererr) {
+                                var usermessage = usererr;
+                                if (usererr.message) {
+                                    usermessage = usererr.message;
+                                }
+                                const deleteUserResponse = await deleteUser(token, userKeyclockId);
+                                console.log("delete",deleteUserResponse)
+                                if(deleteUserResponse.length !== 0 ){
+                                    res.status(200).json(error.USER_DELETE);
+                                } else {
+                                    Bank.findByIdAndRemove(bank.id,(bankerr) => {
+                                        if (bankerr) {
+                                            var bankmessage = bankerr;
+                                            if (bankerr.message) {
+                                                bankmessage = bankerr.message;
+                                            }
+                                            res.status(200).json({
+                                                code: 0,
+                                                message: bankmessage,
+                                            });
+                                        }else{
+                                            res.status(200).json({
+                                                code: 0,
+                                                message: usermessage,
+                                            });
+
+                                        }
+                                    });
+                                }
+                            } else {
+                                res.send({code: 1,message: "Bank Created successfully"});
+                            }
+                         });
                     }
                 }
             }

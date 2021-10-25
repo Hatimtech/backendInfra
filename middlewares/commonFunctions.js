@@ -16,7 +16,7 @@ module.exports.getTokenFromRequestHeader = (req, res) => {
 };
 
 module.exports.checkValidityToCreateUser = (req, res) => {
-    const {firstName,lastName, username, password, email, mobile, ccode , country, roles } = req.body;
+    const {firstName,lastName, username, password, email, mobile, ccode , country } = req.body;
     if(!firstName)
     {
         res.send(error.FIRST_NAME_EMPTY);
@@ -41,7 +41,7 @@ module.exports.checkValidityToCreateUser = (req, res) => {
 };
 
 module.exports.checkValidityToEditUser = (req, res) => {
-    const { userKeyclockId, userMongoId, firstName, lastName, username, password, email, mobile, ccode , country, roles } = req.body;
+    const { userKeyclockId, userMongoId, firstName, lastName, username, password, email, mobile, ccode , country } = req.body;
     if(!firstName)
     {
         res.send(error.FIRST_NAME_EMPTY);
@@ -78,7 +78,6 @@ module.exports.checkValidityToCreateBank = (req, res) => {
         mobile,
         ccode ,
         country,
-        roles,
         bcode,
         address,
         state,

@@ -79,4 +79,8 @@ module.exports.error = {
         code: 418,
         message: "Logo is required"
     },
+    Bank_DELETE : {
+        code: 420,
+        message: "Error while deleting bank"
+    },
 }

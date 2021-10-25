@@ -375,44 +375,8 @@ router.post("/api/enableOrDisableUser", checkInfraAdmin , userCtrl.enableOrDisab
  */
 router.post("/api/editUser",  checkInfraAdmin ,userCtrl.editUser);
 
-/**
- * @swagger
- * /api/createRole:
- *   post:
- *     summary: Create role.
- *     Authorization: Bearer
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 description : The user's firstname
- *                 example: bank-cashier
- *     responses:
- *       201:
- *         description: Created
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 data:
- *                   type: object
- *                   properties:
- *                     status:
- *                       type: integer
- *                       description: Status of the request.
- *                       example: 1
- *                     message:
- *                       type: string
- *                       description: Message for the logged in user.
- *                       example: Role created successfully
- */
-router.post("/api/createRole",  checkInfraAdmin ,userCtrl.createRole);
+
+// router.post("/api/createRole",  checkInfraAdmin ,userCtrl.createRole);
 
 
 
