@@ -192,7 +192,7 @@ module.exports.createRole = (token, name, attributes) => {
 module.exports.getAllRoles = (token) => {
     var options = {
         'method': 'GET',
-        'url': KEYCLOCK_IP + "/admin/realms/"  + REALM_NAME + "/roles",
+        'url': KEYCLOCK_IP + "/admin/realms/"  + REALM_NAME + "/roles?briefRepresentation=false",
         'headers': {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
