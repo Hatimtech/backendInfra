@@ -158,7 +158,58 @@ module.exports.createUser = (token, firstName,lastName,username, password, email
             }
         });
     });
+
 }
+
+// Create Roles
+module.exports.createRole = (token, name, attributes) => {
+    var options = {
+        'method': 'POST',
+        'url': KEYCLOCK_IP + "/admin/realms/"  + REALM_NAME + "/roles",
+        'headers': {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          "name": name,
+          "composite": false,
+          "clientRole": false,
+          "attributes":attributes,
+        })
+    }
+    return new Promise(function (resolve, reject) {
+        request(options, async function (err, response) {
+            if(err){
+                reject(err);
+            } else {
+                resolve(response.body);
+            }
+        });
+    });
+}
+
+// Create Roles
+module.exports.getAllRoles = (token) => {
+    var options = {
+        'method': 'GET',
+        'url': KEYCLOCK_IP + "/admin/realms/"  + REALM_NAME + "/roles?briefRepresentation=false",
+        'headers': {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+    }
+    return new Promise(function (resolve, reject) {
+        request(options, async function (err, response) {
+            if(err){
+                reject(err);
+            } else {
+                resolve(response.body);
+            }
+        });
+    });
+}
+
+
 
 module.exports.editusers = (token , userId, editParams) => {
     var options = {
@@ -208,6 +259,7 @@ module.exports.checkInfraAdmin = (req, res, next) => {
 	if(roles.indexOf(ROLES.INFRA_ADMIN_ROLE) == -1){
 		return false;
 	} else{ 
+        req.token = token;
         next();
     }
 }
@@ -218,3 +270,32 @@ module.exports.getUsername = (token) => {
     var decodedToken = jwt_decode(token);
 	return decodedToken.preferred_username;
 };
+
+
+
+//Permission
+module.exports.createPermission = (token, name, description) => {
+    var options = {
+        'method': 'POST',
+        'url': KEYCLOCK_IP + "/admin/realms/"  + REALM_NAME + "/roles",
+        'headers': {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          "name": name,
+          "composite": false,
+          "clientRole": false,
+          "attributes":attributes,
+        })
+    }
+    return new Promise(function (resolve, reject) {
+        request(options, async function (err, response) {
+            if(err){
+                reject(err);
+            } else {
+                resolve(response.body);
+            }
+        });
+    });
+}

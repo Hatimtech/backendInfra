@@ -1,79 +1,141 @@
+const Users = require('../models/User');
 const Bank = require('../models/Bank');
+const { error } = require( "../utils/errorMessages");
+const InfraConfigured = require('../models/InfraConfigured');
 const {
+    getToken,
     getUser,
     createUser,
+    createRole,
+    checkRoles,
     editusers,
     deleteUser,
 } = require("../middlewares/keyClock") ;
-const { getTokenFromRequestHeader } = require("../middlewares/commonFunctions")
+const {
+    getTokenFromRequestHeader,
+    checkValidityToCreateBank,
+    checkValidityToCreateUser
+} = require("../middlewares/commonFunctions")
 
-const {  GROUPS } = require("../config/keyclockConstant") ;
+const { ADMIN_USERNAME , ADMIN_PASSWORD , GROUPS , ROLES} = require("../config/keyclockConstant") ;
 
 
+// exports.createRole = async (req, res) => {
+//     let token = getTokenFromRequestHeader(req,res);
+//     const {
+//        name
+//     } = req.body;
+
+//         const createroleesponse = await this.createRole(token,name);
+//         if(createroleesponse.length !== 0 ){
+//             res.send({ code: 0, message: "Error creating Users"});
+//         }
+//         else {
+//             res.send({
+//                 code: 1,
+//                 message: "Role Created successfully"
+//             });
+//         }
+    
+// };
 
 exports.createBank = async (req, res) => {
     let token = getTokenFromRequestHeader(req,res);
     const {
+        firstName,
+        lastName,
+        username,
+        password,
+        email,
+        mobile,
+        ccode ,
+        country, 
+        roles,
         name,
         bcode,
         address,
         state,
         zip,
-        user_id,
         contract,
-        email,
-        country,
-        ccode,
-        mobile,
-        password,
         logo,
     } = req.body;
-        const createUserResponse = await createUser(token,name,"",mobile,password,email,GROUPS.BANK_GROUP);
-        if(createUserResponse.length !== 0 ){
-            res.send({ status: 0, message: "Error creating Bank"});
-        }
-        else {
-            const getUserResponse = await getUser(token, mobile);
-            const userKeyclockId = JSON.parse(getUserResponse)[0].id;
-            let data = new Bank();
-            data.keyclock_id = userKeyclockId;
-            data.name = name,
-            data.bcode = bcode,
-            data.address = address,
-            data.state = state,
-            data.zip = zip,
-            data.user_id = user_id,
-            data.contract = contract,
-            data.email = email,
-            data.country = country,
-            data.ccode = ccode,
-            data.mobile = mobile,
-            data.username = mobile,
-            data.password = password,
-            data.logo = logo,
-            data.save(async (err1) => {
-                if (err1) {
-                    var message1 = err1;
-                    if (err1.message) { message1 = err1.message; }
-                    const deleteUserResponse = await deleteUser(token, userKeyclockId);
-                    if(deleteUserResponse.length !== 0 ){
-                        res.status(200).json({
-                            status: 0,
-                            message: "Error deleting infra in keyclock",
-                        });
-                    } else {
-                        res.send({status: 0,message: message1,});
-                    }
-                } else {
-                    res.send({
-                        status: 1,
-                        message: "Bank Created successfully"
-                    });
-                }
-            });
 
-        }
-    
+    if (checkValidityToCreateBank(req,res)){
+        let data = new Bank();
+        data.name = name,
+        data.bcode = bcode,
+        data.address = address,
+        data.state = state,
+        data.zip = zip,
+        data.contract = contract,
+        data.country = country,
+        data.ccode = ccode,
+        data.logo = logo,
+        data.save(async (err1,bank) => {
+            if (err1) {
+                var message1 = err1;
+                if (err1.message) { message1 = err1.message; }
+                    res.send({status: 0,message: message1,});
+            } else {
+                if (checkValidityToCreateUser(req,res)){
+                    const createUserResponse = await createUser(token,firstName,lastName,username,password,email,GROUPS.BANK_GROUP);
+                    if(createUserResponse.length !== 0 ){
+                        res.status(200).json(error.USER_CREATE);
+                    } else {
+                        const getUserResponse = await getUser(token, username);
+                        const userKeyclockId = JSON.parse(getUserResponse)[0].id;
+                        let data = new Users();
+                        data.keyclock_id = userKeyclockId;
+                        data.firstname = firstName;
+                        data.lastname = lastName;
+                        data.username = username;
+                        data.mobile = mobile;
+                        data.email = email;
+                        data.ccode = ccode;
+                        data.country = country;
+                        data.user_type = {
+                            bank_id : bank._id,
+                        }
+                        data.save(async (usererr) => {
+                            if (usererr) {
+                                var usermessage = usererr;
+                                if (usererr.message) {
+                                    usermessage = usererr.message;
+                                }
+                                const deleteUserResponse = await deleteUser(token, userKeyclockId);
+                                console.log("delete",deleteUserResponse)
+                                if(deleteUserResponse.length !== 0 ){
+                                    res.status(200).json(error.USER_DELETE);
+                                } else {
+                                    Bank.findByIdAndRemove(bank.id,(bankerr) => {
+                                        if (bankerr) {
+                                            var bankmessage = bankerr;
+                                            if (bankerr.message) {
+                                                bankmessage = bankerr.message;
+                                            }
+                                            res.status(200).json({
+                                                code: 0,
+                                                message: bankmessage,
+                                            });
+                                        }else{
+                                            res.status(200).json({
+                                                code: 0,
+                                                message: usermessage,
+                                            });
+
+                                        }
+                                    });
+                                }
+                            } else {
+                                res.send({code: 1,message: "Bank Created successfully"});
+                            }
+                         });
+                    }
+                }
+            }
+        });
+    }
+        
 };
 
 
@@ -167,15 +229,4 @@ exports.editBank = async (req, res) => {
 
         }
     
-};
-
-
-exports.getAllBanks = async (req, res) => {
-    try {
-        const allBanks = await Bank.find();
-        res.send({ status: 1, message: "User found", banks : allBanks });
-    }catch(err)
-    {
-        res.send({ status: 0, message: err });
-    }
 };

@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
 const bankSchema = mongoose.Schema({
-    keyclock_id: { type: String, required: true },
     name: { type: String, required: true, unique: true },
     bcode: { type: String, required: true, unique: true },
     address: { type: String, required: true },
@@ -10,12 +9,8 @@ const bankSchema = mongoose.Schema({
     zip: { type: String, required: true },
     country: { type: String, required: true },
     ccode: { type: String, required: false },
-    mobile: { type: String, required: true, unique: true },
-    email: { type: String, required: true, unique: true },
-    user_id: { type: String, required: true },
     logo: { type: String, required: false },
     contract: { type: String, required: false },
-    username: { type: String, required: true, unique: true },
     created_at: { type: Date, default: Date.now },
     modified_at: { type: Date, default: null },
     initial_setup: { type: Boolean, default: false },
