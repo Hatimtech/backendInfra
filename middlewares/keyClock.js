@@ -61,6 +61,54 @@ module.exports.passwordReset = (token, userId, password) => {
     });
 }
 
+//Get user
+module.exports.getUser = (token, username) => {
+    var options = {
+        'method': 'GET',
+        'url': KEYCLOCK_IP + "/admin/realms/" + REALM_NAME +"/users/?username=" + username,
+        'headers': {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      
+      };
+    return new Promise(function (resolve, reject) {
+        request(options, async function (err, response) {
+            if(err){
+                reject(err);
+            }else if(response.body.error){
+                reject(response.body.error);
+            } else {
+                resolve(response.body);
+            }
+        });
+    });
+}
+
+//delete user
+module.exports.deleteUser = (token, userid) => {
+    var options = {
+        'method': 'DELETE',
+        'url': KEYCLOCK_IP + "/admin/realms/" + REALM_NAME +"/users/" + userid,
+        'headers': {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      
+      };
+    return new Promise(function (resolve, reject) {
+        request(options, async function (err, response) {
+            if(err){
+                reject(err);
+            }else if(response.body.error){
+                reject(response.body.error);
+            } else {
+                resolve(response.body);
+            }
+        });
+    });
+}
+
 // Create users
 module.exports.createUser = (token, firstName,lastName,username, password, email, group) => {
     var options = {
@@ -110,7 +158,36 @@ module.exports.createUser = (token, firstName,lastName,username, password, email
             }
         });
     });
+
 }
+
+// Create Roles
+module.exports.createRole = (token, name) => {
+    var options = {
+        'method': 'POST',
+        'url': KEYCLOCK_IP + "/admin/realms/"  + REALM_NAME + "/clients/" + CLIENT_ID + "/roles",
+        'headers': {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          "name": name,
+          "composite": false,
+          "clientRole": true,
+          "containerId": CLIENT_ID
+        })
+    }
+    return new Promise(function (resolve, reject) {
+        request(options, async function (err, response) {
+            if(err){
+                reject(err);
+            } else {
+                resolve(response.body);
+            }
+        });
+    });
+}
+
 
 module.exports.editusers = (token , userId, editParams) => {
     var options = {
@@ -135,7 +212,6 @@ module.exports.editusers = (token , userId, editParams) => {
     });
 }
 
-
 //Check validity of token
 module.exports.checkRoles = (token, roleToCheck) => {
     var decodedToken = jwt_decode(token);
@@ -147,7 +223,6 @@ module.exports.checkRoles = (token, roleToCheck) => {
     }
 };
 
-
 module.exports.checkInfraAdmin = (req, res, next) => {
  let token = req.headers["x-access-token"] || req.headers["authorization"];
   if (!token) res.send({ code: 0, message: "Token Required" });
@@ -155,8 +230,6 @@ module.exports.checkInfraAdmin = (req, res, next) => {
 {
     if (token.startsWith("Bearer ")) {
         // Remove Bearer from string
-        console.log('In check infra1')
-    
         token = token.slice(7, token.length);
       }
     var decodedToken = jwt_decode(token);
@@ -164,8 +237,6 @@ module.exports.checkInfraAdmin = (req, res, next) => {
 	if(roles.indexOf(ROLES.INFRA_ADMIN_ROLE) == -1){
 		return false;
 	} else{ 
-        console.log('In check infra2')
-
         next();
     }
 }

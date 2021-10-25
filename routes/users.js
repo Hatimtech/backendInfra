@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const userCtrl = require('../controllers/UserController');
+const bankCtrl = require('../controllers/BankController');
 const {
     checkInfraAdmin,
 } = require("../middlewares/keyClock") ;
@@ -139,10 +140,6 @@ router.get("/api/checkInfraIsConfigured", userCtrl.checkInfraIsConfigured);
  *                       type: string
  *                       description: Message for the logged in user.
  *                       example: Logged In successfully
- *                     token:
- *                       type: string
- *                       description: token for the user authentication.
- *                       example: efwerfewwer
  */
 
 router.post("/api/login", userCtrl.login);
@@ -162,10 +159,6 @@ router.post("/api/login", userCtrl.login);
  *           schema:
  *             type: object
  *             properties:
- *               token:
- *                 type: string
- *                 description : Token of Infra
- *                 example: sdajfosiwefknoanfs
  *               firstName:
  *                 type: string
  *                 description : The user's firstname
@@ -271,10 +264,6 @@ router.get("/api/getInfraUsers", checkInfraAdmin , userCtrl.getInfraUsers);
  *           schema:
  *             type: object
  *             properties:
- *               token:
- *                 type: string
- *                 description : Token of Infra
- *                 example: sdajfosiwefknoanfs
  *               userId:
  *                 type: string
  *                 description : The user's Id
@@ -320,7 +309,7 @@ router.post("/api/enableOrDisableUser", checkInfraAdmin , userCtrl.enableOrDisab
  *           schema:
  *             type: object
  *             properties:
- *               userId:
+ *               userKeyclockId:
  *                 type: string
  *                 description : The user's Id
  *                 example: a244bdab-a2b9-47c4-8cec-af95dd8d63f5
@@ -362,7 +351,7 @@ router.post("/api/enableOrDisableUser", checkInfraAdmin , userCtrl.enableOrDisab
  *                 example: Indian
  *               logo:
  *                 type: string
- *                 description: The user's country.
+ *                 description: The user's logo.
  *                 example: fwfdiawfawfn
  *     responses:
  *       201:
@@ -386,12 +375,11 @@ router.post("/api/enableOrDisableUser", checkInfraAdmin , userCtrl.enableOrDisab
  */
 router.post("/api/editUser",  checkInfraAdmin ,userCtrl.editUser);
 
-
 /**
  * @swagger
- * /api/createBank:
+ * /api/createRole:
  *   post:
- *     summary: Create Bank for infra.
+ *     summary: Create role.
  *     Authorization: Bearer
  *     requestBody:
  *       required: true
@@ -400,62 +388,10 @@ router.post("/api/editUser",  checkInfraAdmin ,userCtrl.editUser);
  *           schema:
  *             type: object
  *             properties:
- *               token:
- *                 type: string
- *                 description : Token of Infra
- *                 example: sdajfosiwefknoanfs
  *               name:
  *                 type: string
- *                 description: The user's name.
- *                 example: icicibank
- *               bcode:
- *                 type: string
- *                 description: The user's code.
- *                 example: icicibank
- *               address:
- *                 type: string
- *                 description: The user's address.
- *                 example: bangalore
- *               state:
- *                 type: string
- *                 description: The user's state.
- *                 example: karnataka
- *               zip:
- *                 type: string
- *                 description: The user's zip.
- *                 example: 673456
- *               user_id:
- *                 type: string
- *                 description: The user's user id.
- *                 example: icicibank
- *               contract:
- *                 type: string
- *                 description: The user's username.
- *                 example: awfwfwfgwgg
- *               logo:
- *                 type: string
- *                 description: The user's username.
- *                 example: egggwsgeg
- *               password:
- *                 type: string
- *                 description: The user's password.
- *                 example: Hello@1234
- *               email:
- *                 type: string
- *                 description: The user's email.
- *                 example: icicibank@gmail.com
- *               mobile:
- *                 type: string
- *                 description: The user's mobile.
- *                 example: 9345612345
- *               ccode:
- *                 type: string
- *                 description: The user's ccode.
- *                 example: +91
- *               country:
- *                 type: string
- *                 description: The user's country.
- *                 example: India
+ *                 description : The user's firstname
+ *                 example: bank-cashier
  *     responses:
  *       201:
  *         description: Created
@@ -474,12 +410,9 @@ router.post("/api/editUser",  checkInfraAdmin ,userCtrl.editUser);
  *                     message:
  *                       type: string
  *                       description: Message for the logged in user.
- *                       example: Bank created successfully
+ *                       example: Role created successfully
  */
- router.post("/api/createBank", checkInfraAdmin , userCtrl.createBank);
-
-
-
+router.post("/api/createRole",  checkInfraAdmin ,userCtrl.createRole);
 
 
 
