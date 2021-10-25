@@ -1,11 +1,14 @@
 const express = require('express');
 const router = express.Router();
 
-const userCtrl = require('../controllers/UserController');
 const bankCtrl = require('../controllers/BankController');
 const {
     checkInfraAdmin,
 } = require("../middlewares/keyClock") ;
+
+
+
+
 
 
 
@@ -22,9 +25,21 @@ const {
  *           schema:
  *             type: object
  *             properties:
+ *               firstName:
+ *                 type: string
+ *                 description: The user's first name.
+ *                 example: Mohan
+ *               lastName:
+ *                 type: string
+ *                 description: The user's last name.
+ *                 example: Deep
+ *               username: 
+ *                 type: string
+ *                 description: The user's username.
+ *                 example: mohan.deep
  *               name:
  *                 type: string
- *                 description: The user's name.
+ *                 description: The bank's name.
  *                 example: sbibank
  *               bcode:
  *                 type: string
@@ -95,6 +110,7 @@ const {
  *                       example: Bank created successfully
  */
  router.post("/api/createBank", checkInfraAdmin , bankCtrl.createBank);
+
 
  /**
  * @swagger
@@ -229,41 +245,6 @@ router.post("/api/enableOrDisableBank", checkInfraAdmin , bankCtrl.enableOrDisab
 
 
 
- /**
- * @swagger
- * /api/getAllBanks:
- *   get:
- *     summary: Getting Infra users created By Infra Admin.
- *     Authorization: Bearer
- *     responses:
- *       200:
- *         description: get
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                     status:
- *                       type: integer
- *                       description: The status code.
- *                       example: 1
- *                     message:
- *                       type: string
- *                       description: The status message.
- *                       example: users found.                       
- *                     banks:
- *                       type: array
- *                       items:
- *                          type: object
- *                          properties:
- *                               name:
- *                                  type: string
- *                                  description: first name of User.
- *                                  example: Hatim. 
- */
-router.get("/api/getAllBanks", checkInfraAdmin , bankCtrl.getAllBanks);
-
- 
 
 
 

@@ -9,7 +9,7 @@ const {
 
 /**
  * @swagger
- * /api/registerInfraAdmin:
+ * /api/infraSetup:
  *   post:
  *     summary: Create admin user for infra.
  *     requestBody:
@@ -72,7 +72,7 @@ const {
  *                       example: Leanne Graham
  */
 
-router.post("/api/registerInfraAdmin", userCtrl.infraSetup);
+router.post("/api/infraSetup", userCtrl.infraSetup);
 
 /**
  * @swagger
@@ -309,7 +309,7 @@ router.post("/api/enableOrDisableUser", checkInfraAdmin , userCtrl.enableOrDisab
  *           schema:
  *             type: object
  *             properties:
- *               userId:
+ *               userKeyclockId:
  *                 type: string
  *                 description : The user's Id
  *                 example: a244bdab-a2b9-47c4-8cec-af95dd8d63f5
@@ -374,5 +374,10 @@ router.post("/api/enableOrDisableUser", checkInfraAdmin , userCtrl.enableOrDisab
  *                       example: User edited successfully.
  */
 router.post("/api/editUser",  checkInfraAdmin ,userCtrl.editUser);
+
+
+// router.post("/api/createRole",  checkInfraAdmin ,userCtrl.createRole);
+
+
 
 module.exports = router;
