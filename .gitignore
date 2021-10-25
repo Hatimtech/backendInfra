@@ -23,3 +23,6 @@ build
 npm-debug.log
 package-lock.json
 restart.sh
+
+#keyclovk
+/config/keyclockConstants

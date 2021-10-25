@@ -188,6 +188,28 @@ module.exports.createRole = (token, name, attributes) => {
     });
 }
 
+// Create Roles
+module.exports.getAllRoles = (token) => {
+    var options = {
+        'method': 'GET',
+        'url': KEYCLOCK_IP + "/admin/realms/"  + REALM_NAME + "/roles",
+        'headers': {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+    }
+    return new Promise(function (resolve, reject) {
+        request(options, async function (err, response) {
+            if(err){
+                reject(err);
+            } else {
+                resolve(response.body);
+            }
+        });
+    });
+}
+
+
 
 module.exports.editusers = (token , userId, editParams) => {
     var options = {

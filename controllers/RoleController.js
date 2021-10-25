@@ -5,6 +5,7 @@ const InfraConfigured = require('../models/InfraConfigured');
 const {
     getToken,
     createRole,
+    getAllRoles,
     getUser,
     createUser,
     checkRoles,
@@ -28,7 +29,7 @@ exports.createUserRoles = async (req, res) => {
  
          const createRoleResponse = await createRole(token,name,attributes);
          if(createRoleResponse.length !== 0 ){
-             res.send({ code: 0, message: "Error creating Users"});
+             res.send(error.ROLE_CREATE);
          }
          else {
              res.send({
@@ -39,3 +40,17 @@ exports.createUserRoles = async (req, res) => {
         
 };
 
+
+exports.getAllRoles = async (req, res) => {
+    let token = getTokenFromRequestHeader(req,res);
+        const getRoleResponse = await getAllRoles(token);
+        if(JSON.parse(getRoleResponse).error){
+            res.status(200).json(error.GET_ALL_ROLE);
+        } else {
+            const roles = JSON.parse(getRoleResponse)
+            res.send({
+                code: 1,
+                roles: roles,
+            });
+        }
+};

@@ -83,4 +83,12 @@ module.exports.error = {
         code: 420,
         message: "Error while deleting bank"
     },
+    ROLE_CREATE : {
+        code: 421,
+        message: "Error while creating role in keyclock"
+    },
+    GET_ALL_ROLE : {
+        code: 421,
+        message: "Error while getting roles"
+    },
 }
