@@ -8,7 +8,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-const banksRouter = require('./routes/banksRoutes')
+const banksRouter = require('./routes/banksRoutes');
+const rolesRouter = require('./routes/rolesRoutes');
 const dotenv = require('dotenv');
 const swaggerUi = require('swagger-ui-express');
 const app = express();
@@ -44,6 +45,7 @@ app.use(bodyParser.json());
 app.use('/', indexRouter);
 app.use('/',usersRouter);
 app.use('/', banksRouter);
+app.use('/', rolesRouter);
 
 /**
  * swagger api config

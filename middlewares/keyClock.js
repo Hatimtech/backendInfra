@@ -162,10 +162,10 @@ module.exports.createUser = (token, firstName,lastName,username, password, email
 }
 
 // Create Roles
-module.exports.createRole = (token, name) => {
+module.exports.createRole = (token, name, attributes) => {
     var options = {
         'method': 'POST',
-        'url': KEYCLOCK_IP + "/admin/realms/"  + REALM_NAME + "/clients/" + CLIENT_ID + "/roles",
+        'url': KEYCLOCK_IP + "/admin/realms/"  + REALM_NAME + "/roles",
         'headers': {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
@@ -173,8 +173,8 @@ module.exports.createRole = (token, name) => {
         body: JSON.stringify({
           "name": name,
           "composite": false,
-          "clientRole": true,
-          "containerId": CLIENT_ID
+          "clientRole": false,
+          "attributes":attributes,
         })
     }
     return new Promise(function (resolve, reject) {
@@ -237,6 +237,7 @@ module.exports.checkInfraAdmin = (req, res, next) => {
 	if(roles.indexOf(ROLES.INFRA_ADMIN_ROLE) == -1){
 		return false;
 	} else{ 
+        req.token = token;
         next();
     }
 }

@@ -6,6 +6,7 @@ const {
     getToken,
     getUser,
     createUser,
+    createRole,
     checkRoles,
     editusers,
     deleteUser,
@@ -19,6 +20,24 @@ const {
 const { ADMIN_USERNAME , ADMIN_PASSWORD , GROUPS , ROLES} = require("../config/keyclockConstant") ;
 
 
+// exports.createRole = async (req, res) => {
+//     let token = getTokenFromRequestHeader(req,res);
+//     const {
+//        name
+//     } = req.body;
+
+//         const createroleesponse = await this.createRole(token,name);
+//         if(createroleesponse.length !== 0 ){
+//             res.send({ code: 0, message: "Error creating Users"});
+//         }
+//         else {
+//             res.send({
+//                 code: 1,
+//                 message: "Role Created successfully"
+//             });
+//         }
+    
+// };
 
 exports.createBank = async (req, res) => {
     let token = getTokenFromRequestHeader(req,res);

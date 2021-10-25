@@ -163,26 +163,6 @@ exports.registerInfraUser = async (req, res) => {
 };
 
 
-exports.createRole = async (req, res) => {
-    let token = getTokenFromRequestHeader(req,res);
-    const {
-       name
-    } = req.body;
-
-        const createroleesponse = await this.createRole(token,name);
-        if(createroleesponse.length !== 0 ){
-            res.send({ code: 0, message: "Error creating Users"});
-        }
-        else {
-            res.send({
-                code: 1,
-                message: "Role Created successfully"
-            });
-        }
-    
-};
-
-
 
 /**
  * This is used for Login to anyuser.
