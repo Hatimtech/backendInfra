@@ -11,6 +11,10 @@ module.exports.error = {
         code: 402,
         message: "Usernameis required"
     },
+    NAME_EMPTY : {
+        code: 402,
+        message: "Nameis required"
+    },
     PASSWORD_EMPTY : {
         code: 403,
         message: "Password is required"
@@ -79,7 +83,7 @@ module.exports.error = {
         code: 418,
         message: "Logo is required"
     },
-    Bank_DELETE : {
+    BANK_DELETE : {
         code: 420,
         message: "Error while deleting bank"
     },
@@ -90,5 +94,17 @@ module.exports.error = {
     GET_ALL_ROLE : {
         code: 421,
         message: "Error while getting roles"
+    },
+    ROLE_DELETE : {
+        code: 410,
+        message: "Error while deleting role in keyclock"
+    },
+    ROLE_EDIT : {
+        code: 410,
+        message: "Error while editing role in keyclock"
+    },
+    ROLE_ASSIGN : {
+        code: 410,
+        message: "Error while assigning role"
     },
 }

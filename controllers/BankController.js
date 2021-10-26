@@ -14,43 +14,18 @@ const {
 const {
     getTokenFromRequestHeader,
     checkValidityToCreateBank,
-    checkValidityToCreateUser
+    checkValidityToCreateUser,
+    checkValidityToAssignUserToBank
 } = require("../middlewares/commonFunctions")
 
 const { ADMIN_USERNAME , ADMIN_PASSWORD , GROUPS , ROLES} = require("../config/keyclockConstant") ;
 
 
-// exports.createRole = async (req, res) => {
-//     let token = getTokenFromRequestHeader(req,res);
-//     const {
-//        name
-//     } = req.body;
-
-//         const createroleesponse = await this.createRole(token,name);
-//         if(createroleesponse.length !== 0 ){
-//             res.send({ code: 0, message: "Error creating Users"});
-//         }
-//         else {
-//             res.send({
-//                 code: 1,
-//                 message: "Role Created successfully"
-//             });
-//         }
-    
-// };
 
 exports.createBank = async (req, res) => {
-    let token = getTokenFromRequestHeader(req,res);
     const {
-        firstName,
-        lastName,
-        username,
-        password,
-        email,
-        mobile,
         ccode ,
         country, 
-        roles,
         name,
         bcode,
         address,
@@ -71,68 +46,14 @@ exports.createBank = async (req, res) => {
         data.country = country,
         data.ccode = ccode,
         data.logo = logo,
-        data.save(async (err1,bank) => {
+        data.save(async (err1) => {
             if (err1) {
                 var message1 = err1;
                 if (err1.message) { message1 = err1.message; }
                     res.send({status: 0,message: message1,});
-            } else {
-                if (checkValidityToCreateUser(req,res)){
-                    const createUserResponse = await createUser(token,firstName,lastName,username,password,email,GROUPS.BANK_GROUP);
-                    if(createUserResponse.length !== 0 ){
-                        res.status(200).json(error.USER_CREATE);
-                    } else {
-                        const getUserResponse = await getUser(token, username);
-                        const userKeyclockId = JSON.parse(getUserResponse)[0].id;
-                        let data = new Users();
-                        data.keyclock_id = userKeyclockId;
-                        data.firstname = firstName;
-                        data.lastname = lastName;
-                        data.username = username;
-                        data.mobile = mobile;
-                        data.email = email;
-                        data.ccode = ccode;
-                        data.country = country;
-                        data.user_type = {
-                            bank_id : bank._id,
-                        }
-                        data.save(async (usererr) => {
-                            if (usererr) {
-                                var usermessage = usererr;
-                                if (usererr.message) {
-                                    usermessage = usererr.message;
-                                }
-                                const deleteUserResponse = await deleteUser(token, userKeyclockId);
-                                console.log("delete",deleteUserResponse)
-                                if(deleteUserResponse.length !== 0 ){
-                                    res.status(200).json(error.USER_DELETE);
-                                } else {
-                                    Bank.findByIdAndRemove(bank.id,(bankerr) => {
-                                        if (bankerr) {
-                                            var bankmessage = bankerr;
-                                            if (bankerr.message) {
-                                                bankmessage = bankerr.message;
-                                            }
-                                            res.status(200).json({
-                                                code: 0,
-                                                message: bankmessage,
-                                            });
-                                        }else{
-                                            res.status(200).json({
-                                                code: 0,
-                                                message: usermessage,
-                                            });
-
-                                        }
-                                    });
-                                }
-                            } else {
-                                res.send({code: 1,message: "Bank Created successfully"});
-                            }
-                         });
-                    }
+                } else {
+                    res.send({code: 1,message: "Bank Created successfully"});
                 }
-            }
         });
     }
         
@@ -229,4 +150,34 @@ exports.editBank = async (req, res) => {
 
         }
     
+};
+
+
+exports.assignUserToBank= async (req, res) => {
+    const {
+        userMongoId,
+        bankMongoId,
+    } = req.body;
+    if (checkValidityToAssignUserToBank(req,res)){
+            Users.findByIdAndUpdate(
+                userMongoId,
+                {
+                    user_type : {
+                        bank_mongo_id: bankMongoId,
+                    },
+                },
+                (err1) => {
+                    if (err1) {
+                        var message1 = err1;
+                        if (err1.message) { message1 = err1.message; }
+                        res.send({status: 0,message: message1,});
+                    } else {
+                        res.send({
+                            status: 1,
+                            message: "User Assigned successfully"
+                        });
+                    }
+                }
+            );
+    } 
 };

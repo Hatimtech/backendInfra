@@ -17,6 +17,7 @@ const {
  * /api/createBank:
  *   post:
  *     summary: Create Bank for infra.
+ *     tags: ['Bank operations']
  *     Authorization: Bearer
  *     requestBody:
  *       required: true
@@ -117,6 +118,7 @@ const {
  * /api/enableOrDisableBank:
  *   post:
  *     summary: Enable and disable user for infra.
+ *     tags: ['Bank operations']
  *     Authorization: Bearer
  *     requestBody:
  *       required: true
@@ -160,6 +162,7 @@ router.post("/api/enableOrDisableBank", checkInfraAdmin , bankCtrl.enableOrDisab
  * /api/editBank:
  *   post:
  *     summary: edit bank for infra.
+ *     tags: ['Bank operations']
  *     Authorization: Bearer
  *     requestBody:
  *       required: true
@@ -242,7 +245,49 @@ router.post("/api/enableOrDisableBank", checkInfraAdmin , bankCtrl.enableOrDisab
  */
  router.post("/api/editBank",  checkInfraAdmin ,bankCtrl.editBank);
 
-
+/**
+ * @swagger
+ * /api/assignUserToBank:
+ *   post:
+ *     summary: Assigns user to bank.
+ *     tags: ['Bank operations']
+ *     Authorization: Bearer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               bankMongoId:
+ *                 type: string
+ *                 description : The user's Id
+ *                 example: a244bdab-a2b9-47c4-8cec-af95dd8d63f5
+ *               userMongoId:
+ *                 type: string
+ *                 description : The user's Id
+ *                 example: 617188e56ed2151bc61ff1af
+ *     responses:
+ *       201:
+ *         description: Created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     status:
+ *                       type: integer
+ *                       description: Status of the request.
+ *                       example: 1
+ *                     message:
+ *                       type: string
+ *                       description: Message for the logged in user.
+ *                       example: User assigned successfully.
+ */
+ router.post("/api/assignUserToBank",  checkInfraAdmin ,bankCtrl.assignUserToBank);
 
 
 

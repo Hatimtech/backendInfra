@@ -6,6 +6,9 @@ const {
     getToken,
     createRole,
     getAllRoles,
+    deleteRole,
+    editRole,
+    assignRole,
     getUser,
     createUser,
     checkRoles,
@@ -40,6 +43,25 @@ exports.createUserRoles = async (req, res) => {
         
 };
 
+exports.editeRoles = async (req, res) => {
+    let token = getTokenFromRequestHeader(req,res);
+    const {
+        name,
+        attributes,
+     } = req.body;
+ 
+         const editRoleResponse = await editRole(token,name,attributes);
+         if(editRoleResponse.length !== 0 ){
+             res.send(error.ROLE_EDIT);
+         }
+         else {
+             res.send({
+                 code: 1,
+                 message: "Role Edited successfully"
+             });
+         }
+        
+};
 
 exports.getAllRoles = async (req, res) => {
     let token = getTokenFromRequestHeader(req,res);
@@ -51,6 +73,36 @@ exports.getAllRoles = async (req, res) => {
             res.send({
                 code: 1,
                 roles: roles,
+            });
+        }
+};
+
+exports.deleteRole = async (req, res) => {
+    const { name } = req.body;
+    let token = getTokenFromRequestHeader(req,res);
+        const deleteRoleResponse = await deleteRole(token, name);
+        console.log(deleteRoleResponse);
+        if(deleteRoleResponse.length !== 0 ){
+            res.status(200).json(error.ROLE_DELETE);
+        } else {
+            res.send({
+                code: 1,
+                message: "Role Deleted successfully"
+            });
+        }
+};
+
+exports.assignRole = async (req, res) => {
+    const { name, userKeyclockId } = req.body;
+    let token = getTokenFromRequestHeader(req,res);
+        const assignRoleResponse = await assignRole(token, userKeyclockId, name);
+        console.log(assignRoleResponse);
+        if(assignRoleResponse.length !== 0 ){
+            res.status(200).json(error.ROLE_ASSIGN);
+        } else {
+            res.send({
+                code: 1,
+                message: "Role Assigned successfully"
             });
         }
 };

@@ -13,7 +13,6 @@ const userSchema = mongoose.Schema({
     logo: { type: String, required: false },
     status: { type: Number, required: true, default: 1 },
     user_type: { type: Object, required: false },
-    roles:   {type: Array}
 });
 
 userSchema.plugin(uniqueValidator);

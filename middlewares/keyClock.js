@@ -188,7 +188,34 @@ module.exports.createRole = (token, name, attributes) => {
     });
 }
 
-// Create Roles
+// Edit Roles
+module.exports.editRole = (token, name, attributes) => {
+    var options = {
+        'method': 'PUT',
+        'url': KEYCLOCK_IP + "/admin/realms/"  + REALM_NAME + "/roles/" + name,
+        'headers': {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          "name": name,
+          "composite": false,
+          "clientRole": false,
+          "attributes": attributes,
+        })
+    }
+    return new Promise(function (resolve, reject) {
+        request(options, async function (err, response) {
+            if(err){
+                reject(err);
+            } else {
+                resolve(response.body);
+            }
+        });
+    });
+}
+
+// Get Roles
 module.exports.getAllRoles = (token) => {
     var options = {
         'method': 'GET',
@@ -209,8 +236,55 @@ module.exports.getAllRoles = (token) => {
     });
 }
 
+// Delete Roles
+module.exports.deleteRole = (token, name) => {
+    var options = {
+        'method': 'DELETE',
+        'url': KEYCLOCK_IP + "/admin/realms/"  + REALM_NAME + "/roles/" + name,
+        'headers': {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+    }
+    return new Promise(function (resolve, reject) {
+        request(options, async function (err, response) {
+            if(err){
+                reject(err);
+            } else {
+                resolve(response.body);
+            }
+        });
+    });
+}
 
+// Assign Role
+module.exports.assignRole = (token, userid, name) => {
+    var options = {
+        'method': 'POST',
+        'url': KEYCLOCK_IP + "/admin/realms/"  + REALM_NAME + "/users/" + userid + "/role-mappings/realm",
+        'headers': {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          "name": name,
+          "composite": false,
+          "clientRole": false,
+          "containerId": REALM_NAME
+        })
+    }
+    return new Promise(function (resolve, reject) {
+        request(options, async function (err, response) {
+            if(err){
+                reject(err);
+            } else {
+                resolve(response.body);
+            }
+        });
+    });
+}
 
+// edit user
 module.exports.editusers = (token , userId, editParams) => {
     var options = {
         'method': 'PUT',

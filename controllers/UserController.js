@@ -190,8 +190,7 @@ exports.login = async (req, res) => {
 
 
 /**
- * This is used for getting Infra User list.
- * @param {token } req
+ * This is used for getting
  * @param { code, message, users} res
  */
 exports.getInfraUsers = async (req, res) => {

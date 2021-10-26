@@ -23,8 +23,18 @@ const swaggerDefinition = {
                 bearerFormat: "JWT"
             },
         }
-    }
-    ,
+    },
+    tags: [
+        {
+          name: 'User operations'
+        },
+        {
+          name: 'Bank operations'
+        },
+        {
+          name: 'Role operations'
+        },
+    ],
     security: [{
         jwt: []
     }]
