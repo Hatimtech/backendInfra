@@ -95,8 +95,21 @@ module.exports.error = {
         code: 422,
         message: "Error while creating permission in keyclock"
 
+    },
+    ERROR_CREATE_FOLDER_PATHNAME_EMPTY: {
+        code: 423,
+        message: "Path name of folder is empty"
+
+    },
+    ERROR_CREATE_FILE_PATHNAME_EMPTY: {
+        code: 424,
+        message: "Path name of file is empty"
+
+    },
+    ERROR_CREATE_FILE_EMPTY: {
+        code: 425,
+        message: "File is empty"
+
     }
-
-
 
 }

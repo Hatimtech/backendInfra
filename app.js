@@ -10,6 +10,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const banksRouter = require('./routes/banksRoutes');
 const rolesRouter = require('./routes/rolesRoutes');
+const openKmRouter = require('./routes/OpenKmRoutes');
 const dotenv = require('dotenv');
 const swaggerUi = require('swagger-ui-express');
 const app = express();
@@ -46,6 +47,7 @@ app.use('/', indexRouter);
 app.use('/',usersRouter);
 app.use('/', banksRouter);
 app.use('/', rolesRouter);
+app.use('/', openKmRouter);
 
 /**
  * swagger api config
