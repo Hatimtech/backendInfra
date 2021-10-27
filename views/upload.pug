@@ -3,7 +3,7 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
-  form(action='http://91d90ac373dc.sn.mynetname.net:2043/OpenKM/services/rest/document/createSimple', method='POST', enctype="multipart/form-data")
+  form(action= 'http://172.16.100.212:8080/OpenKM/services/rest/document/createSimple', method='POST', enctype="multipart/form-data")
     p
       | title:
       input(type='file', name='content', value='')

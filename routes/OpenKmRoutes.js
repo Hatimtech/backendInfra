@@ -58,13 +58,13 @@ const openKmController = require('../controllers/OpenKmController');
  *                       description: if folder has children.
  *                       example: false
  */
-router.post("/api/createFolder" , openKmController.createFolder);
+router.post("/api/createFolder", openKmController.createFolder);
 
 /**
  * @swagger
  * /api/uploadFile:
  *   post:
- *     summary: Create folder on OPEN_KM.
+ *     summary: Upload file on OPEN_KM.
  *     tags:
  *       - OpenKm Api
  *     requestBody:
@@ -74,18 +74,13 @@ router.post("/api/createFolder" , openKmController.createFolder);
  *           schema:
  *             type: object
  *             properties:
+ *               docPath:
+ *                 type: string
+ *                 description : the name of the folder
+ *                 example: /okm:root/folder/image.png
  *               content:
  *                 type: string
- *                 description : the name of the file
- *                 example: folder
  *                 format: binary
- *               pathToStore:
- *                 type: object
- *                 properties:
- *                   docPath:
- *                    type : string
- *                    description : the path of the file
- *                    example: /okm:root/folder/image.png
  *     responses:
  *       201:
  *         description: Created
@@ -123,7 +118,7 @@ router.post("/api/createFolder" , openKmController.createFolder);
  *                       description: if folder has children.
  *                       example: false
  */
-router.post("/api/uploadFile" , openKmController.uploadFile);
+router.post("/api/uploadFile", openKmController.uploadFile);
 
 /**
  * @swagger
@@ -139,17 +134,20 @@ router.post("/api/uploadFile" , openKmController.uploadFile);
  *           type: string
  *         required: true
  *         description: Doc id of the file
- *         example: e62ec3be-d6fe-4d20-9564-2f92e58e2885
+ *         example: 0870d8a3-9483-42cc-8381-af0dd94b8cbd
  *     responses:
  *       200:
  *         description: A file
  *         content:
- *           application/octet-stream:
+ *           application/json:
  *             schema:
- *               type: string
- *               format: binary
+ *               type: objet
+ *               properties:
+ *                 file:
+ *                   type: string
+ *                   format: byte
  */
- router.get("/api/getFile" , openKmController.getFile);
+router.get("/api/getFile", openKmController.getFile);
 
 
 module.exports = router;
