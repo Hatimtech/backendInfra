@@ -1,24 +1,14 @@
 const Users = require('../models/User');
 const Bank = require('../models/Bank');
-const { error } = require( "../utils/errorMessages");
-const InfraConfigured = require('../models/InfraConfigured');
+const { editusers } = require("../middlewares/keyclock/User") ;
+const { checkValidityToCreateUser } = require("../middlewares/validators/UserValidators");
 const {
-    getToken,
-    getUser,
-    createUser,
-    createRole,
-    checkRoles,
-    editusers,
-    deleteUser,
-} = require("../middlewares/keyClock") ;
-const {
-    getTokenFromRequestHeader,
     checkValidityToCreateBank,
-    checkValidityToCreateUser,
-    checkValidityToAssignUserToBank
-} = require("../middlewares/commonFunctions")
+    checkValidityToAssignUserToBank,
+} = require("../middlewares/validators/UserValidators")
+const { getTokenFromRequestHeader } = require("../middlewares/commonFunctions")
 
-const { ADMIN_USERNAME , ADMIN_PASSWORD , GROUPS , ROLES} = require("../config/keyclockConstant") ;
+
 
 
 
@@ -75,9 +65,7 @@ exports.enableOrDisableBank = async (req, res) => {
             res.send({ status: 0, message: "Bank Cannot be edited."});
         }
         else {
-                res.send({status: 1,message: `Bank ${isEnabled ? "enabled" : "disabled"} successfully`});
-                
-
+            res.send({status: 1,message: `Bank ${isEnabled ? "enabled" : "disabled"} successfully`});
         }
 };
 

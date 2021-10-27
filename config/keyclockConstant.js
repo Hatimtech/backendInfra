@@ -17,6 +17,8 @@ module.exports.KEYCLOCK_IP = "http://localhost:8080/auth"
 
 module.exports.CLIENT_ID = "infra-client"
 
+module.exports.ID_OF_CLIENT = "cc6b0966-a696-4c19-811e-2ae115ee8cba"
+
 module.exports.ADMIN_USERNAME = "adminuser"
 
 module.exports.ADMIN_PASSWORD = "H@tim5152"

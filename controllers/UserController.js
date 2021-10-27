@@ -1,20 +1,20 @@
 const Users = require('../models/User');
-const Bank = require('../models/Bank');
 const InfraConfigured = require('../models/InfraConfigured');
 const { error } = require( "../utils/errorMessages");
+const { getToken } = require("../middlewares/keyclock/AccessToken")
+const { checkRoles } = require("../middlewares/validators/TokenValidators")
 const {
-    getToken,
+    checkValidityToEditUser,
+    checkValidityToCreateUser,
+} = require("../middlewares/validators/UserValidators")
+const {
     getUser,
     createUser,
-    createRole,
-    checkRoles,
     editusers,
     deleteUser,
-} = require("../middlewares/keyClock") ;
+} = require("../middlewares/keyclock/User") ;
 const {
     getTokenFromRequestHeader,
-    checkValidityToCreateUser,
-    checkValidityToEditUser,
  } = require("../middlewares/commonFunctions")
 
 const { ADMIN_USERNAME , ADMIN_PASSWORD , GROUPS , ROLES} = require("../config/keyclockConstant") ;

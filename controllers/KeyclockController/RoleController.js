@@ -1,27 +1,14 @@
-const Users = require('../models/User');
-const Bank = require('../models/Bank');
-const { error } = require( "../utils/errorMessages");
-const InfraConfigured = require('../models/InfraConfigured');
+const { error } = require( "../../utils/errorMessages");
 const {
-    getToken,
     createRole,
     getAllRoles,
     deleteRole,
-    editRole,
     assignRole,
-    getUser,
-    createUser,
-    checkRoles,
-    editusers,
-    deleteUser,
-} = require("../middlewares/keyClock") ;
+} = require("../../middlewares/keyclock/Role") ;
 const {
     getTokenFromRequestHeader,
-    checkValidityToCreateBank,
-    checkValidityToCreateUser
-} = require("../middlewares/commonFunctions")
+} = require("../../middlewares/commonFunctions")
 
-const { ADMIN_USERNAME , ADMIN_PASSWORD , GROUPS , ROLES} = require("../config/keyclockConstant") ;
 
 exports.createUserRoles = async (req, res) => {
     let token = getTokenFromRequestHeader(req,res);
@@ -31,6 +18,7 @@ exports.createUserRoles = async (req, res) => {
      } = req.body;
  
          const createRoleResponse = await createRole(token,name,attributes);
+         console.log(createRoleResponse);
          if(createRoleResponse.length !== 0 ){
              res.send(error.ROLE_CREATE);
          }
@@ -43,29 +31,10 @@ exports.createUserRoles = async (req, res) => {
         
 };
 
-exports.editeRoles = async (req, res) => {
-    let token = getTokenFromRequestHeader(req,res);
-    const {
-        name,
-        attributes,
-     } = req.body;
- 
-         const editRoleResponse = await editRole(token,name,attributes);
-         if(editRoleResponse.length !== 0 ){
-             res.send(error.ROLE_EDIT);
-         }
-         else {
-             res.send({
-                 code: 1,
-                 message: "Role Edited successfully"
-             });
-         }
-        
-};
-
 exports.getAllRoles = async (req, res) => {
     let token = getTokenFromRequestHeader(req,res);
         const getRoleResponse = await getAllRoles(token);
+        console.log(getRoleResponse);
         if(JSON.parse(getRoleResponse).error){
             res.status(200).json(error.GET_ALL_ROLE);
         } else {

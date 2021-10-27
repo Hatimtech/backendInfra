@@ -34,6 +34,9 @@ const swaggerDefinition = {
         {
           name: 'Role operations'
         },
+        {
+            name: 'Keyclock operations'
+        },
     ],
     security: [{
         jwt: []
@@ -45,7 +48,7 @@ const swaggerDefinition = {
 const options = {
     swaggerDefinition,
     // Paths to files containing OpenAPI definitions
-    apis: ['./routes/*.js'],
+    apis: ['./routes/*.js','./routes/keyclockRoutes/*.js'],
 
 };
 module.exports.swaggerSpec  = ()=> {

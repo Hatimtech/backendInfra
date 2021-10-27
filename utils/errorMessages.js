@@ -92,19 +92,23 @@ module.exports.error = {
         message: "Error while creating role in keyclock"
     },
     GET_ALL_ROLE : {
-        code: 421,
+        code: 422,
         message: "Error while getting roles"
     },
     ROLE_DELETE : {
-        code: 410,
+        code: 423,
         message: "Error while deleting role in keyclock"
     },
     ROLE_EDIT : {
-        code: 410,
+        code: 424,
         message: "Error while editing role in keyclock"
     },
     ROLE_ASSIGN : {
-        code: 410,
+        code: 425,
         message: "Error while assigning role"
+    },
+    SCOPE_CREATE : {
+        code: 426,
+        message: "Error while creating client in keyclock"
     },
 }

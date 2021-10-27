@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-const roleCtrl = require('../controllers/RoleController');
+const roleCtrl = require('../../controllers/KeyclockController/RoleController');
 const {
     checkInfraAdmin,
-} = require("../middlewares/keyClock") ;
+} = require("../../middlewares/keyClock") ;
 
 /**
  * @swagger
@@ -130,53 +130,6 @@ router.get("/api/getAllRoles", checkInfraAdmin , roleCtrl.getAllRoles);
  */
  router.post("/api/deleteRole", checkInfraAdmin , roleCtrl.deleteRole);
 
- /**
- * @swagger
- * /api/editRole:
- *   post:
- *     summary: Edit Role.
- *     tags: ['Role operations']
- *     Authorization: Bearer
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 description: The user's first name.
- *                 example: Mohan
- *               attributes:
- *                 type: object
- *                 properties:
- *                   permission2:
- *                     type: array
- *                     items:
- *                       type: string
- *                       example: 100
- *     responses:
- *       201:
- *         description: Created
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 data:
- *                   type: object
- *                   properties:
- *                     status:
- *                       type: integer
- *                       description: Status of the request.
- *                       example: 1
- *                     message:
- *                       type: string
- *                       description: Message for the logged in user.
- *                       example: Role edited successfully
- */
-  router.post("/api/editRole", checkInfraAdmin , roleCtrl.editeRoles);
 
   /**
  * @swagger

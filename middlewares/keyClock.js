@@ -13,6 +13,7 @@ module.exports.getToken = (username, password) => {
         },
         form: {
             'client_id': CLIENT_ID,
+            'client_secret': 'a37922ad-9d46-448d-9957-0e30db83b4d8',
             'username': username,
             'password': password,
             'grant_type': 'password'
