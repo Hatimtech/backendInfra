@@ -11,8 +11,6 @@ const fs = require('fs');
  * @returns {Promise<void>}
  */
 exports.createFolder = async  (req, res) => {
-    console.log(req.body)
-
     const {path} = req.body;
 
     if(path == undefined || path == null || path == ''){
@@ -23,6 +21,7 @@ exports.createFolder = async  (req, res) => {
             'url': process.env.OPENKM_URL_SERVICE_BASE + OPEN_KM_END_POINT_CREATE_FOLDER,
             'headers': {
                 'Content-Type': 'application/json',
+                'accept': 'application/json',
                 "Authorization" : "Basic " + new Buffer(process.env.OPENKM_LOGIN+SEPARATOR_DOUBLE_DOT+process.env.OPENKM_PASSWORD).toString("base64")
             },
             body: JSON.stringify({
@@ -33,10 +32,8 @@ exports.createFolder = async  (req, res) => {
         new Promise(()=>{
             request(options,  async function (err, response) {
                 if (err) {
-                    console.log(err)
                   return res.send((err)) ;
                 } else {
-                    console.log(response.body)
                    return res.send(response.body) ;
                 }
             });
