@@ -125,5 +125,31 @@ router.post("/api/createFolder" , openKmController.createFolder);
  */
 router.post("/api/uploadFile" , openKmController.uploadFile);
 
+/**
+ * @swagger
+ * /api/getFile:
+ *   get:
+ *     summary: Gets a file from Open KM.
+ *     tags:
+ *       - OpenKm Api
+ *     parameters:
+ *       - in: query
+ *         name: docId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Doc id of the file
+ *         example: e62ec3be-d6fe-4d20-9564-2f92e58e2885
+ *     responses:
+ *       200:
+ *         description: A file
+ *         content:
+ *           application/octet-stream:
+ *             schema:
+ *               type: string
+ *               format: binary
+ */
+ router.get("/api/getFile" , openKmController.getFile);
+
 
 module.exports = router;

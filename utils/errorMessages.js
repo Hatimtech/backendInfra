@@ -110,6 +110,10 @@ module.exports.error = {
         code: 425,
         message: "File is empty"
 
+    },
+    ERROR_GET_FILE_DOCID_EMPTY: {
+        code: 426,
+        message: "DOcument Id is requires"
     }
 
 }
