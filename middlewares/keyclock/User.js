@@ -25,6 +25,30 @@ module.exports.getUser = (token, username) => {
     });
 }
 
+//Get all user 
+module.exports.getAllUser = (token) => {
+    var options = {
+        'method': 'GET',
+        'url': KEYCLOCK_IP + "/admin/realms/" + REALM_NAME +"/users?briefRepresentation=false",
+        'headers': {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      
+      };
+    return new Promise(function (resolve, reject) {
+        request(options, async function (err, response) {
+            if(err){
+                reject(err);
+            }else if(response.body.error){
+                reject(response.body.error);
+            } else {
+                resolve(response.body);
+            }
+        });
+    });
+}
+
 //delete user by id
 module.exports.deleteUser = (token, userid) => {
     var options = {

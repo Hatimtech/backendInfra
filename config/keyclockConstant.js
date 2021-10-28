@@ -22,3 +22,5 @@ module.exports.ID_OF_CLIENT = "cc6b0966-a696-4c19-811e-2ae115ee8cba"
 module.exports.ADMIN_USERNAME = "adminuser"
 
 module.exports.ADMIN_PASSWORD = "H@tim5152"
+
+module.exports.CLIENT_SECRET = "a37922ad-9d46-448d-9957-0e30db83b4d8"

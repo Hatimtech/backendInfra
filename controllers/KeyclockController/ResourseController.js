@@ -5,7 +5,12 @@ const {
     updateResource,
 } = require("../../middlewares/keyclock/Resource") ;
 const { error } = require( "../../utils/errorMessages");
-const { getTokenFromRequestHeader } = require("../../middlewares/commonFunctions")
+const { getTokenFromRequestHeader } = require("../../middlewares/commonFunctions");
+const {
+    checkValidityToCreateResource,
+    checkValidityToDeleteResource,
+    checkValidityToUpdateResource,
+} = require("../../middlewares/validators/ResourceValidators")
 
 exports.createResources = async (req, res) => {
     let token = getTokenFromRequestHeader(req,res);
@@ -15,12 +20,14 @@ exports.createResources = async (req, res) => {
         scopes,
         uris,
     } = req.body;
-    const createResourseResponse = await createResource(token,name,displayName, scopes, uris);
-    if(JSON.parse(createResourseResponse).error){
-        res.status(200).json(error.ROLE_CREATE);
-    }else{
-        res.send({code: 1,message: "Resource created successfully" });
-    }      
+    if(checkValidityToCreateResource(req,res)){
+        const createResourseResponse = await createResource(token,name,displayName, scopes, uris);
+        if(JSON.parse(createResourseResponse).error){
+            res.status(200).json(error.ROLE_CREATE);
+        }else{
+            res.send({code: 1,message: "Resource created successfully" });
+        }
+    }     
 };
 
 exports.getAllResources = async (req, res) => {
@@ -41,6 +48,7 @@ exports.getAllResources = async (req, res) => {
 exports.deleteResources = async (req, res) => {
     const { resourceId } = req.body;
     let token = getTokenFromRequestHeader(req,res);
+    if(checkValidityToDeleteResource(req,res)){
         const deleteResourceResponse = await deleteResource(token, resourceId);
         console.log(deleteResourceResponse);
         if(deleteResourceResponse.length !== 0 ){
@@ -51,6 +59,7 @@ exports.deleteResources = async (req, res) => {
                 message: "Resource Deleted successfully"
             });
         }
+    }
 };
 
 exports.updateResources = async (req, res) => {
@@ -62,6 +71,7 @@ exports.updateResources = async (req, res) => {
         uris,
     } = req.body;
     let token = getTokenFromRequestHeader(req,res);
+    if(checkValidityToUpdateResource(req,res)){
         const updateResourceResponse = await updateResource(token, resourceId, name, displayName, scopes,uris);
         console.log(updateResourceResponse);
         if(updateResourceResponse.length !== 0 ){
@@ -72,4 +82,5 @@ exports.updateResources = async (req, res) => {
                 message: "Resource Updated successfully"
             });
         }
+    }
 };

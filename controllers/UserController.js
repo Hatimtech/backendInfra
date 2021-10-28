@@ -12,6 +12,7 @@ const {
     createUser,
     editusers,
     deleteUser,
+    getAllUser,
 } = require("../middlewares/keyclock/User") ;
 const {
     getTokenFromRequestHeader,
@@ -203,6 +204,20 @@ exports.getInfraUsers = async (req, res) => {
         }
 };
 
+exports.getAllUsers = async (req, res) => {
+    let token = getTokenFromRequestHeader(req,res);
+    const getUserResponse = await getAllUser(token);
+        console.log(getUserResponse);
+        if(JSON.parse(getUserResponse).error){
+            res.status(200).json(error.GET_ALL_USER);
+        } else {
+            const users = JSON.parse(getUserResponse)
+            res.send({
+                code: 1,
+                users: users,
+            });
+        }
+};
 
 
 exports.enableOrDisableUser = async (req, res) => {

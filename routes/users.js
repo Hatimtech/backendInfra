@@ -253,6 +253,41 @@ router.post("/api/registerInfraUser", checkInfraAdmin , userCtrl.registerInfraUs
  */
 router.get("/api/getInfraUsers", checkInfraAdmin , userCtrl.getInfraUsers);
 
+/**
+ * @swagger
+ * /api/getAllUsers:
+ *   get:
+ *     summary: Getting Infra users created By Infra Admin.
+ *     tags: ['User operations']
+ *     Authorization: Bearer
+ *     responses:
+ *       200:
+ *         description: get
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                     status:
+ *                       type: integer
+ *                       description: The status code.
+ *                       example: 1
+ *                     message:
+ *                       type: string
+ *                       description: The status message.
+ *                       example: users found.                       
+ *                     users:
+ *                       type: array
+ *                       items:
+ *                          type: object
+ *                          properties:
+ *                               firstName:
+ *                                  type: string
+ *                                  description: first name of User.
+ *                                  example: Hatim. 
+ */
+ router.get("/api/getAllUsers", checkInfraAdmin , userCtrl.getAllUsers);
+
 
 
 

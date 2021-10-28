@@ -157,18 +157,38 @@ module.exports.error = {
     },
     PERMISSION_CREATE : {
         code: 426,
-        message: "Error while creating policy in keyclock"
+        message: "Error while creating permission in keyclock"
     },
     GET_ALL_PERMISSION : {
         code: 427,
-        message: "Error while getting policy"
+        message: "Error while getting permission"
     },
     PERMISSION_DELETE : {
         code: 428,
-        message: "Error while deleting policy in keyclock"
+        message: "Error while deleting permission in keyclock"
     },
     PERMISSION_UPDATE : {
         code: 429,
-        message: "Error while updating policy in keyclock"
+        message: "Error while updating permission in keyclock"
+    },
+    DESCRIPTION_EMPTY : {
+        code: 429,
+        message: "Description is required"
+    },
+    DISPLAY_NAME_EMPTY : {
+        code: 429,
+        message: "Description is required"
+    },
+    SCOPE_EMPTY : {
+        code: 429,
+        message: "Scope is required"
+    },
+    URIS_EMPTY : {
+        code: 429,
+        message: "Scope is required"
+    },
+    GET_ALL_USER : {
+        code: 427,
+        message: "Error while getting users"
     },
 }
