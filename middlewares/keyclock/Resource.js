@@ -1,11 +1,11 @@
-const { KEYCLOCK_IP , REALM_NAME,CLIENT_ID , ID_OF_CLIENT} = require( "../../config/keyclockConstant");
+const { KEYCLOCK_IP , REALM_NAME, CLIENT_ID , ID_OF_CLIENT} = require( "../../config/keyclockConstant");
 const request = require("request") ;
 
-//create scope
-module.exports.createScope = (token, name, displayName) => {
+//create resource
+module.exports.createResource = (token, name, displayName, scopes, uris) => {
     var options = {
         'method': 'POST',
-        'url': KEYCLOCK_IP + "/admin/realms/" + REALM_NAME + "/clients/" + ID_OF_CLIENT + "/authz/resource-server/scope",
+        'url': KEYCLOCK_IP + "/admin/realms/" + REALM_NAME + "/clients/" + ID_OF_CLIENT + "/authz/resource-server/resource",
         'headers': {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
@@ -13,6 +13,8 @@ module.exports.createScope = (token, name, displayName) => {
         body: JSON.stringify({
           displayName: name,
           name: displayName,
+          scopes:scopes,
+          uris: uris,
         })
       
       };
@@ -27,11 +29,11 @@ module.exports.createScope = (token, name, displayName) => {
     });
 }
 
-//get scopes
-module.exports.getAllScopes = (token) => {
+//get resources
+module.exports.getAllResource = (token) => {
   var options = {
       'method': 'GET',
-      'url': KEYCLOCK_IP + "/admin/realms/" + REALM_NAME + "/clients/" + ID_OF_CLIENT + "/authz/resource-server/scope",
+      'url': KEYCLOCK_IP + "/admin/realms/" + REALM_NAME + "/clients/" + ID_OF_CLIENT + "/authz/resource-server/resource",
       'headers': {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
@@ -50,10 +52,11 @@ module.exports.getAllScopes = (token) => {
 }
 
 // Delete Scope
-module.exports.deleteScope = (token, scopeId) => {
+module.exports.deleteResource = (token, resourceId) => {
+    console.log(resourceId);
   var options = {
       'method': 'DELETE',
-      'url':  KEYCLOCK_IP + "/admin/realms/" + REALM_NAME + "/clients/" + ID_OF_CLIENT + "/authz/resource-server/scope/" + scopeId,
+      'url':  KEYCLOCK_IP + "/admin/realms/" + REALM_NAME + "/clients/" + ID_OF_CLIENT + "/authz/resource-server/resource/" + resourceId,
       'headers': {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
@@ -71,18 +74,20 @@ module.exports.deleteScope = (token, scopeId) => {
 }
 
 // Update Scope
-module.exports.updateScope = (token, scopeId, name, displayName) => {
+module.exports.updateResource = (token, resourceId, name, displayName, scopes, uris) => {
+    console.log(resourceId);
   var options = {
       'method': 'PUT',
-      'url':  KEYCLOCK_IP + "/admin/realms/" + REALM_NAME + "/clients/" + ID_OF_CLIENT + "/authz/resource-server/scope/" + scopeId,
+      'url':  KEYCLOCK_IP + "/admin/realms/" + REALM_NAME + "/clients/" + ID_OF_CLIENT + "/authz/resource-server/resource/" + resourceId,
       'headers': {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
       },
       body: JSON.stringify({
-        id:scopeId,
         displayName: name,
         name: displayName,
+        scopes:scopes,
+        uris: uris,
       })
   }
   return new Promise(function (resolve, reject) {

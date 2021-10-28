@@ -35,7 +35,10 @@ const swaggerDefinition = {
           name: 'Role operations'
         },
         {
-            name: 'Keyclock operations'
+            name: 'Scope operations'
+        },
+        {
+            name: 'Resourse operations'
         },
     ],
     security: [{

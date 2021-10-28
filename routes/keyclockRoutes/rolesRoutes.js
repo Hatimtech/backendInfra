@@ -23,15 +23,7 @@ const {
  *               name:
  *                 type: string
  *                 description: The user's first name.
- *                 example: Mohan
- *               attributes:
- *                 type: object
- *                 properties:
- *                   permission1:
- *                     type: array
- *                     items:
- *                       type: string
- *                       example: 000
+ *                 example: Role1
  *     responses:
  *       201:
  *         description: Created
@@ -145,14 +137,23 @@ router.get("/api/getAllRoles", checkInfraAdmin , roleCtrl.getAllRoles);
  *           schema:
  *             type: object
  *             properties:
- *               name:
- *                 type: string
- *                 description: The user's first name.
- *                 example: Mohan
  *               userKeyclockId:
  *                 type: string
  *                 description : The user's Id
  *                 example: a244bdab-a2b9-47c4-8cec-af95dd8d63f5
+ *               roles:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       description: Role id.
+ *                       example: 10d4aa4c-7f40-4f48-9475-df2e9691dad8
+ *                     name:
+ *                       type: string
+ *                       description: Role name.
+ *                       example: Role1 
  *     responses:
  *       201:
  *         description: Created

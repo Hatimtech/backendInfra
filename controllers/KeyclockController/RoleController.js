@@ -62,9 +62,9 @@ exports.deleteRole = async (req, res) => {
 };
 
 exports.assignRole = async (req, res) => {
-    const { name, userKeyclockId } = req.body;
+    const { roles, userKeyclockId } = req.body;
     let token = getTokenFromRequestHeader(req,res);
-        const assignRoleResponse = await assignRole(token, userKeyclockId, name);
+        const assignRoleResponse = await assignRole(token, userKeyclockId, roles);
         console.log(assignRoleResponse);
         if(assignRoleResponse.length !== 0 ){
             res.status(200).json(error.ROLE_ASSIGN);

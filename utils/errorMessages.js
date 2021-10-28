@@ -109,6 +109,34 @@ module.exports.error = {
     },
     SCOPE_CREATE : {
         code: 426,
-        message: "Error while creating client in keyclock"
+        message: "Error while creating scope in keyclock"
+    },
+    GET_ALL_SCOPE : {
+        code: 427,
+        message: "Error while getting scopes"
+    },
+    SCOPE_DELETE : {
+        code: 428,
+        message: "Error while deleting scope in keyclock"
+    },
+    SCOPE_UPDATE : {
+        code: 429,
+        message: "Error while updating scope in keyclock"
+    },
+    RESOURCE_CREATE : {
+        code: 426,
+        message: "Error while creating resource in keyclock"
+    },
+    GET_ALL_RESOURCE : {
+        code: 427,
+        message: "Error while getting resource"
+    },
+    RESOURCE_DELETE : {
+        code: 428,
+        message: "Error while deleting resource in keyclock"
+    },
+    RESOURCE_UPDATE : {
+        code: 429,
+        message: "Error while updating resource in keyclock"
     },
 }

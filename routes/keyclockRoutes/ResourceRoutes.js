@@ -1,17 +1,17 @@
 const express = require('express');
 const router = express.Router();
 
-const scopeCtrl = require('../../controllers/KeyclockController/ScopeController');
+const resourceCtrl = require('../../controllers/KeyclockController/ResourseController');
 const {
     checkInfraAdmin,
 } = require("../../middlewares/keyClock");
 
 /**
  * @swagger
- * /api/createScope:
+ * /api/createResource:
  *   post:
  *     summary: create a new Scope.
- *     tags: ['Scope operations']
+ *     tags: ['Resourse operations']
  *     Authorization: Bearer
  *     requestBody:
  *       required: true
@@ -23,11 +23,34 @@ const {
  *               name:
  *                 type: string
  *                 description : The user's Id
- *                 example: create
+ *                 example: bank
  *               displayName:
  *                 type: string
  *                 description : The user's firstname
- *                 example: create
+ *                 example: bank
+ *               scopes:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       description: Scope id.
+ *                       example: 97c7b603-c5b0-4525-95f5-9b945570d60d
+ *                     name:
+ *                       type: string
+ *                       description: Scope name.
+ *                       example: vuiiew
+ *                     displayName:
+ *                       type: string
+ *                       description: Scope display name.
+ *                       example: vuiiew 
+ *               uris:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   example: www.google.com
+ *               
  *     responses:
  *       201:
  *         description: Created
@@ -48,14 +71,14 @@ const {
  *                       description: Message for the logged in user.
  *                       example: Client created successfully.
  */
- router.post("/api/createScope",  checkInfraAdmin , scopeCtrl.createScope);
+ router.post("/api/createResource",  checkInfraAdmin , resourceCtrl.createResources);
 
  /**
  * @swagger
- * /api/getAllScopes:
+ * /api/getAllResources:
  *   get:
- *     summary: Getting Scopes of a client.
- *     tags: ['Scope operations']
+ *     summary: Getting Resources of a client.
+ *     tags: ['Resourse operations']
  *     Authorization: Bearer
  *     responses:
  *       200:
@@ -83,14 +106,14 @@ const {
  *                                  description: first name of User.
  *                                  example: Hatim. 
  */
-router.get("/api/getAllScopes", checkInfraAdmin , scopeCtrl.getAllScopes);
+router.get("/api/getAllResources", checkInfraAdmin , resourceCtrl.getAllResources);
 
 /**
  * @swagger
- * /api/deleteScope:
+ * /api/deleteResourse:
  *   post:
- *     summary: Delete Scope.
- *     tags: ['Scope operations']
+ *     summary: Delete Resourse.
+ *     tags: ['Resourse operations']
  *     Authorization: Bearer
  *     requestBody:
  *       required: true
@@ -99,7 +122,7 @@ router.get("/api/getAllScopes", checkInfraAdmin , scopeCtrl.getAllScopes);
  *           schema:
  *             type: object
  *             properties:
- *               scopeId:
+ *               resourceId:
  *                 type: string
  *                 description: Id of scope.
  *                 example: ad12b7bf-9996-479e-ab02-1ad1079d422c
@@ -123,14 +146,14 @@ router.get("/api/getAllScopes", checkInfraAdmin , scopeCtrl.getAllScopes);
  *                       description: Message for the logged in user.
  *                       example: Role deleted successfully
  */
- router.post("/api/deleteScope", checkInfraAdmin , scopeCtrl.deleteScopes);
+ router.post("/api/deleteResourse", checkInfraAdmin , resourceCtrl.deleteResources);
 
  /**
  * @swagger
- * /api/updateScope:
+ * /api/updateResource:
  *   post:
- *     summary: Update Scope.
- *     tags: ['Scope operations']
+ *     summary: create a new Scope.
+ *     tags: ['Resourse operations']
  *     Authorization: Bearer
  *     requestBody:
  *       required: true
@@ -139,18 +162,41 @@ router.get("/api/getAllScopes", checkInfraAdmin , scopeCtrl.getAllScopes);
  *           schema:
  *             type: object
  *             properties:
- *               scopeId:
+ *               resourceId:
  *                 type: string
- *                 description: Id of scope.
- *                 example: ad12b7bf-9996-479e-ab02-1ad1079d422c
+ *                 description : The user's Id
+ *                 example: f66f3ef8-a2fc-4694-b841-03ce05b4c1cf
  *               name:
  *                 type: string
- *                 description: name of scope.
- *                 example: view
+ *                 description : The user's Id
+ *                 example: bank
  *               displayName:
  *                 type: string
- *                 description: name of scope.
- *                 example: view
+ *                 description : The user's firstname
+ *                 example: bank
+ *               scopes:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       description: Scope id.
+ *                       example: 97c7b603-c5b0-4525-95f5-9b945570d60d
+ *                     name:
+ *                       type: string
+ *                       description: Scope name.
+ *                       example: vuiiew
+ *                     displayName:
+ *                       type: string
+ *                       description: Scope display name.
+ *                       example: vuiiew 
+ *               uris:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   example: www.google.com
+ *               
  *     responses:
  *       201:
  *         description: Created
@@ -169,8 +215,8 @@ router.get("/api/getAllScopes", checkInfraAdmin , scopeCtrl.getAllScopes);
  *                     message:
  *                       type: string
  *                       description: Message for the logged in user.
- *                       example: Role deleted successfully
+ *                       example: Client created successfully.
  */
-  router.post("/api/updateScope", checkInfraAdmin , scopeCtrl.updateScopes);
+  router.post("/api/updateResource",  checkInfraAdmin , resourceCtrl.updateResources);
 
  module.exports = router;

@@ -11,6 +11,7 @@ const usersRouter = require('./routes/users');
 const banksRouter = require('./routes/banksRoutes');
 const rolesRouter = require('./routes/keyclockRoutes/rolesRoutes');
 const scopeRouter = require('./routes/keyclockRoutes/ScopeRoutes');
+const resourceRouter = require('./routes/keyclockRoutes/ResourceRoutes');
 const dotenv = require('dotenv');
 const swaggerUi = require('swagger-ui-express');
 const app = express();
@@ -22,7 +23,7 @@ mongoose.connect(process.env.MONGODB_URL,
       useNewUrlParser: true,
       useUnifiedTopology: true
     })
-    .then(() => console.log('Connexion à MongoDB réussie !'))
+    .then(() => console.log('Connected to database'))
     .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 
@@ -48,6 +49,8 @@ app.use('/',usersRouter);
 app.use('/', banksRouter);
 app.use('/', rolesRouter);
 app.use('/', scopeRouter);
+app.use('/', resourceRouter);
+
 
 
 /**
