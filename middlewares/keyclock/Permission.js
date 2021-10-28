@@ -1,12 +1,11 @@
-
 const { KEYCLOCK_IP , REALM_NAME, CLIENT_ID , ID_OF_CLIENT} = require( "../../config/keyclockConstant");
 const request = require("request") ;
 
 //create policy
-module.exports.createPolicy = (token, name, description, roles) => {
+module.exports.createPermission= (token, name, description, policies, resources) => {
     var options = {
         'method': 'POST',
-        'url': KEYCLOCK_IP + "/admin/realms/" + REALM_NAME + "/clients/" + ID_OF_CLIENT + "/authz/resource-server/policy/role",
+        'url': KEYCLOCK_IP + "/admin/realms/" + REALM_NAME + "/clients/" + ID_OF_CLIENT + "/authz/resource-server/permission/resource",
         'headers': {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
@@ -16,8 +15,9 @@ module.exports.createPolicy = (token, name, description, roles) => {
           name: name,
           decisionStrategy: "UNANIMOUS",
           logic: "POSITIVE",
-          roles:roles,
-          type: "role",
+          policies:policies,
+          resources:resources,
+          type: "resource",
         })
       
       };
@@ -32,11 +32,11 @@ module.exports.createPolicy = (token, name, description, roles) => {
     });
 }
 
-//get policies
-module.exports.getAllPolicy = (token) => {
+//get Permission
+module.exports.getAllPermission = (token) => {
   var options = {
       'method': 'GET',
-      'url': KEYCLOCK_IP + "/admin/realms/" + REALM_NAME + "/clients/" + ID_OF_CLIENT + "/authz/resource-server/policy",
+      'url': KEYCLOCK_IP + "/admin/realms/" + REALM_NAME + "/clients/" + ID_OF_CLIENT + "/authz/resource-server/permission",
       'headers': {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
@@ -54,12 +54,12 @@ module.exports.getAllPolicy = (token) => {
 
 }
 
-// Delete Policy
-module.exports.deletePolicy = (token, policyId) => {
-    console.log(policyId);
+// Delete deletePermission
+module.exports.deletePermission = (token, permissionId) => {
+    console.log(permissionId);
   var options = {
       'method': 'DELETE',
-      'url':  KEYCLOCK_IP + "/admin/realms/" + REALM_NAME + "/clients/" + ID_OF_CLIENT + "/authz/resource-server/policy/" + policyId,
+      'url':  KEYCLOCK_IP + "/admin/realms/" + REALM_NAME + "/clients/" + ID_OF_CLIENT + "/authz/resource-server/permission/" + permissionId,
       'headers': {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
@@ -76,24 +76,25 @@ module.exports.deletePolicy = (token, policyId) => {
   });
 }
 
-// Update Policy
-module.exports.updatePolicy = (token, policyId, name, description, roles) => {
-    console.log(policyId);
+// Update Permission
+module.exports.updatePermission = (token, permissionId, name, description, policies, resources) => {
+    console.log(permissionId);
   var options = {
       'method': 'PUT',
-      'url':  KEYCLOCK_IP + "/admin/realms/" + REALM_NAME + "/clients/" + ID_OF_CLIENT + "/authz/resource-server/policy/role/" + policyId,
+      'url':  KEYCLOCK_IP + "/admin/realms/" + REALM_NAME + "/clients/" + ID_OF_CLIENT + "/authz/resource-server/permission/resource/" + permissionId,
       'headers': {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
       },
       body: JSON.stringify({
-        id: policyId,
+        id: permissionId,
         description: description,
+        name: name,
         decisionStrategy: "UNANIMOUS",
         logic: "POSITIVE",
-        name: name,
-        roles:roles,
-        type: "role",
+        policies:policies,
+        resources:resources,
+        type: "resource",
       })
   }
   return new Promise(function (resolve, reject) {

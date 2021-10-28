@@ -155,4 +155,20 @@ module.exports.error = {
         code: 429,
         message: "Error while updating policy in keyclock"
     },
+    PERMISSION_CREATE : {
+        code: 426,
+        message: "Error while creating policy in keyclock"
+    },
+    GET_ALL_PERMISSION : {
+        code: 427,
+        message: "Error while getting policy"
+    },
+    PERMISSION_DELETE : {
+        code: 428,
+        message: "Error while deleting policy in keyclock"
+    },
+    PERMISSION_UPDATE : {
+        code: 429,
+        message: "Error while updating policy in keyclock"
+    },
 }

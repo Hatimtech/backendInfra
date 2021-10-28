@@ -2,7 +2,7 @@ const {
     createPolicy,
     getAllPolicy,
     deletePolicy,
-    updatepolicy,
+    updatePolicy,
 } = require("../../middlewares/keyclock/Policy") ;
 const { error } = require( "../../utils/errorMessages");
 const { getTokenFromRequestHeader } = require("../../middlewares/commonFunctions")
@@ -60,7 +60,7 @@ exports.updatePolicies = async (req, res) => {
         roles,
     } = req.body;
     let token = getTokenFromRequestHeader(req,res);
-        const updatePolicyResponse = await updatepolicy(token, policyId, name, description, roles);
+        const updatePolicyResponse = await updatePolicy(token, policyId, name, description, roles);
         console.log(updatePolicyResponse);
         if(updatePolicyResponse.length !== 0 ){
             res.status(200).json(error.POLICY_UPDATE);

@@ -13,6 +13,7 @@ const rolesRouter = require('./routes/keyclockRoutes/rolesRoutes');
 const scopeRouter = require('./routes/keyclockRoutes/ScopeRoutes');
 const resourceRouter = require('./routes/keyclockRoutes/ResourceRoutes');
 const policyRouter = require('./routes/keyclockRoutes/PolicyRoutes');
+const permissionRouter = require('./routes/keyclockRoutes/PermissionRoutes');
 const dotenv = require('dotenv');
 const swaggerUi = require('swagger-ui-express');
 const app = express();
@@ -52,6 +53,8 @@ app.use('/', rolesRouter);
 app.use('/', scopeRouter);
 app.use('/', resourceRouter);
 app.use('/', policyRouter);
+app.use('/', permissionRouter);
+
 
 
 /**
