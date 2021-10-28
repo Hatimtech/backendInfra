@@ -12,6 +12,7 @@ const banksRouter = require('./routes/banksRoutes');
 const rolesRouter = require('./routes/keyclockRoutes/rolesRoutes');
 const scopeRouter = require('./routes/keyclockRoutes/ScopeRoutes');
 const resourceRouter = require('./routes/keyclockRoutes/ResourceRoutes');
+const policyRouter = require('./routes/keyclockRoutes/PolicyRoutes');
 const dotenv = require('dotenv');
 const swaggerUi = require('swagger-ui-express');
 const app = express();
@@ -50,7 +51,7 @@ app.use('/', banksRouter);
 app.use('/', rolesRouter);
 app.use('/', scopeRouter);
 app.use('/', resourceRouter);
-
+app.use('/', policyRouter);
 
 
 /**

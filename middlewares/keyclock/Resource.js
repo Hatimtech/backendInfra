@@ -11,8 +11,8 @@ module.exports.createResource = (token, name, displayName, scopes, uris) => {
           'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
-          displayName: name,
-          name: displayName,
+          displayName: displayName,
+          name: name,
           scopes:scopes,
           uris: uris,
         })
@@ -84,8 +84,8 @@ module.exports.updateResource = (token, resourceId, name, displayName, scopes, u
         'Authorization': `Bearer ${token}`,
       },
       body: JSON.stringify({
-        displayName: name,
-        name: displayName,
+        displayName: displayName,
+        name: name,
         scopes:scopes,
         uris: uris,
       })

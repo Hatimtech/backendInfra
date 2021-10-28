@@ -11,8 +11,8 @@ module.exports.createScope = (token, name, displayName) => {
           'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
-          displayName: name,
-          name: displayName,
+          displayName: displayName,
+          name: name,
         })
       
       };
@@ -81,8 +81,8 @@ module.exports.updateScope = (token, scopeId, name, displayName) => {
       },
       body: JSON.stringify({
         id:scopeId,
-        displayName: name,
-        name: displayName,
+        displayName: displayName,
+        name: name,
       })
   }
   return new Promise(function (resolve, reject) {

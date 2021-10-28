@@ -139,4 +139,20 @@ module.exports.error = {
         code: 429,
         message: "Error while updating resource in keyclock"
     },
+    POLICY_CREATE : {
+        code: 426,
+        message: "Error while creating policy in keyclock"
+    },
+    GET_ALL_POLICY : {
+        code: 427,
+        message: "Error while getting policy"
+    },
+    POLICY_DELETE : {
+        code: 428,
+        message: "Error while deleting policy in keyclock"
+    },
+    POLICY_UPDATE : {
+        code: 429,
+        message: "Error while updating policy in keyclock"
+    },
 }

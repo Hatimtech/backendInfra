@@ -40,6 +40,9 @@ const swaggerDefinition = {
         {
             name: 'Resourse operations'
         },
+        {
+            name: 'Policy operations'
+        },
     ],
     security: [{
         jwt: []
