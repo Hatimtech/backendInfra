@@ -27,7 +27,7 @@ module.exports.checkValidityToDeleteResource = (req, res) => {
 
 module.exports.checkValidityToUpdateResource = (req, res) => {
     const {resourceId, name, displayName, scopes } = req.body;
-    if(!scopeId)
+    if(!resourceId)
     {
         res.send(error.KEYCLOCK_ID_EMPTY);
     } else if (!displayName){

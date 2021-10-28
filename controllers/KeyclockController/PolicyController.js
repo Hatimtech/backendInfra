@@ -6,7 +6,11 @@ const {
 } = require("../../middlewares/keyclock/Policy") ;
 const { error } = require( "../../utils/errorMessages");
 const { getTokenFromRequestHeader } = require("../../middlewares/commonFunctions")
-
+const {
+    checkValidityToCreatePolicies,
+    checkValidityToDeletePolicies,
+    checkValidityToUpdatePolicies,
+} = require("../../middlewares/validators/PoliciesValidators")
 exports.createPolicies = async (req, res) => {
     let token = getTokenFromRequestHeader(req,res);
     const {
@@ -14,12 +18,15 @@ exports.createPolicies = async (req, res) => {
         description,
         roles,
     } = req.body;
+    if(checkValidityToCreatePolicies(req,res)){
+
     const createPolicyResponse = await createPolicy(token,name, description, roles);
     if(JSON.parse(createPolicyResponse).error){
         res.status(200).json(error.POLICY_CREATE);
     }else{
         res.send({code: 1,message: "Policy created successfully" });
-    }      
+    }    
+}  
 };
 
 exports.getAllPolicies = async (req, res) => {
@@ -39,6 +46,9 @@ exports.getAllPolicies = async (req, res) => {
 
 exports.deletePolicies = async (req, res) => {
     const { policyId } = req.body;
+    if(checkValidityToDeletePolicies(req,res)){
+
+    
     let token = getTokenFromRequestHeader(req,res);
         const deletePolicyResponse = await deletePolicy(token, policyId);
         console.log(deletePolicyResponse);
@@ -49,7 +59,7 @@ exports.deletePolicies = async (req, res) => {
                 code: 1,
                 message: "Policy Deleted successfully"
             });
-        }
+        }}
 };
 
 exports.updatePolicies = async (req, res) => {
@@ -59,6 +69,8 @@ exports.updatePolicies = async (req, res) => {
         description,
         roles,
     } = req.body;
+    
+    if(checkValidityToUpdatePolicies(req,res)){
     let token = getTokenFromRequestHeader(req,res);
         const updatePolicyResponse = await updatePolicy(token, policyId, name, description, roles);
         console.log(updatePolicyResponse);
@@ -69,5 +81,5 @@ exports.updatePolicies = async (req, res) => {
                 code: 1,
                 message: "Policy Updated successfully"
             });
-        }
+        }}
 };
