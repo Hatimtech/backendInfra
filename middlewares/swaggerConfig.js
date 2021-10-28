@@ -23,8 +23,30 @@ const swaggerDefinition = {
                 bearerFormat: "JWT"
             },
         }
-    }
-    ,
+    },
+    tags: [
+        {
+          name: 'User operations'
+        },
+        {
+          name: 'Bank operations'
+        },
+        {
+          name: 'Role operations'
+        },
+        {
+            name: 'Scope operations'
+        },
+        {
+            name: 'Resourse operations'
+        },
+        {
+            name: 'Policy operations'
+        },
+        {
+            name: 'Permission operations'
+        },
+    ],
     security: [{
         jwt: []
     }]
@@ -35,7 +57,7 @@ const swaggerDefinition = {
 const options = {
     swaggerDefinition,
     // Paths to files containing OpenAPI definitions
-    apis: ['./routes/*.js'],
+    apis: ['./routes/*.js','./routes/keyclockRoutes/*.js'],
 
 };
 module.exports.swaggerSpec  = ()=> {

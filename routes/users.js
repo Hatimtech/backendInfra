@@ -12,6 +12,7 @@ const {
  * /api/infraSetup:
  *   post:
  *     summary: Create admin user for infra.
+ *     tags: ['User operations']
  *     requestBody:
  *       required: true
  *       content:
@@ -79,6 +80,7 @@ router.post("/api/infraSetup", userCtrl.infraSetup);
  * /api/checkInfraIsConfigured:
  *   get:
  *     summary: Check if admin user is created.
+ *     tags: ['User operations']
  *     responses:
  *       200:
  *         description: get
@@ -106,6 +108,7 @@ router.get("/api/checkInfraIsConfigured", userCtrl.checkInfraIsConfigured);
  * /api/login:
  *   post:
  *     summary: Login API for infra users.
+ *     tags: ['User operations']
  *     requestBody:
  *       required: true
  *       content:
@@ -151,6 +154,7 @@ router.post("/api/login", userCtrl.login);
  * /api/registerInfraUser:
  *   post:
  *     summary: Create user for infra.
+ *     tags: ['User operations']
  *     Authorization: Bearer
  *     requestBody:
  *       required: true
@@ -219,6 +223,7 @@ router.post("/api/registerInfraUser", checkInfraAdmin , userCtrl.registerInfraUs
  * /api/getInfraUsers:
  *   get:
  *     summary: Getting Infra users created By Infra Admin.
+ *     tags: ['User operations']
  *     Authorization: Bearer
  *     responses:
  *       200:
@@ -248,6 +253,41 @@ router.post("/api/registerInfraUser", checkInfraAdmin , userCtrl.registerInfraUs
  */
 router.get("/api/getInfraUsers", checkInfraAdmin , userCtrl.getInfraUsers);
 
+/**
+ * @swagger
+ * /api/getAllUsers:
+ *   get:
+ *     summary: Getting Infra users created By Infra Admin.
+ *     tags: ['User operations']
+ *     Authorization: Bearer
+ *     responses:
+ *       200:
+ *         description: get
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                     status:
+ *                       type: integer
+ *                       description: The status code.
+ *                       example: 1
+ *                     message:
+ *                       type: string
+ *                       description: The status message.
+ *                       example: users found.                       
+ *                     users:
+ *                       type: array
+ *                       items:
+ *                          type: object
+ *                          properties:
+ *                               firstName:
+ *                                  type: string
+ *                                  description: first name of User.
+ *                                  example: Hatim. 
+ */
+ router.get("/api/getAllUsers", checkInfraAdmin , userCtrl.getAllUsers);
+
 
 
 
@@ -256,6 +296,7 @@ router.get("/api/getInfraUsers", checkInfraAdmin , userCtrl.getInfraUsers);
  * /api/enableOrDisableUser:
  *   post:
  *     summary: Enable and disable user for infra.
+ *     tags: ['User operations']
  *     Authorization: Bearer
  *     requestBody:
  *       required: true
@@ -301,6 +342,7 @@ router.post("/api/enableOrDisableUser", checkInfraAdmin , userCtrl.enableOrDisab
  * /api/editUser:
  *   post:
  *     summary: edit user for infra.
+ *     tags: ['User operations']
  *     Authorization: Bearer
  *     requestBody:
  *       required: true
@@ -375,8 +417,6 @@ router.post("/api/enableOrDisableUser", checkInfraAdmin , userCtrl.enableOrDisab
  */
 router.post("/api/editUser",  checkInfraAdmin ,userCtrl.editUser);
 
-
-// router.post("/api/createRole",  checkInfraAdmin ,userCtrl.createRole);
 
 
 

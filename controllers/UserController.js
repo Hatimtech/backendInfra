@@ -1,20 +1,21 @@
 const Users = require('../models/User');
-const Bank = require('../models/Bank');
 const InfraConfigured = require('../models/InfraConfigured');
 const { error } = require( "../utils/errorMessages");
+const { getToken } = require("../middlewares/keyclock/AccessToken")
+const { checkRoles } = require("../middlewares/validators/TokenValidators")
 const {
-    getToken,
+    checkValidityToEditUser,
+    checkValidityToCreateUser,
+} = require("../middlewares/validators/UserValidators")
+const {
     getUser,
     createUser,
-    createRole,
-    checkRoles,
     editusers,
     deleteUser,
-} = require("../middlewares/keyClock") ;
+    getAllUser,
+} = require("../middlewares/keyclock/User") ;
 const {
     getTokenFromRequestHeader,
-    checkValidityToCreateUser,
-    checkValidityToEditUser,
  } = require("../middlewares/commonFunctions")
 
 const { ADMIN_USERNAME , ADMIN_PASSWORD , GROUPS , ROLES} = require("../config/keyclockConstant") ;
@@ -190,8 +191,7 @@ exports.login = async (req, res) => {
 
 
 /**
- * This is used for getting Infra User list.
- * @param {token } req
+ * This is used for getting
  * @param { code, message, users} res
  */
 exports.getInfraUsers = async (req, res) => {
@@ -204,6 +204,20 @@ exports.getInfraUsers = async (req, res) => {
         }
 };
 
+exports.getAllUsers = async (req, res) => {
+    let token = getTokenFromRequestHeader(req,res);
+    const getUserResponse = await getAllUser(token);
+        console.log(getUserResponse);
+        if(JSON.parse(getUserResponse).error){
+            res.status(200).json(error.GET_ALL_USER);
+        } else {
+            const users = JSON.parse(getUserResponse)
+            res.send({
+                code: 1,
+                users: users,
+            });
+        }
+};
 
 
 exports.enableOrDisableUser = async (req, res) => {
