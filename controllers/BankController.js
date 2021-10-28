@@ -8,10 +8,6 @@ const {
 } = require("../middlewares/validators/UserValidators")
 const { getTokenFromRequestHeader } = require("../middlewares/commonFunctions")
 
-
-
-
-
 exports.createBank = async (req, res) => {
     const {
         ccode ,
@@ -49,7 +45,6 @@ exports.createBank = async (req, res) => {
         
 };
 
-
 exports.enableOrDisableBank = async (req, res) => {
     let token = getTokenFromRequestHeader(req,res);
     const {
@@ -68,7 +63,6 @@ exports.enableOrDisableBank = async (req, res) => {
             res.send({status: 1,message: `Bank ${isEnabled ? "enabled" : "disabled"} successfully`});
         }
 };
-
 
 exports.editBank = async (req, res) => {
     let token = getTokenFromRequestHeader(req,res);
@@ -139,7 +133,6 @@ exports.editBank = async (req, res) => {
         }
     
 };
-
 
 exports.assignUserToBank= async (req, res) => {
     const {
