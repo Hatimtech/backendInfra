@@ -208,4 +208,24 @@ module.exports.error = {
         message: "Policies Cannot be empty"
     },
    
+    ERROR_CREATE_FOLDER_PATHNAME_EMPTY: {
+        code: 451,
+        message: "Path name of folder is empty"
+
+    },
+    ERROR_CREATE_FILE_PATHNAME_EMPTY: {
+        code: 452,
+        message: "Path name of file is empty"
+
+    },
+    ERROR_CREATE_FILE_EMPTY: {
+        code: 453,
+        message: "File is empty"
+
+    },
+    ERROR_GET_FILE_DOCID_EMPTY: {
+        code: 454,
+        message: "Document Id is requires"
+    }
+
 }
