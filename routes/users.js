@@ -9,7 +9,7 @@ const {
 
 /**
  * @swagger
- * /api/infraSetup:
+ * /api/registerInfraAdmin:
  *   post:
  *     summary: Create admin user for infra.
  *     tags: ['User operations']
@@ -73,7 +73,7 @@ const {
  *                       example: Leanne Graham
  */
 
-router.post("/api/infraSetup", userCtrl.infraSetup);
+router.post("/api/registerInfraAdmin", userCtrl.infraSetup);
 
 /**
  * @swagger
