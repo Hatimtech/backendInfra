@@ -9,8 +9,11 @@ const bodyParser = require('body-parser');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const banksRouter = require('./routes/banksRoutes');
-const rolesRouter = require('./routes/rolesRoutes');
-const openKmRouter = require('./routes/OpenKmRoutes');
+const rolesRouter = require('./routes/keyclockRoutes/rolesRoutes');
+const scopeRouter = require('./routes/keyclockRoutes/ScopeRoutes');
+const resourceRouter = require('./routes/keyclockRoutes/ResourceRoutes');
+const policyRouter = require('./routes/keyclockRoutes/PolicyRoutes');
+const permissionRouter = require('./routes/keyclockRoutes/PermissionRoutes');
 const dotenv = require('dotenv');
 const swaggerUi = require('swagger-ui-express');
 const app = express();
@@ -22,8 +25,8 @@ mongoose.connect(process.env.MONGODB_URL,
       useNewUrlParser: true,
       useUnifiedTopology: true
     })
-    .then(() => console.log('Successfully connected to MongoDB !'))
-    .catch(() => console.log('Failed to connect to MongoDB !'));
+    .then(() => console.log('Connected to database'))
+    .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 
 // view engine setup
@@ -47,7 +50,12 @@ app.use('/', indexRouter);
 app.use('/',usersRouter);
 app.use('/', banksRouter);
 app.use('/', rolesRouter);
-app.use('/', openKmRouter);
+app.use('/', scopeRouter);
+app.use('/', resourceRouter);
+app.use('/', policyRouter);
+app.use('/', permissionRouter);
+
+
 
 /**
  * swagger api config
