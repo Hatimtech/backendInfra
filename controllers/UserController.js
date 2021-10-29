@@ -326,18 +326,18 @@ exports.editUser = async (req, res) => {
 exports.evaluate = async (req, res) => {
     let token = getTokenFromRequestHeader(req,res);
     const {
-        clientId,
         resources,
         roleIds,
         userId,
     } = req.body;
    
     if (checkValidityToEvalute(req,res)){
-        const evaluteResponse = await evaluate(token,clientId,resources,roleIds, userId );
+        const evaluteResponse = await evaluate(token,resources,roleIds, userId );
+        const evaluation = JSON.parse(evaluteResponse)
         if(JSON.parse(evaluteResponse).error){
             res.send({ code: 0, users: JSON.parse(evaluteResponse).error });
         } else {
-            res.send({ code: 1, evaluate: evaluteResponse,
+            res.send({ code: 1, evaluate: evaluation.status,
             });
         }
     }

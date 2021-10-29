@@ -33,13 +33,19 @@ const {
  *                 items:
  *                   type: string
  *                   description: policies id.
- *                   example: 1824d0bb-88ae-411a-90ff-7e65c75a3a7f 
+ *                   example: b0779375-f5fb-434d-b2a6-10ed59ae69fb 
  *               resources:
  *                 type: array
  *                 items:
  *                   type: string
- *                   description: policies id.
+ *                   description: resource id.
  *                   example: f66f3ef8-a2fc-4694-b841-03ce05b4c1cf
+ *               scopes:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   description: scope id.
+ *                   example: 231eb3c0-a194-440b-bc4b-422a58630325
  *     responses:
  *       201:
  *         description: Created
@@ -128,13 +134,19 @@ router.get("/api/getAllPermissions", checkInfraAdmin , permissionCtrl.getAllPerm
  *                 items:
  *                   type: string
  *                   description: policies id.
- *                   example: 1824d0bb-88ae-411a-90ff-7e65c75a3a7f 
+ *                   example: b0779375-f5fb-434d-b2a6-10ed59ae69fb  
  *               resources:
  *                 type: array
  *                 items:
  *                   type: string
  *                   description: policies id.
  *                   example: f66f3ef8-a2fc-4694-b841-03ce05b4c1cf
+ *               scopes:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   description: scope id.
+ *                   example: 231eb3c0-a194-440b-bc4b-422a58630325
  *     responses:
  *       201:
  *         description: Created

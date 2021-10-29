@@ -1,47 +1,91 @@
+const {
+    createPermission,
+    getAllPermission,
+    updatePermission,
+    deletePermission,
+} = require("../../middlewares/keyclock/Permission") ;
 const { error } = require( "../../utils/errorMessages");
+const { getTokenFromRequestHeader } = require("../../middlewares/commonFunctions")
+const {
+    checkValidityToCreatePermissions,
+    checkValidityToDeletePermissions,
+    checkValidityToUpdatePermissions,
+} = require("../../middlewares/validators/PermissionValidators")
 
-module.exports.checkValidityToCreatePermissions = (req, res) => {
-    const { name, description,policies, resources, } = req.body;
-    if(!name)
-    {
-        res.send(error.NAME_EMPTY);
-    } else if (!description){
-        res.send(error.DESCRIPTION_EMPTY);
-    } else if (!policies){
-        res.send(error.POLICIES_EMPTY);
-    } else if (!resources){
-        res.send(error.RESOURCES_EMPTY);
-    }else {
-        return true;
-    }
-
+exports.createPermissions = async (req, res) => {
+    let token = getTokenFromRequestHeader(req,res);
+    const {
+        name,
+        description,
+        policies,
+        resources,
+        scopes,
+    } = req.body;
+    if(checkValidityToCreatePermissions(req,res)){
+    const createPermissionResponse = await createPermission(token,name, description, policies,resources,scopes );
+   console.log(createPermissionResponse)
+    if(JSON.parse(createPermissionResponse).error){
+        res.status(200).json(error.PERMISSION_CREATE);
+    }else{
+        res.send({code: 1,message: "Permission created successfully" });
+    }  
+}    
 };
 
-module.exports.checkValidityToDeletePermissions = (req, res) => {
-    const {permissionId } = req.body;
-    if(!permissionId)
-    {
-        res.send(error.KEYCLOCK_ID_EMPTY);
-    } else {
-        return true;
+exports.getAllPermission = async (req, res) => {
+    let token = getTokenFromRequestHeader(req,res);
+        const getPermissionResponse = await getAllPermission(token);
+        console.log(getPermissionResponse);
+        if(JSON.parse(getPermissionResponse).error){
+            res.status(200).json(error.GET_ALL_PERMISSION);
+        } else {
+            const permissions = JSON.parse(getPermissionResponse)
+            res.send({
+                code: 1,
+                permissions: permissions,
+            });
+        }
+};
+
+exports.deletePermissions = async (req, res) => {
+    const { permissionId } = req.body;
+    if(checkValidityToDeletePermissions(req,res)){
+
+    let token = getTokenFromRequestHeader(req,res);
+        const deletePermissionResponse = await deletePermission(token, permissionId);
+        console.log(deletePermissionResponse);
+        if(deletePermissionResponse.length !== 0 ){
+            res.status(200).json(error.PERMISSION_DELETE);
+        } else {
+            res.send({
+                code: 1,
+                message: "Permission Deleted successfully"
+            });
+        }
     }
 };
 
-module.exports.checkValidityToUpdatePermissions = (req, res) => {
-    const {permissionId, name, description,policies, resources } = req.body;
-    if(!permissionId)
-    {
-        res.send(error.KEYCLOCK_ID_EMPTY);
-    } else if (!name){
-        res.send(error.NAME_EMPTY);
-    } else if (!description){
-        res.send(error.DESCRIPTION_EMPTY);
-    } else if (!policies){
-        res.send(error.POLICIES_EMPTY);
-    }else if (!resources){
-        res.send(error.RESOURCES_EMPTY);
-    } 
-     else {
-        return true;
+exports.updatePermissions = async (req, res) => {
+    const {
+        permissionId,
+        name,
+        description,
+        policies,
+        resources,
+        scopes,
+    } = req.body;
+    if(checkValidityToUpdatePermissions(req,res)){
+
+    let token = getTokenFromRequestHeader(req,res);
+        const updatePermissionResponse = await updatePermission(token, permissionId, name, description, policies,resources, scopes);
+        console.log(updatePermissionResponse);
+        if(updatePermissionResponse.length !== 0 ){
+            res.status(200).json(error.PERMISSION_UPDATE);
+        } else {
+            res.send({
+                code: 1,
+                message: "Permission Updated successfully"
+            });
+        }
     }
 };

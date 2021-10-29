@@ -269,19 +269,14 @@ router.post("/api/registerInfraUser", checkInfraAdmin , userCtrl.registerInfraUs
  *           schema:
  *             type: object
  *             properties:
- *               clientId:
- *                 type: string
- *                 description : The clien's Id
- *                 example: 9cb3cd66-4537-4539-ada5-026e10ea152f
  *               userId:
  *                 type: string
  *                 description : The user's Id
- *                 example: c72de78c-ae33-4c39-b241-171b5997f26a
+ *                 example: 10d4aa4c-7f40-4f48-9475-df2e9691dad8
  *               roleIds:
  *                 type: array
  *                 items:
  *                    type: string
- *                    example: infra-admin
  *               resources:
  *                 type: array
  *                 items:
@@ -290,15 +285,15 @@ router.post("/api/registerInfraUser", checkInfraAdmin , userCtrl.registerInfraUs
  *                     _id:
  *                       type: string
  *                       description: resource id.
- *                       example: 1e30c56c-e5de-497c-a1dd-1c94c25868c7
+ *                       example: f66f3ef8-a2fc-4694-b841-03ce05b4c1cf
  *                     name:
  *                       type: string
  *                       description: Scope name.
- *                       example: bankDashboard
+ *                       example: cashier
  *                     displayName:
  *                       type: string
  *                       description: Scope display name.
- *                       example: bankDashboard 
+ *                       example: cashier 
  *                     ownerManagedAccess:
  *                       type: boolean
  *                       description: Scope display name.
@@ -314,19 +309,16 @@ router.post("/api/registerInfraUser", checkInfraAdmin , userCtrl.registerInfraUs
  *                         type: string
  *                         example: Delete
  *                     owner:
- *                         type: array
- *                         items:
- *                           type: object
- *                           properties:
- *                             id:
- *                               type: string
- *                               description: Owner id.
- *                               example: 9cb3cd66-4537-4539-ada5-026e10ea152f
- *                             name:
- *                               type: string
- *                               description: Owner name.
- *                               example: infra-client
- *               
+ *                         type: object
+ *                         properties:
+ *                           id:
+ *                             type: string
+ *                             description: Owner id.
+ *                             example: cc6b0966-a696-4c19-811e-2ae115ee8cba
+ *                           name:
+ *                             type: string
+ *                             description: Owner name.
+ *                             example: infra-client
  *     responses:
  *       201:
  *         description: Created

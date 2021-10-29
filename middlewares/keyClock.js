@@ -355,7 +355,7 @@ module.exports.getRolesFromToken = (token) => {
 
 
 
-module.exports.evaluate = (token, clientId,resources,roleIds, userId) => {
+module.exports.evaluate = (token, resources,roleIds, userId) => {
     var options = {
         'method': 'POST',
         'url': KEYCLOCK_IP + "/admin/realms/"  + REALM_NAME + "/clients/" + ID_OF_CLIENT + "/authz/resource-server/policy/evaluate",        
@@ -364,7 +364,7 @@ module.exports.evaluate = (token, clientId,resources,roleIds, userId) => {
           'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
-          "clientId": clientId,
+          "clientId": ID_OF_CLIENT,
           "userId": userId,
           "entitlements": false,
           "roleIds": roleIds,
