@@ -4,12 +4,7 @@ const router = express.Router();
 const bankCtrl = require('../controllers/BankController');
 const {
     checkInfraAdmin,
-} = require("../middlewares/keyClock") ;
-
-
-
-
-
+} = require("../middlewares/validators/AuthorizationValidator") ;
 
 
 /**

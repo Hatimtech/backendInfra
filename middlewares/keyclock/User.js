@@ -1,4 +1,4 @@
-const { KEYCLOCK_IP , REALM_NAME } = require( "../../config/keyclockConstant");
+const { KEYCLOCK_IP , REALM_NAME , ID_OF_CLIENT} = require( "../../config/keyclockConstant");
 const request = require("request") ;
 
 //Get user by username
@@ -137,6 +137,43 @@ module.exports.editusers = (token , userId, editParams) => {
             ...editParams
          }),
     }
+    return new Promise(function (resolve, reject) {
+        request(options, async function (err, response) {
+            if(err){
+                reject(err);
+            } else {
+                resolve(response.body);
+            }
+        });
+    });
+}
+
+module.exports.getRolesFromToken = (token) => {
+    var decodedToken = jwt_decode(token);
+    console.log('I am here', decodedToken)
+
+	return decodedToken.resource_access;
+};
+
+
+
+module.exports.evaluate = (token, resources,roleIds, userId) => {
+    var options = {
+        'method': 'POST',
+        'url': KEYCLOCK_IP + "/admin/realms/"  + REALM_NAME + "/clients/" + ID_OF_CLIENT + "/authz/resource-server/policy/evaluate",        
+        'headers': {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          "clientId": ID_OF_CLIENT,
+          "userId": userId,
+          "entitlements": false,
+          "roleIds": roleIds,
+          "resources":resources
+        })
+    }
+    console.log(options.url)
     return new Promise(function (resolve, reject) {
         request(options, async function (err, response) {
             if(err){
