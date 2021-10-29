@@ -2,10 +2,11 @@ const Users = require('../models/User');
 const InfraConfigured = require('../models/InfraConfigured');
 const { error } = require( "../utils/errorMessages");
 const { getToken } = require("../middlewares/keyclock/AccessToken")
-const { checkRoles } = require("../middlewares/validators/TokenValidators")
+const { getRolesFromToken , evaluate} = require("../middlewares/keyClock")
 const {
     checkValidityToEditUser,
     checkValidityToCreateUser,
+    checkValidityToEvalute
 } = require("../middlewares/validators/UserValidators")
 const {
     getUser,
@@ -175,16 +176,13 @@ exports.login = async (req, res) => {
     const tokenResponse = await getToken(username, password);
 
     if(JSON.parse(tokenResponse).hasOwnProperty('error')){
-        res.send({ code: 0, message: "Error getting token" });
+        res.send({ code: 0, message: JSON.parse(tokenResponse).error });
     }else{
         const token =JSON.parse(tokenResponse).access_token;
-        if(!checkRoles(token, ROLES.INFRA_ADMIN_ROLE)) {
-            res.send({ code: 0, message: "Unauthorized to login" });
-        }else{
-            res.send({ code: 1, message: "Authorized to login", token : token });
+        res.send({ code: 1, message: "Authorized to login", token : token });
 
 
-        }
+        
     }
 
 };
@@ -202,6 +200,22 @@ exports.getInfraUsers = async (req, res) => {
         {
             res.send({ code: 0, message: err });
         }
+};
+
+exports.getRoleFromToken = async (req, res) => {
+    console.log('I am here')
+
+    try {
+
+        let token = getTokenFromRequestHeader(req,res);
+        const getUserResponse =  getRolesFromToken(token);
+        console.log('I am here')
+
+        res.send({ code: 1, message: "User found", roles : getUserResponse });
+    }catch(err)
+    {
+        res.send({ code: 0, message: err });
+    }
 };
 
 exports.getAllUsers = async (req, res) => {
@@ -307,3 +321,28 @@ exports.editUser = async (req, res) => {
         }
     }
 };
+
+
+exports.evaluate = async (req, res) => {
+    let token = getTokenFromRequestHeader(req,res);
+    const {
+        clientId,
+        resources,
+        roleIds,
+        userId,
+    } = req.body;
+   
+    if (checkValidityToEvalute(req,res)){
+        const evaluteResponse = await evaluate(token,clientId,resources,roleIds, userId );
+        if(JSON.parse(evaluteResponse).error){
+            res.send({ code: 0, users: JSON.parse(evaluteResponse).error });
+        } else {
+            res.send({ code: 1, evaluate: evaluteResponse,
+            });
+        }
+    }
+};
+
+
+
+

@@ -220,6 +220,139 @@ router.post("/api/registerInfraUser", checkInfraAdmin , userCtrl.registerInfraUs
 
 /**
  * @swagger
+ * /api/getUserRole:
+ *   get:
+ *     summary: Getting Infra Client roles for user .
+ *     tags: ['User operations']
+ *     Authorization: Bearer
+ *     responses:
+ *       200:
+ *         description: get
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                     status:
+ *                       type: integer
+ *                       description: The status code.
+ *                       example: 1
+ *                     message:
+ *                       type: string
+ *                       description: The status message.
+ *                       example: users found.                       
+ *                     role:
+ *                       type: array
+ *                       items:
+ *                          type: object
+ *                          properties:
+ *                               role1:
+ *                                  type: string
+ *                                  description: first name of User.
+ *                                  example: admin. 
+ */
+ router.get("/api/getUserRole" , userCtrl.getRoleFromToken);
+
+
+
+/**
+ * @swagger
+ * /api/evaluteUser:
+ *   post:
+ *     summary: create a new Scope.
+ *     tags: ['User operations']
+ *     Authorization: Bearer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               clientId:
+ *                 type: string
+ *                 description : The clien's Id
+ *                 example: 9cb3cd66-4537-4539-ada5-026e10ea152f
+ *               userId:
+ *                 type: string
+ *                 description : The user's Id
+ *                 example: c72de78c-ae33-4c39-b241-171b5997f26a
+ *               roleIds:
+ *                 type: array
+ *                 items:
+ *                    type: string
+ *                    example: infra-admin
+ *               resources:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                       description: resource id.
+ *                       example: 1e30c56c-e5de-497c-a1dd-1c94c25868c7
+ *                     name:
+ *                       type: string
+ *                       description: Scope name.
+ *                       example: bankDashboard
+ *                     displayName:
+ *                       type: string
+ *                       description: Scope display name.
+ *                       example: bankDashboard 
+ *                     ownerManagedAccess:
+ *                       type: boolean
+ *                       description: Scope display name.
+ *                       example: false 
+ *                     uris:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                         example: www.google.com
+ *                     scopes:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                         example: Delete
+ *                     owner:
+ *                         type: array
+ *                         items:
+ *                           type: object
+ *                           properties:
+ *                             id:
+ *                               type: string
+ *                               description: Owner id.
+ *                               example: 9cb3cd66-4537-4539-ada5-026e10ea152f
+ *                             name:
+ *                               type: string
+ *                               description: Owner name.
+ *                               example: infra-client
+ *               
+ *     responses:
+ *       201:
+ *         description: Created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     status:
+ *                       type: integer
+ *                       description: Status of the request.
+ *                       example: 1
+ *                     message:
+ *                       type: string
+ *                       description: Message for the logged in user.
+ *                       example: Client created successfully.
+ */
+ router.post("/api/evaluteUser" , userCtrl.evaluate);
+
+
+
+/**
+ * @swagger
  * /api/getInfraUsers:
  *   get:
  *     summary: Getting Infra users created By Infra Admin.
