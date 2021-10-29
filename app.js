@@ -19,7 +19,7 @@ const dotenv = require('dotenv');
 const swaggerUi = require('swagger-ui-express');
 const app = express();
 const swaggerSpec =  require('./middlewares/swaggerConfig')
-
+const formidable = require('express-formidable');
 dotenv.config();
 mongoose.connect(process.env.MONGODB_URL,
     {
@@ -27,7 +27,7 @@ mongoose.connect(process.env.MONGODB_URL,
       useUnifiedTopology: true
     })
     .then(() => console.log('Connected to database'))
-    .catch(() => console.log('Connexion à MongoDB échouée !'));
+    .catch(() => console.log('Connected to database failed'));
 
 
 // view engine setup
@@ -35,10 +35,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -46,7 +44,11 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
   next();
 });
-app.use(bodyParser.json());
+
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/',usersRouter);
 app.use('/', banksRouter);
@@ -55,9 +57,8 @@ app.use('/', scopeRouter);
 app.use('/', resourceRouter);
 app.use('/', policyRouter);
 app.use('/', permissionRouter);
-app.use('/', openKmRouter);
-
-
+app.use('/',formidable(), openKmRouter);
+app.use(formidable());
 
 /**
  * swagger api config
@@ -79,5 +80,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
 
 module.exports = app;

@@ -1,6 +1,6 @@
+const multer = require('../middlewares/multer-config');
 const express = require('express');
 const router = express.Router();
-
 const openKmController = require('../controllers/OpenKmController');
 
 /**
@@ -68,7 +68,7 @@ router.post("/api/createFolder", openKmController.createFolder);
  *     tags:
  *       - OpenKm Api
  *     requestBody:
- *       required: true
+ *       required: false
  *       content:
  *         multipart/form-data:
  *           schema:
@@ -77,10 +77,15 @@ router.post("/api/createFolder", openKmController.createFolder);
  *               docPath:
  *                 type: string
  *                 description : the name of the folder
- *                 example: /okm:root/folder/image.png
+ *                 example: folder/image.png
  *               content:
  *                 type: string
  *                 format: binary
+ *           encoding:
+ *             content:
+ *              contentType: image/png, image/jpeg
+ *             docPath:
+ *              contentType: text/plain
  *     responses:
  *       201:
  *         description: Created
@@ -118,7 +123,7 @@ router.post("/api/createFolder", openKmController.createFolder);
  *                       description: if folder has children.
  *                       example: false
  */
-router.post("/api/uploadFile", openKmController.uploadFile);
+router.post("/api/uploadFile",openKmController.uploadFile);
 
 /**
  * @swagger
