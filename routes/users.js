@@ -2,10 +2,9 @@ const express = require('express');
 const router = express.Router();
 
 const userCtrl = require('../controllers/UserController');
-const bankCtrl = require('../controllers/BankController');
 const {
     checkInfraAdmin,
-} = require("../middlewares/keyClock") ;
+} = require("../middlewares/validators/AuthorizationValidator");
 
 /**
  * @swagger
@@ -195,6 +194,19 @@ router.post("/api/login", userCtrl.login);
  *                 type: string
  *                 description: The user's country.
  *                 example: Indian
+ *               roles:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       description: Role id.
+ *                       example: 10d4aa4c-7f40-4f48-9475-df2e9691dad8
+ *                     name:
+ *                       type: string
+ *                       description: Role name.
+ *                       example: Role1 
  *     responses:
  *       201:
  *         description: Created

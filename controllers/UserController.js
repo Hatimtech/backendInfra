@@ -2,18 +2,20 @@ const Users = require('../models/User');
 const InfraConfigured = require('../models/InfraConfigured');
 const { error } = require( "../utils/errorMessages");
 const { getToken } = require("../middlewares/keyclock/AccessToken")
-const { getRolesFromToken , evaluate} = require("../middlewares/keyClock")
 const {
     checkValidityToEditUser,
     checkValidityToCreateUser,
     checkValidityToEvalute
 } = require("../middlewares/validators/UserValidators")
+const { assignRole} = require("../middlewares/keyclock/Role") ;
 const {
     getUser,
     createUser,
     editusers,
     deleteUser,
     getAllUser,
+    getRolesFromToken,
+    evaluate,
 } = require("../middlewares/keyclock/User") ;
 const {
     getTokenFromRequestHeader,
@@ -120,6 +122,7 @@ exports.registerInfraUser = async (req, res) => {
         username,
         password,
         logo,
+        roles,
     } = req.body;
     if (checkValidityToCreateUser(req,res)){
         const createUserResponse = await createUser(token,firstName,lastName,username,password,email,GROUPS.INFRA_GROUP);
@@ -146,16 +149,22 @@ exports.registerInfraUser = async (req, res) => {
                     if(deleteUserResponse.length !== 0 ){
                         res.status(200).json({
                             code: 0,
-                            message: "Error deleting infra in keyclock",
+                            message: "Error deleting user in keyclock",
                         });
                     } else {
                         res.send({code: 0,message: message1,});
                     }
                 } else {
-                    res.send({
-                        code: 1,
-                        message: "User Created successfully"
-                    });
+                    const assignRoleResponse = await assignRole(token, userKeyclockId, roles);
+                    console.log(assignRoleResponse);
+                    if(assignRoleResponse.length !== 0 ){
+                        res.status(200).json(error.ROLE_ASSIGN);
+                    } else {
+                        res.send({
+                            code: 1,
+                            message: "User Created"
+                        });
+                    }
                 }
             });
 

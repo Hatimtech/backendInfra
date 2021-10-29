@@ -3,8 +3,8 @@ const router = express.Router();
 
 const policyCtrl = require('../../controllers/KeyclockController/PolicyController');
 const {
-    checkInfraAdmin,
-} = require("../../middlewares/keyClock");
+    checkInfraAdmin
+} = require("../../middlewares/validators/AuthorizationValidator") ;
 
 /**
  * @swagger
