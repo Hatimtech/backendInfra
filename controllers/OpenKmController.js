@@ -94,6 +94,7 @@ exports.uploadFile = async (req, res) => {
  * @param res
  * @returns {Promise<void>}
  */
+
 exports.getFile = async (req, res) => {
     const {docId} = req.query;
     if (docId == undefined || docId == null || docId == '') {
@@ -113,8 +114,8 @@ exports.getFile = async (req, res) => {
                 if (err) {
                     return res.send((err));
                 } else {
-                     const encryptedBytes = Buffer.from(response.body,"base64").toString("base64");
-                     return res.send(encryptedBytes);
+                     const base64String = Buffer.from(response.body,"base64").toString("base64"); // if you want return a base64 string
+                     return res.send(response.body); //send octet-stream buffer
                 }
             });
         });

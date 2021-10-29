@@ -1,4 +1,3 @@
-const multer = require('../middlewares/multer-config');
 const express = require('express');
 const router = express.Router();
 const openKmController = require('../controllers/OpenKmController');
