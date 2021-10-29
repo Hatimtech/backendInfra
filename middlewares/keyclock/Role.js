@@ -91,3 +91,24 @@ module.exports.assignRole = (token, userid, roles) => {
         });
     });
 }
+
+
+module.exports.getRole = (token , username) => {
+    var options = {
+        'method': 'GET',
+        'url': KEYCLOCK_IP + "/admin/realms/"  + REALM_NAME + "/users/"+ username + "/role-mappings" + "/clients/" + ID_OF_CLIENT,
+        'headers': {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+    }
+    return new Promise(function (resolve, reject) {
+        request(options, async function (err, response) {
+            if(err){
+                reject(err);
+            } else {
+                resolve(response.body);
+            }
+        });
+    });
+}

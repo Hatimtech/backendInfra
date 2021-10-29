@@ -9,7 +9,7 @@ const {
 
 /**
  * @swagger
- * /api/infraSetup:
+ * /api/registerInfraAdmin:
  *   post:
  *     summary: Create admin user for infra.
  *     tags: ['User operations']
@@ -73,7 +73,7 @@ const {
  *                       example: Leanne Graham
  */
 
-router.post("/api/infraSetup", userCtrl.infraSetup);
+router.post("/api/registerInfraAdmin", userCtrl.infraSetup);
 
 /**
  * @swagger
@@ -216,6 +216,131 @@ router.post("/api/login", userCtrl.login);
  *                       example: User registed successfully
  */
 router.post("/api/registerInfraUser", checkInfraAdmin , userCtrl.registerInfraUser);
+
+
+/**
+ * @swagger
+ * /api/getUserRole:
+ *   get:
+ *     summary: Getting Infra Client roles for user .
+ *     tags: ['User operations']
+ *     Authorization: Bearer
+ *     responses:
+ *       200:
+ *         description: get
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                     status:
+ *                       type: integer
+ *                       description: The status code.
+ *                       example: 1
+ *                     message:
+ *                       type: string
+ *                       description: The status message.
+ *                       example: users found.                       
+ *                     role:
+ *                       type: array
+ *                       items:
+ *                          type: object
+ *                          properties:
+ *                               role1:
+ *                                  type: string
+ *                                  description: first name of User.
+ *                                  example: admin. 
+ */
+ router.get("/api/getUserRole" , userCtrl.getRoleFromToken);
+
+
+
+/**
+ * @swagger
+ * /api/evaluteUser:
+ *   post:
+ *     summary: create a new Scope.
+ *     tags: ['User operations']
+ *     Authorization: Bearer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: string
+ *                 description : The user's Id
+ *                 example: 10d4aa4c-7f40-4f48-9475-df2e9691dad8
+ *               roleIds:
+ *                 type: array
+ *                 items:
+ *                    type: string
+ *               resources:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                       description: resource id.
+ *                       example: f66f3ef8-a2fc-4694-b841-03ce05b4c1cf
+ *                     name:
+ *                       type: string
+ *                       description: Scope name.
+ *                       example: cashier
+ *                     displayName:
+ *                       type: string
+ *                       description: Scope display name.
+ *                       example: cashier 
+ *                     ownerManagedAccess:
+ *                       type: boolean
+ *                       description: Scope display name.
+ *                       example: false 
+ *                     uris:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                         example: www.google.com
+ *                     scopes:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                         example: Delete
+ *                     owner:
+ *                         type: object
+ *                         properties:
+ *                           id:
+ *                             type: string
+ *                             description: Owner id.
+ *                             example: cc6b0966-a696-4c19-811e-2ae115ee8cba
+ *                           name:
+ *                             type: string
+ *                             description: Owner name.
+ *                             example: infra-client
+ *     responses:
+ *       201:
+ *         description: Created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     status:
+ *                       type: integer
+ *                       description: Status of the request.
+ *                       example: 1
+ *                     message:
+ *                       type: string
+ *                       description: Message for the logged in user.
+ *                       example: Client created successfully.
+ */
+ router.post("/api/evaluteUser" , userCtrl.evaluate);
+
 
 
 /**

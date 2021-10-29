@@ -2,10 +2,10 @@ const { KEYCLOCK_IP , REALM_NAME, CLIENT_ID , ID_OF_CLIENT} = require( "../../co
 const request = require("request") ;
 
 //create policy
-module.exports.createPermission= (token, name, description, policies, resources) => {
+module.exports.createPermission= (token, name, description, policies, resources, scopes) => {
     var options = {
         'method': 'POST',
-        'url': KEYCLOCK_IP + "/admin/realms/" + REALM_NAME + "/clients/" + ID_OF_CLIENT + "/authz/resource-server/permission/resource",
+        'url': KEYCLOCK_IP + "/admin/realms/" + REALM_NAME + "/clients/" + ID_OF_CLIENT + "/authz/resource-server/permission/scope",
         'headers': {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
@@ -13,11 +13,12 @@ module.exports.createPermission= (token, name, description, policies, resources)
         body: JSON.stringify({
           description: description,
           name: name,
-          decisionStrategy: "UNANIMOUS",
+          decisionStrategy: "AFFIRMATIVE",
           logic: "POSITIVE",
           policies:policies,
           resources:resources,
-          type: "resource",
+          scopes:scopes,
+          type: "scope",
         })
       
       };
@@ -77,11 +78,11 @@ module.exports.deletePermission = (token, permissionId) => {
 }
 
 // Update Permission
-module.exports.updatePermission = (token, permissionId, name, description, policies, resources) => {
+module.exports.updatePermission = (token, permissionId, name, description, policies, resources, scopes) => {
     console.log(permissionId);
   var options = {
       'method': 'PUT',
-      'url':  KEYCLOCK_IP + "/admin/realms/" + REALM_NAME + "/clients/" + ID_OF_CLIENT + "/authz/resource-server/permission/resource/" + permissionId,
+      'url':  KEYCLOCK_IP + "/admin/realms/" + REALM_NAME + "/clients/" + ID_OF_CLIENT + "/authz/resource-server/permission/scope/" + permissionId,
       'headers': {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
@@ -90,11 +91,12 @@ module.exports.updatePermission = (token, permissionId, name, description, polic
         id: permissionId,
         description: description,
         name: name,
-        decisionStrategy: "UNANIMOUS",
+        decisionStrategy: "AFFIRMATIVE",
         logic: "POSITIVE",
         policies:policies,
         resources:resources,
-        type: "resource",
+        type: "scope",
+        scopes:scopes,
       })
   }
   return new Promise(function (resolve, reject) {

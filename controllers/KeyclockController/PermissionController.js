@@ -19,9 +19,10 @@ exports.createPermissions = async (req, res) => {
         description,
         policies,
         resources,
+        scopes,
     } = req.body;
     if(checkValidityToCreatePermissions(req,res)){
-    const createPermissionResponse = await createPermission(token,name, description, policies,resources);
+    const createPermissionResponse = await createPermission(token,name, description, policies,resources,scopes );
    console.log(createPermissionResponse)
     if(JSON.parse(createPermissionResponse).error){
         res.status(200).json(error.PERMISSION_CREATE);
@@ -70,12 +71,13 @@ exports.updatePermissions = async (req, res) => {
         name,
         description,
         policies,
-        resources
+        resources,
+        scopes,
     } = req.body;
     if(checkValidityToUpdatePermissions(req,res)){
 
     let token = getTokenFromRequestHeader(req,res);
-        const updatePermissionResponse = await updatePermission(token, permissionId, name, description, policies,resources);
+        const updatePermissionResponse = await updatePermission(token, permissionId, name, description, policies,resources, scopes);
         console.log(updatePermissionResponse);
         if(updatePermissionResponse.length !== 0 ){
             res.status(200).json(error.PERMISSION_UPDATE);

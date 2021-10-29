@@ -52,3 +52,17 @@ module.exports.checkValidityToEditUser = (req, res) => {
         return true;
     }
 };
+
+
+
+module.exports.checkValidityToEvalute = (req, res) => {
+    const {  resources, userId, } = req.body;
+    if(!resources)
+    {
+        res.send(error.RESOURCES_EMPTY);
+    } else if (!userId){
+        res.send(error.USERNAME_EMPTY);
+    } else {
+        return true;
+    }
+};
