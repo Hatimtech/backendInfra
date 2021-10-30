@@ -2,7 +2,7 @@ const { KEYCLOCK_IP , REALM_NAME, CLIENT_ID, CLIENT_SECRET} = require( "../../co
 const request = require("request") ;
 
 //Get token by username and password
-module.exports.getToken = (username, password) => {
+module.exports.getToken =  (username, password) => {
     var options = {
         'method': 'POST',
         'url': KEYCLOCK_IP + "/realms/" + REALM_NAME + "/protocol/openid-connect/token",

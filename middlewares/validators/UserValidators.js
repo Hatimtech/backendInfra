@@ -1,24 +1,23 @@
 const { error } = require( "../../utils/errorMessages");
 
-module.exports.checkValidityToCreateUser = (req, res) => {
-    const {firstName,lastName, username, password, email, mobile, ccode , country } = req.body;
-    if(!firstName)
-    {
-        res.send(error.FIRST_NAME_EMPTY);
-    } else if (!lastName){
-        res.send(error.LAST_NAME_EMPTY);
-    } else if (!username){
-        res.send(error.USERNAME_EMPTY);
-    } else if (!password){
-        res.send(error.PASSWORD_EMPTY);
-    } else if (!email){
-        res.send(error.EMAIL_EMPTY);
-    } else if (!mobile){
-        res.send(error.MOBILE_EMPTY);
-    } else if (!ccode){
-        res.send(error.CCODE_EMPTY);
-    } else if (!country){
-        res.send(error.COUNTRY_EMPTY);
+module.exports.checkValidityToCreateUser = async (user) => {
+
+    if(!user.firstName){
+        return error.FIRST_NAME_EMPTY;
+    } else if (!user.lastName){
+        return error.LAST_NAME_EMPTY;
+    } else if (!user.username){
+        return error.USERNAME_EMPTY;
+    } else if (!user.password){
+        return error.PASSWORD_EMPTY;
+    } else if (!user.email){
+        return error.EMAIL_EMPTY
+    } else if (!user.mobile){
+        return error.MOBILE_EMPTY
+    } else if (!user.ccode){
+        return error.CCODE_EMPTY
+    } else if (!user.country){
+        return error.COUNTRY_EMPTY
     } else {
         return true;
     }

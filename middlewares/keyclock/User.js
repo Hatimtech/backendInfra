@@ -74,8 +74,8 @@ module.exports.deleteUser = (token, userid) => {
 }
 
 // Create users
-module.exports.createUser = (token, firstName,lastName,username, password, email, group) => {
-    var options = {
+module.exports.createUser = (token, userInfo, group) => {
+    const options = {
         'method': 'POST',
         'url': KEYCLOCK_IP + "/admin/realms/" + REALM_NAME + "/users",
         'headers': {
@@ -84,13 +84,13 @@ module.exports.createUser = (token, firstName,lastName,username, password, email
         },
         body: JSON.stringify({
           "createdTimestamp": 1588880747548,
-          "username": username,
+          "username": userInfo.username,
           "enabled": true,
           "totp": false,
           "emailVerified": true,
-          "firstName": firstName,
-          "lastName": lastName,
-          "email": email,
+          "firstName": userInfo.firstName,
+          "lastName": userInfo.lastName,
+          "email": userInfo.email,
           "disableableCredentialTypes": [],
           "requiredActions": [],
           "notBefore": 0,
@@ -104,7 +104,7 @@ module.exports.createUser = (token, firstName,lastName,username, password, email
           "credentials":[
                   {
                     "type":"password",
-                      "value":password,
+                      "value":userInfo.password,
                       "temporary":false
                   }
             ],
@@ -116,8 +116,10 @@ module.exports.createUser = (token, firstName,lastName,username, password, email
     return new Promise(function (resolve, reject) {
         request(options, async function (err, response) {
             if(err){
+                console.log(err)
                 reject(err);
             } else {
+                console.log(response.body)
                 resolve(response.body);
             }
         });

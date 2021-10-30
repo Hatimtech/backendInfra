@@ -5,18 +5,16 @@ const SEPARATOR_DOUBLE_DOT = ':';
 const request = require("request");
 const {error} = require("../utils/errorMessages");
 const fs = require('fs');
-
+const Readable = require('stream').Readable
 /**
  * Create folder on OpenKM
- * @param req
- * @param res
+ * @param path
  * @returns {Promise<void>}
  */
-exports.createFolder = async (req, res) => {
-    const {path} = req.body;
+module.exports.createFolder = async (path) => {
 
     if (path == undefined || path == null || path == '') {
-        return res.send(error.ERROR_CREATE_FOLDER_PATHNAME_EMPTY);
+        return error.ERROR_CREATE_FOLDER_PATHNAME_EMPTY;
     } else {
         const options = {
             'method': 'POST',
@@ -31,15 +29,19 @@ exports.createFolder = async (req, res) => {
             }),
         };
 
-        new Promise(() => {
+
+        return new Promise(function (resolve, reject) {
             request(options, async function (err, response) {
-                if (err) {
-                    return res.send((err));
+                if(err){
+                    reject(err);
+                }else if(response.body.error){
+                    reject(response.body.error);
                 } else {
-                    return res.send(response.body);
+                    resolve(response.body);
                 }
             });
         });
+
     }
 
 };
@@ -50,14 +52,15 @@ exports.createFolder = async (req, res) => {
  * @param res
  * @returns {Promise<void>}
  */
-exports.uploadFile = async (req, res) => {
-    const {docPath} = req.fields
-    const content = req.files
+module.exports.uploadFile = async (docPath,fileNameAndExtension, base64String) => {
+
+
+    let content = new Buffer.from(base64String, 'base64')
     if (docPath == undefined || docPath == null || docPath == '') {
-        return res.send(error.ERROR_CREATE_FILE_PATHNAME_EMPTY);
+        return error.ERROR_CREATE_FILE_PATHNAME_EMPTY;
     }
-    else if (content == undefined || content == null || content == '') {
-        return res.send(error.ERROR_CREATE_FILE_EMPTY);
+    else if (content == undefined || content == null ) {
+        return error.ERROR_CREATE_FILE_EMPTY;
     }
 
     else {
@@ -73,18 +76,22 @@ exports.uploadFile = async (req, res) => {
             },
 
             formData: {
-                        'docPath': process.env.OPENKM_DOCPATH_BASE+docPath,
-                        'content' : fs.createReadStream(content.content.path)
+                        'docPath': process.env.OPENKM_DOCPATH_BASE+docPath+"/"+fileNameAndExtension,
+                        'content' : content
             }
 
         };
-            request(options,  function (err, response) {
-                if (err) {
-                    return res.send(err);
+        return new Promise(function (resolve, reject) {
+            request(options, async function (err, response) {
+                if(err){
+                    reject(err);
+                }else if(response.body.error){
+                    reject(response.body.error);
                 } else {
-                    return res.send(response.body);
+                    resolve(response.body);
                 }
             });
+        });
     }
 };
 
@@ -95,7 +102,7 @@ exports.uploadFile = async (req, res) => {
  * @returns {Promise<void>}
  */
 
-exports.getFile = async (req, res) => {
+module.exports.getFile = async (req, res) => {
     const {docId} = req.query;
     if (docId == undefined || docId == null || docId == '') {
         return res.send(error.ERROR_GET_FILE_DOCID_EMPTY);

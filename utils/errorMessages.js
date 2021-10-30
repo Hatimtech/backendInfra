@@ -40,7 +40,7 @@ module.exports.error = {
         message: "Error while getting Token"
     },
     USER_CREATE : {
-        code: 409,
+        code: 456,
         message: "Error while creating user in keyclock"
     },
     USER_DELETE : {

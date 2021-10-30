@@ -1,7 +1,8 @@
-const Users = require('../models/User');
+const User = require('../models/User');
 const InfraConfigured = require('../models/InfraConfigured');
 const { error } = require( "../utils/errorMessages");
 const { getToken } = require("../middlewares/keyclock/AccessToken")
+const request = require("request");
 const {
     checkValidityToEditUser,
     checkValidityToCreateUser,
@@ -22,68 +23,72 @@ const {
  } = require("../middlewares/commonFunctions")
 
 const { ADMIN_USERNAME , ADMIN_PASSWORD , GROUPS , ROLES} = require("../config/keyclockConstant") ;
-
+const {createFolder,uploadFile,getFile} = require("../controllers/OpenKmController")
 
 
 
 /**
  * This is used when we primarily setting up the project which help in creating first infra Admin.
- * @param {firstName,lastName, username, password, email, mobile, ccode , country } req
- * @param { code, message} res
+ * @param {requestParamsUser}
+ * @param { code, message}
  */
-exports.infraSetup = async (req, res) => {
-    //get token
-    const tokenResponse = await getToken(ADMIN_USERNAME, ADMIN_PASSWORD);
-    //check validity to create user
-    if (checkValidityToCreateUser(req,res)){
-         //this is req params
-        const {firstName,lastName, username, password, email, mobile, ccode , country, roles } = req.body;
-        if(JSON.parse(tokenResponse).error){
-            res.status(200).json(error.TOKEN_CREATE);
-        }else{
-            const token = JSON.parse(tokenResponse).access_token;
-            const createUserResponse = await createUser(token,firstName,lastName,username,password,email,GROUPS.INFRA_GROUP);
-            if(createUserResponse.length !== 0 ){
-                res.status(200).json(error.USER_CREATE);
+exports.registerInfraAdmin = async (req, res)=> {
+        let user =  new User(req.body)
+       const response =  await checkValidityToCreateUser(user)
+        if (response === true) {
+            //get token
+            const tokenResponse = await getToken(ADMIN_USERNAME, ADMIN_PASSWORD);
+
+            if (JSON.parse(tokenResponse).error) {
+                res.status(200).json(error.TOKEN_CREATE);
             } else {
-                const getUserResponse = await getUser(token, username);
-                const userKeyclockId = JSON.parse(getUserResponse)[0].id;
-                let data = new Users();
-                data.keyclock_id = userKeyclockId;
-                data.firstname = firstName;
-                data.lastname = lastName;
-                data.username = username;
-                data.roles = roles;
-                data.mobile = mobile;
-                data.email = email;
-                data.ccode = ccode;
-                data.country = country;
-                data.save(async (err) => {
-                    if (err) {
-                        var message = err;
-                        if (err.message) {
-                            message = err.message;
-                        }
-                        const deleteUserResponse = await deleteUser(token, userKeyclockId);
-                        if(deleteUserResponse.length !== 0 ){
-                            res.status(200).json(error.USER_DELETE);
+                const token = JSON.parse(tokenResponse).access_token;
+                const createUserResponse = await createUser(token, user, GROUPS.INFRA_GROUP);
+                if (createUserResponse.length !== 0) {
+                    res.status(200).json(error.USER_CREATE);
+                } else {
+                    const getUserResponse = await  getUser(token, user.username);
+                    user.keyclock_id = JSON.parse(getUserResponse)[0].id;
+                    user.uuidPhoto = ''
+                    user.save(async (err) => {
+                        if (err) {
+                            let message = err;
+                            if (err.message) {
+                                message = err.message;
+                            }
+                            const deleteUserResponse = await deleteUser(token,  user.keyclock_id);
+                            if (deleteUserResponse.length !== 0) {
+                                res.status(200).json(error.USER_DELETE);
+                            } else {
+                                res.status(200).json({
+                                    code: 0,
+                                    message: message,
+                                });
+                            }
                         } else {
-                            res.status(200).json({
-                                code: 0,
-                                message: message,
-                            });
+
+                         const responseCreateFolder =   await createFolder(user.username)
+                              if(responseCreateFolder != null && responseCreateFolder!=''){
+                                  const responseupload  =    await  uploadFile(user.username,user.username+'.png',user.photoUserBase64)
+                                  user.uuidPhoto = JSON.parse(responseupload).uuid
+                                 User.updateOne({'username':user.username}, {$set: {'uuidPhoto':user.uuidPhoto}} )
+                              }
+                            let infra = new InfraConfigured()
+                            infra.isConfigured = true
+                           await infra.save()
+
+                            res.send({code: 1, message: "User Created successfully", username: user.username});
                         }
-                    } else {
-                        let infra = new InfraConfigured()
-                        infra.isConfigured = true
-                        infra.save()
-                        res.send({code: 1,message: "User Created successfully" , username: username});
-                    }
-                });
+                    })
+                }
             }
+
         }
-    }
+        else {
+            return res.send(response)
+        }
 };
+
 
 /**
  * This is used for checking if there is an infra user in the system or not.
@@ -106,8 +111,8 @@ exports.checkInfraIsConfigured = async (req, res) => {
 
 /**
  * Infr user register API
- * @param { token, name, email, country, ccode, mobile, username, password, logo,} req
- * @param { code, message} res
+ * @param { token, name, email, country, ccode, mobile, username, password, logo,}
+ * @param { code, message}
  */
 
 exports.registerInfraUser = async (req, res) => {
@@ -127,12 +132,12 @@ exports.registerInfraUser = async (req, res) => {
     if (checkValidityToCreateUser(req,res)){
         const createUserResponse = await createUser(token,firstName,lastName,username,password,email,GROUPS.INFRA_GROUP);
         if(createUserResponse.length !== 0 ){
-            res.send({ code: 0, message: "Error creating Users"});
+            res.send({ code: 0, message: "Error creating User"});
         }
         else {
             const getUserResponse = await getUser(token, username);
             const userKeyclockId = JSON.parse(getUserResponse)[0].id;
-            let data = new Users();
+            let data = new User();
             data.keyclock_id = userKeyclockId;
             data.firstname = firstName;
             data.lastname = lastName;
@@ -203,7 +208,7 @@ exports.login = async (req, res) => {
  */
 exports.getInfraUsers = async (req, res) => {
         try {
-            const InfrUsers = await Users.find();
+            const InfrUsers = await User.find();
             res.send({ code: 1, message: "User found", users : InfrUsers });
         }catch(err)
         {
@@ -256,7 +261,7 @@ exports.enableOrDisableUser = async (req, res) => {
         
         const editUserResponse = await editusers(token,userId,editParams);
         if(editUserResponse.length !== 0 ){
-            res.send({ code: 0, message: "Users Cannot be edited."});
+            res.send({ code: 0, message: "User Cannot be edited."});
         }
         else {
                 res.send({code: 1,message: `User ${isEnabled ? "enabled" : "disabled"} successfully`});
@@ -301,7 +306,7 @@ exports.editUser = async (req, res) => {
             res.send(error.USER_EDIT);
         }
         else {
-            Users.findOneAndUpdate(
+            User.findOneAndUpdate(
                 { _id: userMongoId },
                 {
                     firstname: firstName,
@@ -351,7 +356,3 @@ exports.evaluate = async (req, res) => {
         }
     }
 };
-
-
-
-
