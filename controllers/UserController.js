@@ -126,11 +126,13 @@ exports.registerInfraUser = async (req, res) => {
     } = req.body;
     if (checkValidityToCreateUser(req,res)){
         const createUserResponse = await createUser(token,firstName,lastName,username,password,email,GROUPS.INFRA_GROUP);
+        console.log(createUserResponse);
         if(createUserResponse.length !== 0 ){
             res.send({ code: 0, message: "Error creating Users"});
         }
         else {
             const getUserResponse = await getUser(token, username);
+            
             const userKeyclockId = JSON.parse(getUserResponse)[0].id;
             let data = new Users();
             data.keyclock_id = userKeyclockId;

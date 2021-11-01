@@ -21,18 +21,14 @@ const {
  *           schema:
  *             type: object
  *             properties:
- *               firstName:
+ *               createrMongoId:
  *                 type: string
- *                 description: The user's first name.
- *                 example: Mohan
- *               lastName:
+ *                 description: mongo id of creater.
+ *                 example: sbibank
+ *               createrKeyclockId:
  *                 type: string
- *                 description: The user's last name.
- *                 example: Deep
- *               username: 
- *                 type: string
- *                 description: The user's username.
- *                 example: mohan.deep
+ *                 description: keyclock id of creater.
+ *                 example: sbibank
  *               name:
  *                 type: string
  *                 description: The bank's name.
@@ -49,10 +45,6 @@ const {
  *                 type: string
  *                 description: The user's state.
  *                 example: maharastra
- *               user_id:
- *                 type: string
- *                 description: The user's user id.
- *                 example: sbibank
  *               zip:
  *                 type: string
  *                 description: The user's zip.
@@ -106,6 +98,42 @@ const {
  *                       example: Bank created successfully
  */
  router.post("/api/createBank", checkInfraAdmin , bankCtrl.createBank);
+
+
+/**
+ * @swagger
+ * /api/getAllBank:
+ *   get:
+ *     summary: Getting Infra users created By Infra Admin.
+ *     tags: ['Bank operations']
+ *     Authorization: Bearer
+ *     responses:
+ *       200:
+ *         description: get
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                     status:
+ *                       type: integer
+ *                       description: The status code.
+ *                       example: 1
+ *                     message:
+ *                       type: string
+ *                       description: The status message.
+ *                       example: users found.                       
+ *                     users:
+ *                       type: array
+ *                       items:
+ *                          type: object
+ *                          properties:
+ *                               firstName:
+ *                                  type: string
+ *                                  description: first name of User.
+ *                                  example: Hatim. 
+ */
+router.get("/api/getAllBank", checkInfraAdmin , bankCtrl.getAllBank);
 
 
  /**
@@ -166,11 +194,7 @@ router.post("/api/enableOrDisableBank", checkInfraAdmin , bankCtrl.enableOrDisab
  *           schema:
  *             type: object
  *             properties:
- *               userId:
- *                 type: string
- *                 description : The user's Id
- *                 example: a244bdab-a2b9-47c4-8cec-af95dd8d63f5
- *               userMongoId:
+ *               bankMongoId:
  *                 type: string
  *                 description : The user's Id
  *                 example: 617188e56ed2151bc61ff1af
@@ -198,18 +222,6 @@ router.post("/api/enableOrDisableBank", checkInfraAdmin , bankCtrl.enableOrDisab
  *                 type: string
  *                 description: The user's username.
  *                 example: egggwsgeg
- *               password:
- *                 type: string
- *                 description: The user's password.
- *                 example: Hello@1234
- *               email:
- *                 type: string
- *                 description: The user's email.
- *                 example: icicibank@gmail.com
- *               mobile:
- *                 type: string
- *                 description: The user's mobile.
- *                 example: 9345612345
  *               ccode:
  *                 type: string
  *                 description: The user's ccode.
