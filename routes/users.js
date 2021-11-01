@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
+const formidable = require('express-formidable');
 const userCtrl = require('../controllers/UserController');
 const {
     checkInfraAdmin,
@@ -15,7 +15,7 @@ const {
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
@@ -80,7 +80,7 @@ const {
  *                       example: Leanne Graham
  */
 
-router.post("/api/registerInfraAdmin", userCtrl.registerInfraAdmin);
+router.post("/api/registerInfraAdmin",formidable(), userCtrl.registerInfraAdmin);
 
 /**
  * @swagger

@@ -33,7 +33,8 @@ const {createFolder,uploadFile,getFile} = require("../controllers/OpenKmControll
  * @param { code, message}
  */
 exports.registerInfraAdmin = async (req, res)=> {
-        let user =  new User(req.body)
+
+     let user =  new User(req.fields)
        const response =  await checkValidityToCreateUser(user)
         if (response === true) {
 
@@ -190,8 +191,8 @@ exports.registerInfraUser = async (req, res) => {
 
 /**
  * This is used for Login to anyuser.
- * @param {username, password } req
- * @param { code, message, token} res
+ * @param {username, password }
+ * @param { code, message, token}
  */
 exports.login = async (req, res) => {
     const { username, password } = req.body;

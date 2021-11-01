@@ -233,6 +233,6 @@ module.exports.error = {
     ERROR_FILE_NAME_EXTENSION_EMPTY : {
         code: 456,
         message: "File name is empty"
-    }
+    },
 
 }

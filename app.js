@@ -58,7 +58,7 @@ app.use('/', resourceRouter);
 app.use('/', policyRouter);
 app.use('/', permissionRouter);
 app.use('/',formidable(), openKmRouter);
-app.use(formidable());
+
 
 /**
  * swagger api config
