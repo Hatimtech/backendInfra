@@ -50,7 +50,6 @@ exports.registerInfraAdmin = async (req, res)=> {
                 } else {
                     const getUserResponse = await  getUser(token, user.username);
                     user.keyclock_id = JSON.parse(getUserResponse)[0].id;
-                    user.uuidPhoto = ''
                     user.save(async (err) => {
                         if (err) {
                             let message = err;
@@ -73,7 +72,6 @@ exports.registerInfraAdmin = async (req, res)=> {
                                 const responseCreateFolder =   await createFolder(user.username)
 
                                 if(responseCreateFolder != null && responseCreateFolder!=''){
-
                                     //upload  photo
                                     const responseupload  =    await  uploadFile(user.username,user.username+'.png',user.photoUserBase64)
                                     // Update uuidPhoto
@@ -100,8 +98,8 @@ exports.registerInfraAdmin = async (req, res)=> {
 
 /**
  * This is used for checking if there is an infra user in the system or not.
- * @param { } req
- * @param { code, message} res
+ * @param { }
+ * @param { code, message}
  */
 exports.checkInfraIsConfigured = async (req, res) => {
 

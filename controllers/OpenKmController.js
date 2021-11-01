@@ -4,8 +4,7 @@ const OPEN_KM_END_POINT_GET_FILE = 'rest/document/getContent?docId=';
 const SEPARATOR_DOUBLE_DOT = ':';
 const request = require("request");
 const {error} = require("../utils/errorMessages");
-const fs = require('fs');
-const Readable = require('stream').Readable
+
 /**
  * Create folder on OpenKM
  * @param path
@@ -13,7 +12,7 @@ const Readable = require('stream').Readable
  */
 module.exports.createFolder = async (path) => {
 
-    if (path == undefined || path == null || path == '') {
+    if (!path) {
         return error.ERROR_CREATE_FOLDER_PATHNAME_EMPTY;
     } else {
         const options = {
@@ -32,9 +31,9 @@ module.exports.createFolder = async (path) => {
 
         return new Promise(function (resolve, reject) {
             request(options, async function (err, response) {
-                if(err){
+                if (err) {
                     reject(err);
-                }else if(response.body.error){
+                } else if (response.body.error) {
                     reject(response.body.error);
                 } else {
                     resolve(response.body);
@@ -52,47 +51,46 @@ module.exports.createFolder = async (path) => {
  * @param res
  * @returns {Promise<void>}
  */
-module.exports.uploadFile = async (docPath,fileNameAndExtension, base64String) => {
-
-
-    let content = new Buffer.from(base64String, 'base64')
-    if (docPath == undefined || docPath == null || docPath == '') {
+module.exports.uploadFile = async (docPath, fileNameAndExtension, base64String) => {
+    if (!docPath) {
         return error.ERROR_CREATE_FILE_PATHNAME_EMPTY;
-    }
-    else if (content == undefined || content == null ) {
+    } else if (!fileNameAndExtension) {
+        return error.ERROR_FILE_NAME_EXTENSION_EMPTY;
+    } else if (!base64String) {
         return error.ERROR_CREATE_FILE_EMPTY;
     }
 
-    else {
-        const options = {
-            method: 'POST',
-            url: process.env.OPENKM_URL_SERVICE_BASE + OPEN_KM_END_POINT_UPLOAD_FILE,
-            enctype:"multipart/form-data",
-            headers: {
-                Authorization: "Basic " +
-                    new Buffer(process.env.OPENKM_LOGIN + SEPARATOR_DOUBLE_DOT + process.env.OPENKM_PASSWORD).toString("base64"),
-                ContentType: "multipart/form-data",
-                accept: 'application/json'
-            },
+    let content = new Buffer.from(base64String, 'base64');
 
-            formData: {
-                        'docPath': process.env.OPENKM_DOCPATH_BASE+docPath+"/"+fileNameAndExtension,
-                        'content' : content
+    const options = {
+        method: 'POST',
+        url: process.env.OPENKM_URL_SERVICE_BASE + OPEN_KM_END_POINT_UPLOAD_FILE,
+        enctype: "multipart/form-data",
+        headers: {
+            Authorization: "Basic " +
+                new Buffer(process.env.OPENKM_LOGIN + SEPARATOR_DOUBLE_DOT + process.env.OPENKM_PASSWORD).toString("base64"),
+            ContentType: "multipart/form-data",
+            accept: 'application/json'
+        },
+
+        formData: {
+            'docPath': process.env.OPENKM_DOCPATH_BASE + docPath + "/" + fileNameAndExtension,
+            'content': content
+        }
+
+    };
+    return new Promise(function (resolve, reject) {
+        request(options, async function (err, response) {
+            if (err) {
+                reject(err);
+            } else if (response.body.error) {
+                reject(response.body.error);
+            } else {
+                resolve(response.body);
             }
-
-        };
-        return new Promise(function (resolve, reject) {
-            request(options, async function (err, response) {
-                if(err){
-                    reject(err);
-                }else if(response.body.error){
-                    reject(response.body.error);
-                } else {
-                    resolve(response.body);
-                }
-            });
         });
-    }
+    });
+
 };
 
 /**
@@ -104,7 +102,7 @@ module.exports.uploadFile = async (docPath,fileNameAndExtension, base64String) =
 
 module.exports.getFile = async (req, res) => {
     const {docId} = req.query;
-    if (docId == undefined || docId == null || docId == '') {
+    if (docId) {
         return res.send(error.ERROR_GET_FILE_DOCID_EMPTY);
     } else {
         const options = {
@@ -121,8 +119,8 @@ module.exports.getFile = async (req, res) => {
                 if (err) {
                     return res.send((err));
                 } else {
-                     const base64String = Buffer.from(response.body,"base64").toString("base64"); // if you want return a base64 string
-                     return res.send(response.body); //send octet-stream buffer
+                    const base64String = Buffer.from(response.body, "base64").toString("base64"); // if you want return a base64 string
+                    return res.send(response.body); //send octet-stream buffer
                 }
             });
         });

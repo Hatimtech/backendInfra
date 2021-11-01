@@ -230,4 +230,9 @@ module.exports.error = {
         message: "Error while creating user in keyclock"
     },
 
+    ERROR_FILE_NAME_EXTENSION_EMPTY : {
+        code: 456,
+        message: "File name is empty"
+    }
+
 }
