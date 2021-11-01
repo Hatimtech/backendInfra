@@ -21,6 +21,10 @@ const userSchema = mongoose.Schema({
         type: String,
         transient: true,
     },
+    photoNameExtension: {
+        type: String,
+        transient: true,
+    },
     uuidPhoto :{type: String,required: false}
 });
 

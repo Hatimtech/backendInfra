@@ -51,6 +51,10 @@ const {
  *                 type: string
  *                 description: The user's country.
  *                 example: Indian
+ *               photoNameExtension:
+ *                 type: string
+ *                 description: The user's photo name and extension.
+ *                 example: image.png
  *               photoUserBase64:
  *                 type: string
  *                 description: The user's photo.

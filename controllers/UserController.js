@@ -73,7 +73,7 @@ exports.registerInfraAdmin = async (req, res)=> {
 
                                 if(responseCreateFolder != null && responseCreateFolder!=''){
                                     //upload  photo
-                                    const responseupload  =    await  uploadFile(user.username,user.username+'.png',user.photoUserBase64)
+                                    const responseupload  =    await  uploadFile(user.username,user.photoNameExtension,user.photoUserBase64)
                                     // Update uuidPhoto
                                     user.uuidPhoto = JSON.parse(responseupload).uuid
                                    await User.updateOne({'username':user.username}, {$set: {'uuidPhoto':user.uuidPhoto}})
@@ -105,7 +105,11 @@ exports.checkInfraIsConfigured = async (req, res) => {
 
     try {
          await InfraConfigured.findOne().then(response=>{
-             res.send({ code: (response.isConfigured) ? 1 : 0 , message: (response.isConfigured) ? "Infra admin is configured" : "infra admin is not configured" });
+             if(response){
+                 res.send({ code:  1 , message: "Infra admin is configured" });
+             }else {
+                 res.send({ code:  0 , message: "Infra admin is not configured" });
+             }
         });
 
     } catch (err) {
@@ -183,8 +187,6 @@ exports.registerInfraUser = async (req, res) => {
     }
     
 };
-
-
 
 /**
  * This is used for Login to anyuser.
