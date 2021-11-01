@@ -3,6 +3,8 @@ const uniqueValidator = require('mongoose-unique-validator');
 
 const bankSchema = mongoose.Schema({
     name: { type: String, required: true, unique: true },
+    creater_keyclock_id: { type: String, required: true },
+    creater_mongo_id: { type: String, required: true },
     bcode: { type: String, required: true, unique: true },
     address: { type: String, required: true },
     state: { type: String, required: true },
