@@ -39,10 +39,7 @@ module.exports.error = {
         code: 409,
         message: "Error while getting Token"
     },
-    USER_CREATE : {
-        code: 456,
-        message: "Error while creating user in keyclock"
-    },
+
     USER_DELETE : {
         code: 410,
         message: "Error while deleting user in keyclock"
@@ -226,6 +223,11 @@ module.exports.error = {
     ERROR_GET_FILE_DOCID_EMPTY: {
         code: 454,
         message: "Document Id is requires"
-    }
+    },
+
+    USER_CREATE : {
+        code: 455,
+        message: "Error while creating user in keyclock"
+    },
 
 }

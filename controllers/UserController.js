@@ -36,6 +36,7 @@ exports.registerInfraAdmin = async (req, res)=> {
         let user =  new User(req.body)
        const response =  await checkValidityToCreateUser(user)
         if (response === true) {
+
             //get token
             const tokenResponse = await getToken(ADMIN_USERNAME, ADMIN_PASSWORD);
 
@@ -67,16 +68,23 @@ exports.registerInfraAdmin = async (req, res)=> {
                             }
                         } else {
 
-                         const responseCreateFolder =   await createFolder(user.username)
-                              if(responseCreateFolder != null && responseCreateFolder!=''){
-                                  const responseupload  =    await  uploadFile(user.username,user.username+'.png',user.photoUserBase64)
-                                  user.uuidPhoto = JSON.parse(responseupload).uuid
-                                 User.updateOne({'username':user.username}, {$set: {'uuidPhoto':user.uuidPhoto}} )
-                              }
+                            if (user.photoUserBase64){
+                                //Create Folder
+                                const responseCreateFolder =   await createFolder(user.username)
+
+                                if(responseCreateFolder != null && responseCreateFolder!=''){
+
+                                    //upload  photo
+                                    const responseupload  =    await  uploadFile(user.username,user.username+'.png',user.photoUserBase64)
+                                    // Update uuidPhoto
+                                    user.uuidPhoto = JSON.parse(responseupload).uuid
+                                   await User.updateOne({'username':user.username}, {$set: {'uuidPhoto':user.uuidPhoto}})
+                                }
+                            }
+
                             let infra = new InfraConfigured()
                             infra.isConfigured = true
                            await infra.save()
-
                             res.send({code: 1, message: "User Created successfully", username: user.username});
                         }
                     })
