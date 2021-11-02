@@ -29,18 +29,15 @@ const {createFolder,uploadFile,getFile} = require("../controllers/OpenKmControll
 
 /**
  * This is used when we primarily setting up the project which help in creating first infra Admin.
- * @param {requestParamsUser}
- * @param { code, message}
+ * @param {requestParamsUser }
+ * @param { code, message }
  */
 exports.registerInfraAdmin = async (req, res)=> {
-
      let user =  new User(req.fields)
        const response =  await checkValidityToCreateUser(user)
-        if (response === true) {
-
+        if (response === true ) {
             //get token
             const tokenResponse = await getToken(ADMIN_USERNAME, ADMIN_PASSWORD);
-
             if (JSON.parse(tokenResponse).error) {
                 res.status(200).json(error.TOKEN_CREATE);
             } else {
@@ -75,6 +72,7 @@ exports.registerInfraAdmin = async (req, res)=> {
                                 if(responseCreateFolder != null && responseCreateFolder!=''){
                                     //upload  photo
                                     const responseupload  =    await  uploadFile(user.username,user.photoNameExtension,user.photoUserBase64)
+
                                     // Update uuidPhoto
                                     user.uuidPhoto = JSON.parse(responseupload).uuid
                                    await User.updateOne({'username':user.username}, {$set: {'uuidPhoto':user.uuidPhoto}})
@@ -192,7 +190,7 @@ exports.registerInfraUser = async (req, res) => {
 /**
  * This is used for Login to anyuser.
  * @param {username, password }
- * @param { code, message, token}
+ * @param { code, message, token, user}
  */
 exports.login = async (req, res) => {
     const { username, password } = req.body;
@@ -201,8 +199,10 @@ exports.login = async (req, res) => {
     if(JSON.parse(tokenResponse).hasOwnProperty('error')){
         res.send({ code: 0, message: JSON.parse(tokenResponse).error });
     }else{
-        const token =JSON.parse(tokenResponse).access_token;
-        res.send({ code: 1, message: "Authorized to login", token : token });
+        const token = JSON.parse(tokenResponse).access_token;
+        const getUserResponse = await  getUser(token, username);
+        const user = JSON.parse(getUserResponse)
+        res.send({ code: 1, message: "Authorized to login", token : token, user: user });
 
 
         

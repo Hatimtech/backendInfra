@@ -110,7 +110,12 @@ module.exports.createUser = (token, userInfo, group) => {
             ],
           "groups": [
                 group
-          ]
+          ],
+          "attributes": {
+              "mobile":userInfo.mobile,
+              "country": userInfo.country,
+              "ccode": userInfo.ccode,
+            }
         }),
     }
     return new Promise(function (resolve, reject) {
