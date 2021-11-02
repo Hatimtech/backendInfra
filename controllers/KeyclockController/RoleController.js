@@ -9,7 +9,11 @@ const {
     getTokenFromRequestHeader,
 } = require("../../middlewares/commonFunctions")
 
-
+/**
+ * 
+ * @param { name, attributes } req 
+ * @param { code, message } res 
+ */
 exports.createUserRoles = async (req, res) => {
     let token = getTokenFromRequestHeader(req,res);
     const {
@@ -31,6 +35,11 @@ exports.createUserRoles = async (req, res) => {
         
 };
 
+/**
+ * 
+ * @param {*} req 
+ * @param { code, roles } res 
+ */
 exports.getAllRoles = async (req, res) => {
     let token = getTokenFromRequestHeader(req,res);
         const getRoleResponse = await getAllRoles(token);
@@ -46,6 +55,11 @@ exports.getAllRoles = async (req, res) => {
         }
 };
 
+/**
+ * 
+ * @param { name } req 
+ * @param { code, message } res 
+ */
 exports.deleteRole = async (req, res) => {
     const { name } = req.body;
     let token = getTokenFromRequestHeader(req,res);
@@ -61,6 +75,11 @@ exports.deleteRole = async (req, res) => {
         }
 };
 
+/**
+ * 
+ * @param { roles, userKeyclockId } req 
+ * @param { code, message } res 
+ */
 exports.assignRole = async (req, res) => {
     const { roles, userKeyclockId } = req.body;
     let token = getTokenFromRequestHeader(req,res);

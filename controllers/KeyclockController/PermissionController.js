@@ -11,7 +11,12 @@ const {
     checkValidityToDeletePermissions,
     checkValidityToUpdatePermissions,
 } = require("../../middlewares/validators/PermissionValidators")
-
+ 
+/**
+ * 
+ * @param {name, description, policies, resources} req 
+ * @param { code, message } res 
+ */
 exports.createPermissions = async (req, res) => {
     let token = getTokenFromRequestHeader(req,res);
     const {
@@ -31,10 +36,14 @@ exports.createPermissions = async (req, res) => {
 }    
 };
 
+/**
+ * 
+ * @param {*} req 
+ * @param { code, permissions } res 
+ */
 exports.getAllPermission = async (req, res) => {
     let token = getTokenFromRequestHeader(req,res);
         const getPermissionResponse = await getAllPermission(token);
-        console.log(getPermissionResponse);
         if(JSON.parse(getPermissionResponse).error){
             res.status(200).json(error.GET_ALL_PERMISSION);
         } else {
@@ -46,6 +55,11 @@ exports.getAllPermission = async (req, res) => {
         }
 };
 
+/**
+ * 
+ * @param { permissionId } req 
+ * @param { message } res 
+ */
 exports.deletePermissions = async (req, res) => {
     const { permissionId } = req.body;
     if(checkValidityToDeletePermissions(req,res)){
@@ -63,6 +77,12 @@ exports.deletePermissions = async (req, res) => {
         }
     }
 };
+
+/**
+ * 
+ * @param { permissionId, name, description, policies, resources} req 
+ * @param { code, message } res 
+ */
 
 exports.updatePermissions = async (req, res) => {
     const {

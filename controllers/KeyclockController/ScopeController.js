@@ -13,6 +13,11 @@ const {
     checkValidityToUpdateScope,
 } = require("../../middlewares/validators/ScopeValidators")
 
+/**
+ * 
+ * @param { name, displayName } req 
+ * @param { code, message } res 
+ */
 exports.createScope = async (req, res) => {
     let token = getTokenFromRequestHeader(req,res);
     const {
@@ -29,6 +34,11 @@ exports.createScope = async (req, res) => {
     }    
 };
 
+/**
+ * 
+ * @param {*} req 
+ * @param { code, scopes } res 
+ */
 exports.getAllScopes = async (req, res) => {
     let token = getTokenFromRequestHeader(req,res);
         const getScopeResponse = await getAllScopes(token);
@@ -44,6 +54,11 @@ exports.getAllScopes = async (req, res) => {
         }
 };
 
+/**
+ * 
+ * @param { scopeId } req 
+ * @param { code, message } res 
+ */
 exports.deleteScopes = async (req, res) => {
     const { scopeId } = req.body;
     let token = getTokenFromRequestHeader(req,res);
@@ -61,6 +76,11 @@ exports.deleteScopes = async (req, res) => {
     }
 };
 
+/**
+ * 
+ * @param { scopeId, name, displayName } req 
+ * @param { code, message } res 
+ */
 exports.updateScopes = async (req, res) => {
     const { scopeId, name, displayName} = req.body;
     let token = getTokenFromRequestHeader(req,res);

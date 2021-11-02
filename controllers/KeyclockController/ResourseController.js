@@ -12,6 +12,11 @@ const {
     checkValidityToUpdateResource,
 } = require("../../middlewares/validators/ResourceValidators")
 
+/**
+ * 
+ * @param { name, displayName, scopes, uris } req 
+ * @param { code, message } res 
+ */
 exports.createResources = async (req, res) => {
     let token = getTokenFromRequestHeader(req,res);
     const {
@@ -30,6 +35,11 @@ exports.createResources = async (req, res) => {
     }     
 };
 
+/**
+ * 
+ * @param {*} req 
+ * @param { code, resources} res 
+ */
 exports.getAllResources = async (req, res) => {
     let token = getTokenFromRequestHeader(req,res);
         const getResourceResponse = await getAllResource(token);
@@ -45,6 +55,11 @@ exports.getAllResources = async (req, res) => {
         }
 };
 
+/**
+ * 
+ * @param { resourceId } req 
+ * @param { code, message} res 
+ */
 exports.deleteResources = async (req, res) => {
     const { resourceId } = req.body;
     let token = getTokenFromRequestHeader(req,res);
@@ -61,6 +76,12 @@ exports.deleteResources = async (req, res) => {
         }
     }
 };
+
+/**
+ * 
+ * @param { resourceId, name, displayName, scopes, uris} req 
+ * @param { code, message} res 
+ */
 
 exports.updateResources = async (req, res) => {
     const {
