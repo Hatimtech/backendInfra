@@ -265,38 +265,26 @@ exports.enableOrDisableUser = async (req, res) => {
  */
 exports.editUser = async (req, res) => {
     let token = getTokenFromRequestHeader(req,res);
-    const {
-        userKeyclockId,
-        userMongoId,
-        firstName,
-        lastName,
-        username,
-        email,
-        country,
-        ccode,
-        mobile,
-        password,
-        logo,
-    } = req.body;
+    const bodyParams = req.body;
     let editParams = {
-        firstName : firstName,
-        lastName: lastName,
-        email: email,
-        username: username,
+        firstName : bodyParams.firstName,
+        lastName: bodyParams.lastName,
+        email: bodyParams.email,
+        username: bodyParams.username,
         credentials:[
             {
               "type":"password",
-                "value":password,
+                "value": bodyParams.password,
                 "temporary":false
             }
         ],
         "attributes": {
-            "mobile":mobile,
-            "country": country,
-            "ccode": ccode,
+            "mobile": bodyParams.mobile,
+            "country": bodyParams.country,
+            "ccode": bodyParams.ccode,
         }
     }
-    if (checkValidityToEditUser(req,res)){
+    if (checkValidityToEditUser(bodyParams, res)){
         const editUserResponse = await editusers(token,userKeyclockId,editParams);
         if(editUserResponse.length !== 0 ){
             res.send(error.USER_EDIT);

@@ -17,16 +17,16 @@ module.exports.USER_ATTRIBUTES = {
     CCODE: "ccode"
 }
 
-module.exports.REALM_NAME = "Ewallet"
+module.exports.REALM_NAME = "ewallet"
 
 module.exports.KEYCLOCK_IP = "http://localhost:8080/auth"
 
 module.exports.CLIENT_ID = "infra-client"
 
-module.exports.ID_OF_CLIENT = "cc6b0966-a696-4c19-811e-2ae115ee8cba"
+module.exports.ID_OF_CLIENT = "52f745c1-c087-455b-b86d-67769453fa25"
 
-module.exports.ADMIN_USERNAME = "adminuser"
+module.exports.ADMIN_USERNAME = "admin"
 
-module.exports.ADMIN_PASSWORD = "H@tim5152"
+module.exports.ADMIN_PASSWORD = "admin"
 
-module.exports.CLIENT_SECRET = "a37922ad-9d46-448d-9957-0e30db83b4d8"
+module.exports.CLIENT_SECRET = "f6ce541d-896d-4a9d-87ce-c88cd184c330"

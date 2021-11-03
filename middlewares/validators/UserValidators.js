@@ -34,28 +34,27 @@ module.exports.checkValidityToCreateUser = async (user) => {
  * @param { code, message } res 
  * @returns 
  */
-module.exports.checkValidityToEditUser = (req, res) => {
-    const { userKeyclockId, userMongoId, firstName, lastName, username, password, email, mobile, ccode , country } = req.body;
-    if(!firstName)
+module.exports.checkValidityToEditUser = (bodyParams, res) => {
+    if(!bodyParams.firstName)
     {
         res.send(error.FIRST_NAME_EMPTY);
-    } else if (!lastName){
+    } else if (!bodyParams.lastName){
         res.send(error.LAST_NAME_EMPTY);
-    } else if (!username){
+    } else if (!bodyParams.username){
         res.send(error.USERNAME_EMPTY);
-    } else if (!password){
+    } else if (!bodyParams.password){
         res.send(error.PASSWORD_EMPTY);
-    } else if (!email){
+    } else if (!bodyParams.email){
         res.send(error.EMAIL_EMPTY);
-    } else if (!mobile){
+    } else if (!bodyParams.mobile){
         res.send(error.MOBILE_EMPTY);
-    } else if (!ccode){
+    } else if (!bodyParams.ccode){
         res.send(error.CCODE_EMPTY);
-    } else if (!country){
+    } else if (!bodyParams.country){
         res.send(error.COUNTRY_EMPTY);
-    }else if (!userKeyclockId){
+    }else if (!bodyParams.userKeyclockId){
         res.send(error.KEYCLOCK_ID_EMPTY);
-    }else if (!userMongoId){
+    }else if (!bodyParams.userMongoId){
         res.send(error.MONGO_ID_EMPTY);
     } else {
         return true;
