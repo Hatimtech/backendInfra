@@ -72,30 +72,20 @@ exports.enableOrDisableBank = async (req, res) => {
  * @param { code, message} res 
  */
 exports.editBank = async (req, res) => {
-    const {
-        bankMongoId,
-        ccode ,
-        country, 
-        name,
-        address,
-        state,
-        zip,
-        contract,
-        logo,
-    } = req.body;
+    const bodyParams = req.body;
    
-    if (checkValidityToEditBank(req,res)){
+    if (checkValidityToEditBank(bodyParams,res)){
         Bank.findOneAndUpdate(
-            { _id: bankMongoId },
+            { _id: bodyParams.bankMongoId },
             {
-                name : name,
-                address : address,
-                state : state,
-                zip : zip,
-                contract : contract,
-                country : country,
-                ccode : ccode,
-                logo : logo,
+                name : bodyParams.name,
+                address : bodyParams.address,
+                state : bodyParams.state,
+                zip : bodyParams.zip,
+                contract : bodyParams.contract,
+                country : bodyParams.country,
+                ccode : bodyParams.ccode,
+                logo : bodyParams.logo,
                 modified_at: Date.now(),
             },
             (err1, bank) => {
@@ -106,7 +96,8 @@ exports.editBank = async (req, res) => {
                 } else {
                     res.send({
                         code: 1,
-                        message: "Bank Edited successfully"
+                        message: "Bank Edited successfully",
+                        bank : bank
                     });
                 }
             }

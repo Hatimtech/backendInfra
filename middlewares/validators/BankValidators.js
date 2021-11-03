@@ -61,35 +61,25 @@ module.exports.checkValidityToCreateBank = (bank) => {
  * @returns 
  */
 module.exports.checkValidityToEditBank = (req, res) => {
-    const {
-        bankMongoId,
-        ccode ,
-        country, 
-        name,
-        address,
-        state,
-        zip,
-        contract,
-        logo,
-    } = req.body;
-    if(!ccode)
+    
+    if(!bodyParams.ccode)
     {
         res.send(error.CCODE_EMPTY);
     } else if (!country){
         res.send(error.COUNTRY_EMPTY);
-    } else if (!name){
+    } else if (!bodyParams.name){
         res.send(error.NAME_EMPTY);
-    } else if (!address){
+    } else if (!bodyParams.address){
         res.send(error.ADDRESS_EMPTY);
-    } else if (!state){
+    } else if (!bodyParams.state){
         res.send(error.STATE_EMPTY);
-    } else if (!contract){
+    } else if (!bodyParams.contract){
         res.send(error.CONTRACT_EMPTY);
-    } else if (!logo){
+    } else if (!bodyParams.logo){
         res.send(error.LOGO_EMPTY);
-    } else if (!zip){
+    } else if (!bodyParams.zip){
         res.send(error.ZIP_EMPTY);
-    } else if (!bankMongoId){
+    } else if (!bodyParams.bankMongoId){
         res.send(error.MONGO_ID_EMPTY);
     } else {
         return true;
