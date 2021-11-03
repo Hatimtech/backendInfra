@@ -1,7 +1,16 @@
 const { KEYCLOCK_IP , REALM_NAME, CLIENT_ID , ID_OF_CLIENT} = require( "../../config/keyclockConstant");
 const request = require("request") ;
 
-//create policy
+/**
+ * This is used to create permission in keyclock
+ * @param {*} token 
+ * @param {*} name 
+ * @param {*} description 
+ * @param {*} policies 
+ * @param {*} resources 
+ * @param {*} scopes 
+ * @returns 
+ */
 module.exports.createPermission= (token, name, description, policies, resources, scopes) => {
     var options = {
         'method': 'POST',
@@ -33,7 +42,11 @@ module.exports.createPermission= (token, name, description, policies, resources,
     });
 }
 
-//get Permission
+/**
+ * This is used to get all permissions from keyclock
+ * @param {*} token 
+ * @returns 
+ */
 module.exports.getAllPermission = (token) => {
   var options = {
       'method': 'GET',
@@ -55,7 +68,12 @@ module.exports.getAllPermission = (token) => {
 
 }
 
-// Delete deletePermission
+/**
+ * this is used to delete a permission in keyclock
+ * @param {*} token 
+ * @param {*} permissionId 
+ * @returns 
+ */
 module.exports.deletePermission = (token, permissionId) => {
     console.log(permissionId);
   var options = {
@@ -77,7 +95,17 @@ module.exports.deletePermission = (token, permissionId) => {
   });
 }
 
-// Update Permission
+/**
+ * This is used to update a permission in keyclock
+ * @param {*} token 
+ * @param {*} permissionId 
+ * @param {*} name 
+ * @param {*} description 
+ * @param {*} policies 
+ * @param {*} resources 
+ * @param {*} scopes 
+ * @returns 
+ */
 module.exports.updatePermission = (token, permissionId, name, description, policies, resources, scopes) => {
     console.log(permissionId);
   var options = {

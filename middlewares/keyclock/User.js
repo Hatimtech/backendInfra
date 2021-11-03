@@ -1,7 +1,12 @@
 const { KEYCLOCK_IP , REALM_NAME , ID_OF_CLIENT, USER_ATTRIBUTES} = require( "../../config/keyclockConstant");
 const request = require("request") ;
 
-//Get user by username
+/**
+ * This is used to get a user from keyclock by username
+ * @param {*} token 
+ * @param {*} username 
+ * @returns 
+ */
 module.exports.getUser = (token, username) => {
     var options = {
         'method': 'GET',
@@ -25,7 +30,11 @@ module.exports.getUser = (token, username) => {
     });
 }
 
-//Get all user 
+/**
+ * This is used to get all users from keyclock
+ * @param {*} token 
+ * @returns 
+ */
 module.exports.getAllUser = (token) => {
     var options = {
         'method': 'GET',
@@ -49,7 +58,12 @@ module.exports.getAllUser = (token) => {
     });
 }
 
-//delete user by id
+/**
+ * This is used to delete a user by id in keyclock
+ * @param {*} token 
+ * @param {*} userid 
+ * @returns 
+ */
 module.exports.deleteUser = (token, userid) => {
     var options = {
         'method': 'DELETE',
@@ -73,7 +87,13 @@ module.exports.deleteUser = (token, userid) => {
     });
 }
 
-// Create users
+/**
+ * This is used to create a user in keyclock
+ * @param {*} token 
+ * @param {username, firstName, lastName, email, mobile, country, ccode} userInfo 
+ * @param {*} group 
+ * @returns 
+ */
 module.exports.createUser = (token, userInfo, group) => {
     const options = {
         'method': 'POST',
@@ -131,7 +151,13 @@ module.exports.createUser = (token, userInfo, group) => {
     });
 }
 
-// edit user
+/**
+ * This is used to edit users in keyclock
+ * @param {*} token 
+ * @param {*} userId 
+ * @param {firstName, lastName, email, credentials, attributes} editParams 
+ * @returns 
+ */
 module.exports.editusers = (token , userId, editParams) => {
     var options = {
         'method': 'PUT',
@@ -163,7 +189,14 @@ module.exports.getRolesFromToken = (token) => {
 };
 
 
-
+/**
+ * This is used to evaluate a user access
+ * @param {*} token 
+ * @param {*} resources 
+ * @param {*} roleIds 
+ * @param {*} userId 
+ * @returns 
+ */
 module.exports.evaluate = (token, resources,roleIds, userId) => {
     var options = {
         'method': 'POST',

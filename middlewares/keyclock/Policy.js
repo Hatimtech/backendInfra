@@ -2,7 +2,14 @@
 const { KEYCLOCK_IP , REALM_NAME, CLIENT_ID , ID_OF_CLIENT} = require( "../../config/keyclockConstant");
 const request = require("request") ;
 
-//create policy
+/**
+ * This is used to create a policy in keyclock
+ * @param {*} token 
+ * @param {*} name 
+ * @param {*} description 
+ * @param {*} roles 
+ * @returns 
+ */
 module.exports.createPolicy = (token, name, description, roles) => {
     var options = {
         'method': 'POST',
@@ -32,7 +39,11 @@ module.exports.createPolicy = (token, name, description, roles) => {
     });
 }
 
-//get policies
+/**
+ * This is used to get all policies from key clock
+ * @param {} token 
+ * @returns 
+ */
 module.exports.getAllPolicy = (token) => {
   var options = {
       'method': 'GET',
@@ -54,7 +65,12 @@ module.exports.getAllPolicy = (token) => {
 
 }
 
-// Delete Policy
+/**
+ * This is used to delete a policy from keyclock
+ * @param {} token 
+ * @param {*} policyId 
+ * @returns 
+ */
 module.exports.deletePolicy = (token, policyId) => {
     console.log(policyId);
   var options = {
@@ -76,7 +92,15 @@ module.exports.deletePolicy = (token, policyId) => {
   });
 }
 
-// Update Policy
+/**
+ * This is used to update a policy in keyclock
+ * @param {*} token 
+ * @param {*} policyId 
+ * @param {*} name 
+ * @param {*} description 
+ * @param {*} roles 
+ * @returns 
+ */
 module.exports.updatePolicy = (token, policyId, name, description, roles) => {
     console.log(policyId);
   var options = {
