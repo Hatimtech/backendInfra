@@ -11,6 +11,12 @@ module.exports.GROUPS = {
     BANK_BRANCH_GROUP: "Bank Branch"
 }
 
+module.exports.USER_ATTRIBUTES = {
+	MOBILE: "mobile",
+    COUNTRY: "country",
+    CCODE: "ccode"
+}
+
 module.exports.REALM_NAME = "Ewallet"
 
 module.exports.KEYCLOCK_IP = "http://localhost:8080/auth"

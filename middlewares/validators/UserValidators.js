@@ -1,7 +1,11 @@
 const { error } = require( "../../utils/errorMessages");
 
+/**
+ * This checks the validity to create user
+ * @param { firstName, lastName, username, password, email, mobile, ccode, country} user 
+ * @returns { code, message}
+ */
 module.exports.checkValidityToCreateUser = async (user) => {
-
     if(!user.firstName){
         return error.FIRST_NAME_EMPTY;
     } else if (!user.lastName){
@@ -24,6 +28,12 @@ module.exports.checkValidityToCreateUser = async (user) => {
 
 };
 
+/**
+ * This checks the validity to eit user
+ * @param { userKeyclockId, userMongoId, firstName, lastName, username, password, email, mobile, ccode , country } req 
+ * @param { code, message } res 
+ * @returns 
+ */
 module.exports.checkValidityToEditUser = (req, res) => {
     const { userKeyclockId, userMongoId, firstName, lastName, username, password, email, mobile, ccode , country } = req.body;
     if(!firstName)
@@ -52,10 +62,14 @@ module.exports.checkValidityToEditUser = (req, res) => {
     }
 };
 
-
-
+/**
+ * This checks the validity to evaluate user
+ * @param { resources, userId } req 
+ * @param { code, message } res 
+ * @returns 
+ */
 module.exports.checkValidityToEvalute = (req, res) => {
-    const {  resources, userId, } = req.body;
+    const {  resources, userId } = req.body;
     if(!resources)
     {
         res.send(error.RESOURCES_EMPTY);

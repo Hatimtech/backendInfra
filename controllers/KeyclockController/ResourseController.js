@@ -13,7 +13,7 @@ const {
 } = require("../../middlewares/validators/ResourceValidators")
 
 /**
- * 
+ * This is used to create a resource
  * @param { name, displayName, scopes, uris } req 
  * @param { code, message } res 
  */
@@ -36,7 +36,7 @@ exports.createResources = async (req, res) => {
 };
 
 /**
- * 
+ * this is used to get all resources
  * @param {*} req 
  * @param { code, resources} res 
  */
@@ -56,7 +56,7 @@ exports.getAllResources = async (req, res) => {
 };
 
 /**
- * 
+ * This is used to delete a resource
  * @param { resourceId } req 
  * @param { code, message} res 
  */
@@ -78,7 +78,7 @@ exports.deleteResources = async (req, res) => {
 };
 
 /**
- * 
+ * this is used to update a resource
  * @param { resourceId, name, displayName, scopes, uris} req 
  * @param { code, message} res 
  */

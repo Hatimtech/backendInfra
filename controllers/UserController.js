@@ -65,19 +65,19 @@ exports.registerInfraAdmin = async (req, res)=> {
                             }
                         } else {
 
-                            if (user.photoUserBase64){
-                                //Create Folder
-                                const responseCreateFolder =   await createFolder(user.username)
+                            // if (user.photoUserBase64){
+                            //     //Create Folder
+                            //     const responseCreateFolder =   await createFolder(user.username)
 
-                                if(responseCreateFolder != null && responseCreateFolder!=''){
-                                    //upload  photo
-                                    const responseupload  =    await  uploadFile(user.username,user.photoNameExtension,user.photoUserBase64)
+                            //     if(responseCreateFolder != null && responseCreateFolder!=''){
+                            //         //upload  photo
+                            //         const responseupload  =    await  uploadFile(user.username,user.photoNameExtension,user.photoUserBase64)
 
-                                    // Update uuidPhoto
-                                    user.uuidPhoto = JSON.parse(responseupload).uuid
-                                   await User.updateOne({'username':user.username}, {$set: {'uuidPhoto':user.uuidPhoto}})
-                                }
-                            }
+                            //         // Update uuidPhoto
+                            //         user.uuidPhoto = JSON.parse(responseupload).uuid
+                            //        await User.updateOne({'username':user.username}, {$set: {'uuidPhoto':user.uuidPhoto}})
+                            //     }
+                            // }
 
                             let infra = new InfraConfigured()
                             infra.isConfigured = true
@@ -93,7 +93,6 @@ exports.registerInfraAdmin = async (req, res)=> {
             return res.send(response)
         }
 };
-
 
 /**
  * This is used for checking if there is an infra user in the system or not.
@@ -117,7 +116,6 @@ exports.checkInfraIsConfigured = async (req, res) => {
 
 };
 
-
 /**
  * Infr user register API
  * @param { token, name, email, country, ccode, mobile, username, password, logo,}
@@ -125,37 +123,19 @@ exports.checkInfraIsConfigured = async (req, res) => {
  */
 
 exports.registerInfraUser = async (req, res) => {
+    let user =  new User(req.body);
     let token = getTokenFromRequestHeader(req,res);
-    const {
-        firstName,
-        lastName,
-        email,
-        country,
-        ccode,
-        mobile,
-        username,
-        password,
-        logo,
-        roles,
-    } = req.body;
-    if (checkValidityToCreateUser(req,res)){
-        const createUserResponse = await createUser(token,firstName,lastName,username,password,email,GROUPS.INFRA_GROUP);
+    const response =  await checkValidityToCreateUser(user);
+    if (response === true ){
+        const createUserResponse = await createUser(token, user, GROUPS.INFRA_GROUP);
         if(createUserResponse.length !== 0 ){
             res.send({ code: 0, message: "Error creating User"});
         }
         else {
-            const getUserResponse = await getUser(token, username);
+            const getUserResponse = await getUser(token, user.username);
             const userKeyclockId = JSON.parse(getUserResponse)[0].id;
-            let data = new User();
-            data.keyclock_id = userKeyclockId;
-            data.firstname = firstName;
-            data.lastname = lastName;
-            data.username = username;
-            data.mobile = mobile;
-            data.email = email;
-            data.ccode = ccode;
-            data.country = country;
-            data.save(async(err1) => {
+            user.keyclock_id = userKeyclockId;
+            user.save(async(err1) => {
                 if (err1) {
                     var message1 = err1;
                     if (err1.message) { message1 = err1.message; }
@@ -169,8 +149,7 @@ exports.registerInfraUser = async (req, res) => {
                         res.send({code: 0,message: message1,});
                     }
                 } else {
-                    const assignRoleResponse = await assignRole(token, userKeyclockId, roles);
-                    console.log(assignRoleResponse);
+                    const assignRoleResponse = await assignRole(token, userKeyclockId, req.body.roles);
                     if(assignRoleResponse.length !== 0 ){
                         res.status(200).json(error.ROLE_ASSIGN);
                     } else {
@@ -181,12 +160,12 @@ exports.registerInfraUser = async (req, res) => {
                     }
                 }
             });
-
         }
+    } else {
+        return res.send(response)
     }
-    
 };
-
+ 
 /**
  * This is used for Login to anyuser.
  * @param {username, password }
@@ -202,17 +181,13 @@ exports.login = async (req, res) => {
         const token = JSON.parse(tokenResponse).access_token;
         const getUserResponse = await  getUser(token, username);
         const user = JSON.parse(getUserResponse)
-        res.send({ code: 1, message: "Authorized to login", token : token, user: user });
-
-
-        
+        res.send({ code: 1, message: "Authorized to login", token : token, user: user }); 
     }
 
 };
 
-
 /**
- * This is used for getting
+ * This is used for getting users from mongoDb
  * @param { code, message, users} res
  */
 exports.getInfraUsers = async (req, res) => {
@@ -226,13 +201,11 @@ exports.getInfraUsers = async (req, res) => {
 };
 
 exports.getRoleFromToken = async (req, res) => {
-    console.log('I am here')
 
     try {
 
         let token = getTokenFromRequestHeader(req,res);
         const getUserResponse =  getRolesFromToken(token);
-        console.log('I am here')
 
         res.send({ code: 1, message: "User found", roles : getUserResponse });
     }catch(err)
@@ -241,10 +214,13 @@ exports.getRoleFromToken = async (req, res) => {
     }
 };
 
+/**
+ * This is used for getting users from keyclock
+ * @param { code, message, users} res
+ */
 exports.getAllUsers = async (req, res) => {
     let token = getTokenFromRequestHeader(req,res);
     const getUserResponse = await getAllUser(token);
-        console.log(getUserResponse);
         if(JSON.parse(getUserResponse).error){
             res.status(200).json(error.GET_ALL_USER);
         } else {
@@ -256,7 +232,11 @@ exports.getAllUsers = async (req, res) => {
         }
 };
 
-
+/**
+ * This is used to enable or disable users in keyclock
+ * @param { userId, isEnabled,} req 
+ * @param { code, message} res 
+ */
 exports.enableOrDisableUser = async (req, res) => {
     let token = getTokenFromRequestHeader(req,res);
     const {
@@ -273,14 +253,16 @@ exports.enableOrDisableUser = async (req, res) => {
             res.send({ code: 0, message: "User Cannot be edited."});
         }
         else {
-                res.send({code: 1,message: `User ${isEnabled ? "enabled" : "disabled"} successfully`});
-                
-
+            res.send({code: 1,message: `User ${isEnabled ? "enabled" : "disabled"} successfully`});
         }
     
 };
 
-
+/**
+ * This is used to edit user
+ * @param { userKeyclockId, userMongoId, firstName, lastName, username, email, country, ccode, mobile, password, logo } req 
+ * @param { code, message } res 
+ */
 exports.editUser = async (req, res) => {
     let token = getTokenFromRequestHeader(req,res);
     const {
@@ -307,7 +289,12 @@ exports.editUser = async (req, res) => {
                 "value":password,
                 "temporary":false
             }
-      ],
+        ],
+        "attributes": {
+            "mobile":mobile,
+            "country": country,
+            "ccode": ccode,
+        }
     }
     if (checkValidityToEditUser(req,res)){
         const editUserResponse = await editusers(token,userKeyclockId,editParams);
@@ -345,7 +332,11 @@ exports.editUser = async (req, res) => {
     }
 };
 
-
+/**
+ * This is user to evaluate user access in keyclock
+ * @param { resources, roleIds, userId,} req 
+ * @param { code, evaluate } res 
+ */
 exports.evaluate = async (req, res) => {
     let token = getTokenFromRequestHeader(req,res);
     const {

@@ -14,7 +14,7 @@ const {
 } = require("../../middlewares/validators/ScopeValidators")
 
 /**
- * 
+ * This is used to create a scope
  * @param { name, displayName } req 
  * @param { code, message } res 
  */
@@ -35,7 +35,7 @@ exports.createScope = async (req, res) => {
 };
 
 /**
- * 
+ * This is used to get all scopes
  * @param {*} req 
  * @param { code, scopes } res 
  */
@@ -55,7 +55,7 @@ exports.getAllScopes = async (req, res) => {
 };
 
 /**
- * 
+ * This is used to delete a scope
  * @param { scopeId } req 
  * @param { code, message } res 
  */
@@ -77,7 +77,7 @@ exports.deleteScopes = async (req, res) => {
 };
 
 /**
- * 
+ * This is used to update a scope
  * @param { scopeId, name, displayName } req 
  * @param { code, message } res 
  */

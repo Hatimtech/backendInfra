@@ -8,36 +8,16 @@ const {
 } = require("../middlewares/validators/BankValidators")
 const { getTokenFromRequestHeader } = require("../middlewares/commonFunctions")
 
-
+/**
+ * This is used to create a new bank
+ * @param {requestParamsBank} req 
+ * @param {code,message} res 
+ */
 exports.createBank = async (req, res) => {
-    const {
-        createrMongoId,
-        createrKeyclockId,
-        ccode ,
-        country, 
-        name,
-        bcode,
-        address,
-        state,
-        zip,
-        contract,
-        logo,
-    } = req.body;
-
-    if (checkValidityToCreateBank(req,res)){
-        let data = new Bank();
-        data.name = name,
-        data.creater_keyclock_id = createrKeyclockId;
-        data.creater_mongo_id = createrMongoId;
-        data.bcode = bcode,
-        data.address = address,
-        data.state = state,
-        data.zip = zip,
-        data.contract = contract,
-        data.country = country,
-        data.ccode = ccode,
-        data.logo = logo,
-        data.save(async (err1) => {
+    let bank =  new Bank(req.body)
+    const response =  await checkValidityToCreateBank(bank)
+    if (response === true ){
+        bank.save(async (err1) => {
             if (err1) {
                 var message1 = err1;
                 if (err1.message) { message1 = err1.message; }
@@ -46,10 +26,17 @@ exports.createBank = async (req, res) => {
                     res.send({code: 1,message: "Bank Created successfully"});
                 }
         });
+    } else {
+        res.send(response)
     }
         
 };
 
+/**
+ * this is used to get all banks
+ * @param {*} req 
+ * @param { code, message} res 
+ */
 exports.getAllBank = async (req, res) => {
     try {
         const banks = await Bank.find();
@@ -59,8 +46,6 @@ exports.getAllBank = async (req, res) => {
         res.send({ code: 0, message: err });
     }   
 };
-
-
 
 exports.enableOrDisableBank = async (req, res) => {
     let token = getTokenFromRequestHeader(req,res);
@@ -81,7 +66,11 @@ exports.enableOrDisableBank = async (req, res) => {
         }
 };
 
-
+/**
+ * 
+ * @param { bankMongoId,ccode ,country, name, address, state, zip, contract, logo} req 
+ * @param { code, message} res 
+ */
 exports.editBank = async (req, res) => {
     const {
         bankMongoId,
@@ -113,10 +102,10 @@ exports.editBank = async (req, res) => {
                 if (err1) {
                     var message1 = err1;
                     if (err1.message) { message1 = err1.message; }
-                    res.send({status: 0,message: message1,});
+                    res.send({code: 0,message: message1,});
                 } else {
                     res.send({
-                        status: 1,
+                        code: 1,
                         message: "Bank Edited successfully"
                     });
                 }
@@ -125,7 +114,11 @@ exports.editBank = async (req, res) => {
     }
 };
 
-
+/**
+ * This is used to assign a user to the bank
+ * @param { userMongoId, bankMongoId} req 
+ * @param { code, message} res 
+ */
 exports.assignUserToBank= async (req, res) => {
     const {
         userMongoId,
@@ -143,10 +136,10 @@ exports.assignUserToBank= async (req, res) => {
                     if (err1) {
                         var message1 = err1;
                         if (err1.message) { message1 = err1.message; }
-                        res.send({status: 0,message: message1,});
+                        res.send({code: 0,message: message1,});
                     } else {
                         res.send({
-                            status: 1,
+                            code: 1,
                             message: "User Assigned successfully"
                         });
                     }

@@ -1,4 +1,4 @@
-const { KEYCLOCK_IP , REALM_NAME , ID_OF_CLIENT} = require( "../../config/keyclockConstant");
+const { KEYCLOCK_IP , REALM_NAME , ID_OF_CLIENT, USER_ATTRIBUTES} = require( "../../config/keyclockConstant");
 const request = require("request") ;
 
 //Get user by username

@@ -21,11 +21,11 @@ const {
  *           schema:
  *             type: object
  *             properties:
- *               createrMongoId:
+ *               creater_mongo_id:
  *                 type: string
  *                 description: mongo id of creater.
  *                 example: sbibank
- *               createrKeyclockId:
+ *               creater_keyclock_id:
  *                 type: string
  *                 description: keyclock id of creater.
  *                 example: sbibank

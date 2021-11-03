@@ -13,7 +13,7 @@ const {
 } = require("../../middlewares/validators/PermissionValidators")
  
 /**
- * 
+ * This is used to create permission
  * @param {name, description, policies, resources} req 
  * @param { code, message } res 
  */
@@ -37,7 +37,7 @@ exports.createPermissions = async (req, res) => {
 };
 
 /**
- * 
+ * This is used to get all permissions
  * @param {*} req 
  * @param { code, permissions } res 
  */
@@ -56,7 +56,7 @@ exports.getAllPermission = async (req, res) => {
 };
 
 /**
- * 
+ * This is used to delete permissions
  * @param { permissionId } req 
  * @param { message } res 
  */
@@ -79,7 +79,7 @@ exports.deletePermissions = async (req, res) => {
 };
 
 /**
- * 
+ * this is used to update permissions
  * @param { permissionId, name, description, policies, resources} req 
  * @param { code, message } res 
  */

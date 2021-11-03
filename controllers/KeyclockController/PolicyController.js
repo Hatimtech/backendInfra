@@ -13,7 +13,7 @@ const {
 } = require("../../middlewares/validators/PoliciesValidators")
 
 /**
- * 
+ * This is used to create policy
  * @param { name, description, roles } req 
  * @param { code, message } res 
  */
@@ -36,7 +36,7 @@ exports.createPolicies = async (req, res) => {
 };
 
 /**
- * 
+ * this is used to get all policy
  * @param {*} req 
  * @param { code, policies} res 
  */
@@ -55,6 +55,11 @@ exports.getAllPolicies = async (req, res) => {
         }
 };
 
+/**
+ * This is used to delete policy
+ * @param {policyId} req 
+ * @param {code, message} res 
+ */
 exports.deletePolicies = async (req, res) => {
     const { policyId } = req.body;
     if(checkValidityToDeletePolicies(req,res)){
@@ -73,6 +78,11 @@ exports.deletePolicies = async (req, res) => {
         }}
 };
 
+/**
+ * This is used to update a policy
+ * @param { policyId,name,description,roles} req 
+ * @param {*} res 
+ */
 exports.updatePolicies = async (req, res) => {
     const {
         policyId,

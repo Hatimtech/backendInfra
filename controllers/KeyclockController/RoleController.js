@@ -10,7 +10,7 @@ const {
 } = require("../../middlewares/commonFunctions")
 
 /**
- * 
+ * This is used to create a role
  * @param { name, attributes } req 
  * @param { code, message } res 
  */
@@ -36,7 +36,7 @@ exports.createUserRoles = async (req, res) => {
 };
 
 /**
- * 
+ * This is used to get all roles
  * @param {*} req 
  * @param { code, roles } res 
  */
@@ -56,7 +56,7 @@ exports.getAllRoles = async (req, res) => {
 };
 
 /**
- * 
+ * This is used to delete a role
  * @param { name } req 
  * @param { code, message } res 
  */
@@ -76,7 +76,7 @@ exports.deleteRole = async (req, res) => {
 };
 
 /**
- * 
+ * this is used to assign roles to a user
  * @param { roles, userKeyclockId } req 
  * @param { code, message } res 
  */
