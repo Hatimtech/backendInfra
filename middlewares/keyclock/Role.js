@@ -1,7 +1,12 @@
 const { KEYCLOCK_IP , REALM_NAME , ID_OF_CLIENT} = require( "../../config/keyclockConstant");
 const request = require("request") ;
 
-// Create Roles
+/**
+ * This is used to create a role in keyclock
+ * @param {*} token 
+ * @param {*} name 
+ * @returns 
+ */
 module.exports.createRole = (token, name) => {
     var options = {
         'method': 'POST',
@@ -28,7 +33,11 @@ module.exports.createRole = (token, name) => {
     });
 }
 
-// Get Roles
+/**
+ * This is used to get all roles from keyclock
+ * @param {*} token 
+ * @returns 
+ */
 module.exports.getAllRoles = (token) => {
     var options = {
         'method': 'GET',
@@ -49,7 +58,12 @@ module.exports.getAllRoles = (token) => {
     });
 }
 
-// Delete Roles
+/**
+ * This is used to delete a role from keyclock
+ * @param {*} token 
+ * @param {*} name 
+ * @returns 
+ */
 module.exports.deleteRole = (token, name) => {
     var options = {
         'method': 'DELETE',
@@ -70,7 +84,13 @@ module.exports.deleteRole = (token, name) => {
     });
 }
 
-// Assign Role
+/**
+ * This is used to assign roles to a user in keyclock 
+ * @param {*} token 
+ * @param {*} userid 
+ * @param {*} roles 
+ * @returns 
+ */
 module.exports.assignRole = (token, userid, roles) => {
     var options = {
         'method': 'POST',
@@ -92,7 +112,12 @@ module.exports.assignRole = (token, userid, roles) => {
     });
 }
 
-
+/**
+ * This is used to get the role mappings from keyclock
+ * @param {*} token 
+ * @param {*} username 
+ * @returns 
+ */
 module.exports.getRole = (token , username) => {
     var options = {
         'method': 'GET',

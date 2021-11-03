@@ -1,7 +1,12 @@
 const { KEYCLOCK_IP , REALM_NAME, CLIENT_ID, CLIENT_SECRET} = require( "../../config/keyclockConstant");
 const request = require("request") ;
 
-//Get token by username and password
+/**
+ * This is used to get access token from keyclock
+ * @param {*} username 
+ * @param {*} password 
+ * @returns 
+ */
 module.exports.getToken =  (username, password) => {
     var options = {
         'method': 'POST',
